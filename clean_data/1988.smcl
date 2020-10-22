@@ -1,0 +1,403 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/thesis/clean_data/1988.smcl
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}17 Oct 2020, 22:28:57
+{txt}
+{com}. 
+. * 1988 Democratic primaries
+. 
+. * Load in a STATA data set
+. use df88st_d
+{txt}(Written by R.              )
+
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/wp/cwmrq5v9115gygh6bzyqpqmw0000gn/T//SD22420.000000"
+{txt}
+{com}. 
+. * Load in a STATA data set
+. use df88st_d
+{txt}(Written by R.              )
+
+{com}. 
+. * Test
+. clogit VoteCandidate NORMALIZED_FT NORMALIZED_VIABILITY NORMALIZED_ELECTABILITY NORMALIZED_IDEOLOGY TRAITS, group(ID)
+{txt}note: 10 groups (23 obs) dropped because of all positive or
+      all negative outcomes.
+{res}
+{txt}Iteration 0:{space 3}log likelihood = {res:-188.31338}  
+Iteration 1:{space 3}log likelihood = {res:-181.56067}  
+Iteration 2:{space 3}log likelihood = {res:-177.53654}  
+Iteration 3:{space 3}log likelihood = {res:-177.49559}  
+Iteration 4:{space 3}log likelihood = {res:-177.49558}  
+{res}
+{txt}Conditional (fixed-effects) logistic regression
+
+{col 49}Number of obs{col 67}= {res}     1,424
+{txt}{col 49}LR chi2({res}5{txt}){col 67}= {res}    607.02
+{txt}{col 49}Prob > chi2{col 67}= {res}    0.0000
+{txt}Log likelihood = {res}-177.49558{txt}{col 49}Pseudo R2{col 67}= {res}    0.6310
+
+{txt}{hline 24}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}          VoteCandidate{col 25}{c |}      Coef.{col 37}   Std. Err.{col 49}      z{col 57}   P>|z|{col 65}     [95% Con{col 78}f. Interval]
+{hline 24}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 10}NORMALIZED_FT {c |}{col 25}{res}{space 2} 3.211531{col 37}{space 2} .3785645{col 48}{space 1}    8.48{col 57}{space 3}0.000{col 65}{space 4} 2.469558{col 78}{space 3} 3.953504
+{txt}{space 3}NORMALIZED_VIABILITY {c |}{col 25}{res}{space 2}  4.99019{col 37}{space 2} 1.382905{col 48}{space 1}    3.61{col 57}{space 3}0.000{col 65}{space 4} 2.279746{col 78}{space 3} 7.700634
+{txt}NORMALIZED_ELECTABILITY {c |}{col 25}{res}{space 2} 1.667273{col 37}{space 2} 1.041306{col 48}{space 1}    1.60{col 57}{space 3}0.109{col 65}{space 4}-.3736485{col 78}{space 3} 3.708195
+{txt}{space 4}NORMALIZED_IDEOLOGY {c |}{col 25}{res}{space 2}-.0788293{col 37}{space 2} .2481665{col 48}{space 1}   -0.32{col 57}{space 3}0.751{col 65}{space 4}-.5652266{col 78}{space 3} .4075681
+{txt}{space 17}TRAITS {c |}{col 25}{res}{space 2} 6.189676{col 37}{space 2}   1.2433{col 48}{space 1}    4.98{col 57}{space 3}0.000{col 65}{space 4} 3.752853{col 78}{space 3} 8.626499
+{txt}{hline 24}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{com}. cd "/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/1988"
+{res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/1988
+{txt}
+{com}. outreg2 using 1988_d.doc, replace 
+{txt}{stata `"shellout using `"1988_d.doc"'"':1988_d.doc}
+{browse `"/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/1988"' :dir}{com} : {txt}{stata `"seeout using "1988_d.txt""':seeout}
+
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/wp/cwmrq5v9115gygh6bzyqpqmw0000gn/T//SD22420.000000"
+{txt}
+{com}. 
+. * Load in a STATA data set
+. use df88st_d
+{err}{p 0 4 2}
+file df88st_d.dta
+not found
+{p_end}
+{txt}{search r(601), local:r(601);}
+
+end of do-file
+
+{search r(601), local:r(601);}
+
+{com}. do "/var/folders/wp/cwmrq5v9115gygh6bzyqpqmw0000gn/T//SD22420.000000"
+{txt}
+{com}. 
+. * Load in a STATA data set
+. use df88st_d
+{err}{p 0 4 2}
+file df88st_d.dta
+not found
+{p_end}
+{txt}{search r(601), local:r(601);}
+
+end of do-file
+
+{search r(601), local:r(601);}
+
+{com}. do "/var/folders/wp/cwmrq5v9115gygh6bzyqpqmw0000gn/T//SD22420.000000"
+{txt}
+{com}. 
+. * Open a log file
+. cd "/Users/ryan/Google Drive/2020_2021/Thesis/Data/thesis/clean_data"
+{res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/thesis/clean_data
+{txt}
+{com}. log using 1988, replace
+{err}log file already open
+{txt}{search r(604), local:r(604);}
+
+end of do-file
+
+{search r(604), local:r(604);}
+
+{com}. do "/var/folders/wp/cwmrq5v9115gygh6bzyqpqmw0000gn/T//SD22420.000000"
+{txt}
+{com}. 
+. * 1988 Democratic primaries
+. 
+. * Load in a STATA data set
+. use df88st_d
+{txt}(Written by R.              )
+
+{com}. 
+. * Test
+. clogit VoteCandidate NORMALIZED_FT NORMALIZED_VIABILITY NORMALIZED_ELECTABILITY NORMALIZED_IDEOLOGY TRAITS, group(ID)
+{txt}note: 23 groups (42 obs) dropped because of all positive or
+      all negative outcomes.
+{res}
+{txt}Iteration 0:{space 3}log likelihood = {res:-194.50306}  
+Iteration 1:{space 3}log likelihood = {res: -187.5528}  
+Iteration 2:{space 3}log likelihood = {res:-184.58295}  
+Iteration 3:{space 3}log likelihood = {res:-184.56202}  
+Iteration 4:{space 3}log likelihood = {res:-184.56201}  
+{res}
+{txt}Conditional (fixed-effects) logistic regression
+
+{col 49}Number of obs{col 67}= {res}     1,499
+{txt}{col 49}LR chi2({res}5{txt}){col 67}= {res}    645.31
+{txt}{col 49}Prob > chi2{col 67}= {res}    0.0000
+{txt}Log likelihood = {res}-184.56201{txt}{col 49}Pseudo R2{col 67}= {res}    0.6361
+
+{txt}{hline 24}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}          VoteCandidate{col 25}{c |}      Coef.{col 37}   Std. Err.{col 49}      z{col 57}   P>|z|{col 65}     [95% Con{col 78}f. Interval]
+{hline 24}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 10}NORMALIZED_FT {c |}{col 25}{res}{space 2} 3.233427{col 37}{space 2} .3739898{col 48}{space 1}    8.65{col 57}{space 3}0.000{col 65}{space 4} 2.500421{col 78}{space 3} 3.966434
+{txt}{space 3}NORMALIZED_VIABILITY {c |}{col 25}{res}{space 2} 5.047439{col 37}{space 2} 1.333543{col 48}{space 1}    3.78{col 57}{space 3}0.000{col 65}{space 4} 2.433743{col 78}{space 3} 7.661135
+{txt}NORMALIZED_ELECTABILITY {c |}{col 25}{res}{space 2} 1.609933{col 37}{space 2} 1.024053{col 48}{space 1}    1.57{col 57}{space 3}0.116{col 65}{space 4}-.3971751{col 78}{space 3}  3.61704
+{txt}{space 4}NORMALIZED_IDEOLOGY {c |}{col 25}{res}{space 2}-.0984315{col 37}{space 2} .2455782{col 48}{space 1}   -0.40{col 57}{space 3}0.689{col 65}{space 4}-.5797559{col 78}{space 3}  .382893
+{txt}{space 17}TRAITS {c |}{col 25}{res}{space 2} 6.246715{col 37}{space 2} 1.219729{col 48}{space 1}    5.12{col 57}{space 3}0.000{col 65}{space 4} 3.856091{col 78}{space 3}  8.63734
+{txt}{hline 24}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{com}. cd "/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/1988"
+{res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/1988
+{txt}
+{com}. outreg2 using 1988_d.doc, replace 
+{txt}{stata `"shellout using `"1988_d.doc"'"':1988_d.doc}
+{browse `"/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/1988"' :dir}{com} : {txt}{stata `"seeout using "1988_d.txt""':seeout}
+
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/wp/cwmrq5v9115gygh6bzyqpqmw0000gn/T//SD22420.000000"
+{txt}
+{com}. 
+. * 1988 Democratic primaries
+. 
+. * Load in a STATA data set
+. use df88st_d
+{err}{p 0 4 2}
+file df88st_d.dta
+not found
+{p_end}
+{txt}{search r(601), local:r(601);}
+
+end of do-file
+
+{search r(601), local:r(601);}
+
+{com}. do "/var/folders/wp/cwmrq5v9115gygh6bzyqpqmw0000gn/T//SD22420.000000"
+{txt}
+{com}. 
+. * 1988 Democratic primaries
+. 
+. * Load in a STATA data set
+. use df88st_d
+{err}{p 0 4 2}
+file df88st_d.dta
+not found
+{p_end}
+{txt}{search r(601), local:r(601);}
+
+end of do-file
+
+{search r(601), local:r(601);}
+
+{com}. do "/var/folders/wp/cwmrq5v9115gygh6bzyqpqmw0000gn/T//SD22420.000000"
+{txt}
+{com}. cd "/Users/ryan/Google Drive/2020_2021/Thesis/Data/thesis/clean_data"
+{res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/thesis/clean_data
+{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/wp/cwmrq5v9115gygh6bzyqpqmw0000gn/T//SD22420.000000"
+{txt}
+{com}. * Load in a STATA data set
+. use df88st_d
+{txt}(Written by R.              )
+
+{com}. 
+. * Test
+. clogit VoteCandidate NORMALIZED_FT NORMALIZED_VIABILITY NORMALIZED_ELECTABILITY NORMALIZED_IDEOLOGY TRAITS, group(ID)
+{txt}note: 23 groups (42 obs) dropped because of all positive or
+      all negative outcomes.
+{res}
+{txt}Iteration 0:{space 3}log likelihood = {res:-194.50306}  
+Iteration 1:{space 3}log likelihood = {res: -187.5528}  
+Iteration 2:{space 3}log likelihood = {res:-184.58295}  
+Iteration 3:{space 3}log likelihood = {res:-184.56202}  
+Iteration 4:{space 3}log likelihood = {res:-184.56201}  
+{res}
+{txt}Conditional (fixed-effects) logistic regression
+
+{col 49}Number of obs{col 67}= {res}     1,499
+{txt}{col 49}LR chi2({res}5{txt}){col 67}= {res}    645.31
+{txt}{col 49}Prob > chi2{col 67}= {res}    0.0000
+{txt}Log likelihood = {res}-184.56201{txt}{col 49}Pseudo R2{col 67}= {res}    0.6361
+
+{txt}{hline 24}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}          VoteCandidate{col 25}{c |}      Coef.{col 37}   Std. Err.{col 49}      z{col 57}   P>|z|{col 65}     [95% Con{col 78}f. Interval]
+{hline 24}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 10}NORMALIZED_FT {c |}{col 25}{res}{space 2} 3.233427{col 37}{space 2} .3739898{col 48}{space 1}    8.65{col 57}{space 3}0.000{col 65}{space 4} 2.500421{col 78}{space 3} 3.966434
+{txt}{space 3}NORMALIZED_VIABILITY {c |}{col 25}{res}{space 2} 5.047439{col 37}{space 2} 1.333543{col 48}{space 1}    3.78{col 57}{space 3}0.000{col 65}{space 4} 2.433743{col 78}{space 3} 7.661135
+{txt}NORMALIZED_ELECTABILITY {c |}{col 25}{res}{space 2} 1.609933{col 37}{space 2} 1.024053{col 48}{space 1}    1.57{col 57}{space 3}0.116{col 65}{space 4}-.3971751{col 78}{space 3}  3.61704
+{txt}{space 4}NORMALIZED_IDEOLOGY {c |}{col 25}{res}{space 2}-.0984315{col 37}{space 2} .2455782{col 48}{space 1}   -0.40{col 57}{space 3}0.689{col 65}{space 4}-.5797559{col 78}{space 3}  .382893
+{txt}{space 17}TRAITS {c |}{col 25}{res}{space 2} 1.249343{col 37}{space 2} .2439458{col 48}{space 1}    5.12{col 57}{space 3}0.000{col 65}{space 4} .7712181{col 78}{space 3} 1.727468
+{txt}{hline 24}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{com}. cd "/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/1988"
+{res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/1988
+{txt}
+{com}. outreg2 using 1988_d.doc, replace 
+{txt}{stata `"shellout using `"1988_d.doc"'"':1988_d.doc}
+{browse `"/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/1988"' :dir}{com} : {txt}{stata `"seeout using "1988_d.txt""':seeout}
+
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/wp/cwmrq5v9115gygh6bzyqpqmw0000gn/T//SD22420.000000"
+{txt}
+{com}. * Load in a STATA data set
+. use df88st_d
+{err}{p 0 4 2}
+file df88st_d.dta
+not found
+{p_end}
+{txt}{search r(601), local:r(601);}
+
+end of do-file
+
+{search r(601), local:r(601);}
+
+{com}. do "/var/folders/wp/cwmrq5v9115gygh6bzyqpqmw0000gn/T//SD22420.000000"
+{txt}
+{com}. * Load in a STATA data set
+. use df88st_d
+{err}{p 0 4 2}
+file df88st_d.dta
+not found
+{p_end}
+{txt}{search r(601), local:r(601);}
+
+end of do-file
+
+{search r(601), local:r(601);}
+
+{com}. do "/var/folders/wp/cwmrq5v9115gygh6bzyqpqmw0000gn/T//SD22420.000000"
+{txt}
+{com}. * Load in a STATA data set
+. use df88st_d
+{err}{p 0 4 2}
+file df88st_d.dta
+not found
+{p_end}
+{txt}{search r(601), local:r(601);}
+
+end of do-file
+
+{search r(601), local:r(601);}
+
+{com}. do "/var/folders/wp/cwmrq5v9115gygh6bzyqpqmw0000gn/T//SD22420.000000"
+{txt}
+{com}. * Load in a STATA data set
+. use df88st_d
+{err}{p 0 4 2}
+file df88st_d.dta
+not found
+{p_end}
+{txt}{search r(601), local:r(601);}
+
+end of do-file
+
+{search r(601), local:r(601);}
+
+{com}. do "/var/folders/wp/cwmrq5v9115gygh6bzyqpqmw0000gn/T//SD22420.000000"
+{txt}
+{com}. cd "/Users/ryan/Google Drive/2020_2021/Thesis/Data/thesis/clean_data"
+{res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/thesis/clean_data
+{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/wp/cwmrq5v9115gygh6bzyqpqmw0000gn/T//SD22420.000000"
+{txt}
+{com}. * Load in a STATA data set
+. use df88st_d
+{txt}(Written by R.              )
+
+{com}. 
+. * Test
+. clogit VoteCandidate NORMALIZED_FT NORMALIZED_VIABILITY NORMALIZED_ELECTABILITY NORMALIZED_IDEOLOGY TRAITS, group(ID)
+{txt}note: 23 groups (42 obs) dropped because of all positive or
+      all negative outcomes.
+{res}
+{txt}Iteration 0:{space 3}log likelihood = {res:-194.50306}  
+Iteration 1:{space 3}log likelihood = {res: -187.5528}  
+Iteration 2:{space 3}log likelihood = {res:-184.58295}  
+Iteration 3:{space 3}log likelihood = {res:-184.56202}  
+Iteration 4:{space 3}log likelihood = {res:-184.56201}  
+{res}
+{txt}Conditional (fixed-effects) logistic regression
+
+{col 49}Number of obs{col 67}= {res}     1,499
+{txt}{col 49}LR chi2({res}5{txt}){col 67}= {res}    645.31
+{txt}{col 49}Prob > chi2{col 67}= {res}    0.0000
+{txt}Log likelihood = {res}-184.56201{txt}{col 49}Pseudo R2{col 67}= {res}    0.6361
+
+{txt}{hline 24}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}          VoteCandidate{col 25}{c |}      Coef.{col 37}   Std. Err.{col 49}      z{col 57}   P>|z|{col 65}     [95% Con{col 78}f. Interval]
+{hline 24}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 10}NORMALIZED_FT {c |}{col 25}{res}{space 2} 3.233427{col 37}{space 2} .3739898{col 48}{space 1}    8.65{col 57}{space 3}0.000{col 65}{space 4} 2.500421{col 78}{space 3} 3.966434
+{txt}{space 3}NORMALIZED_VIABILITY {c |}{col 25}{res}{space 2} 5.047439{col 37}{space 2} 1.333543{col 48}{space 1}    3.78{col 57}{space 3}0.000{col 65}{space 4} 2.433743{col 78}{space 3} 7.661135
+{txt}NORMALIZED_ELECTABILITY {c |}{col 25}{res}{space 2} 1.609933{col 37}{space 2} 1.024053{col 48}{space 1}    1.57{col 57}{space 3}0.116{col 65}{space 4}-.3971751{col 78}{space 3}  3.61704
+{txt}{space 4}NORMALIZED_IDEOLOGY {c |}{col 25}{res}{space 2}-.0984315{col 37}{space 2} .2455782{col 48}{space 1}   -0.40{col 57}{space 3}0.689{col 65}{space 4}-.5797559{col 78}{space 3}  .382893
+{txt}{space 17}TRAITS {c |}{col 25}{res}{space 2} 6.246715{col 37}{space 2} 1.219729{col 48}{space 1}    5.12{col 57}{space 3}0.000{col 65}{space 4} 3.856091{col 78}{space 3}  8.63734
+{txt}{hline 24}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{com}. cd "/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/1988"
+{res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/1988
+{txt}
+{com}. outreg2 using 1988_d.doc, replace 
+{txt}{stata `"shellout using `"1988_d.doc"'"':1988_d.doc}
+{browse `"/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/1988"' :dir}{com} : {txt}{stata `"seeout using "1988_d.txt""':seeout}
+
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/wp/cwmrq5v9115gygh6bzyqpqmw0000gn/T//SD22420.000000"
+{txt}
+{com}. * 1988 Republican primaries
+. 
+. * Load in a STATA data set
+. cd "/Users/ryan/Google Drive/2020_2021/Thesis/Data/thesis/clean_data"
+{res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/thesis/clean_data
+{txt}
+{com}. use df88st_r
+{txt}(Written by R.              )
+
+{com}. 
+. * Test
+. clogit VoteCandidate NORMALIZED_FT NORMALIZED_VIABILITY NORMALIZED_ELECTABILITY NORMALIZED_IDEOLOGY TRAITS, group(ID)
+{txt}note: 29 groups (38 obs) dropped because of all positive or
+      all negative outcomes.
+{res}
+{txt}Iteration 0:{space 3}log likelihood = {res:-221.06388}  
+Iteration 1:{space 3}log likelihood = {res:-216.10314}  
+Iteration 2:{space 3}log likelihood = {res:-215.48366}  
+Iteration 3:{space 3}log likelihood = {res:-215.48338}  
+Iteration 4:{space 3}log likelihood = {res:-215.48338}  
+{res}
+{txt}Conditional (fixed-effects) logistic regression
+
+{col 49}Number of obs{col 67}= {res}     1,594
+{txt}{col 49}LR chi2({res}5{txt}){col 67}= {res}    692.28
+{txt}{col 49}Prob > chi2{col 67}= {res}    0.0000
+{txt}Log likelihood = {res}-215.48338{txt}{col 49}Pseudo R2{col 67}= {res}    0.6163
+
+{txt}{hline 24}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}          VoteCandidate{col 25}{c |}      Coef.{col 37}   Std. Err.{col 49}      z{col 57}   P>|z|{col 65}     [95% Con{col 78}f. Interval]
+{hline 24}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 10}NORMALIZED_FT {c |}{col 25}{res}{space 2} 3.331486{col 37}{space 2} .3626486{col 48}{space 1}    9.19{col 57}{space 3}0.000{col 65}{space 4} 2.620708{col 78}{space 3} 4.042264
+{txt}{space 3}NORMALIZED_VIABILITY {c |}{col 25}{res}{space 2} 1.891943{col 37}{space 2} 1.081572{col 48}{space 1}    1.75{col 57}{space 3}0.080{col 65}{space 4}-.2278991{col 78}{space 3} 4.011786
+{txt}NORMALIZED_ELECTABILITY {c |}{col 25}{res}{space 2} 5.653221{col 37}{space 2} 1.164044{col 48}{space 1}    4.86{col 57}{space 3}0.000{col 65}{space 4} 3.371736{col 78}{space 3} 7.934706
+{txt}{space 4}NORMALIZED_IDEOLOGY {c |}{col 25}{res}{space 2}-.7216534{col 37}{space 2} .2200436{col 48}{space 1}   -3.28{col 57}{space 3}0.001{col 65}{space 4}-1.152931{col 78}{space 3}-.2903758
+{txt}{space 17}TRAITS {c |}{col 25}{res}{space 2} 5.514966{col 37}{space 2} 1.220724{col 48}{space 1}    4.52{col 57}{space 3}0.000{col 65}{space 4} 3.122392{col 78}{space 3} 7.907541
+{txt}{hline 24}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{com}. cd "/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/1988"
+{res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/1988
+{txt}
+{com}. outreg2 using 1988_r.doc, replace
+{txt}{stata `"shellout using `"1988_r.doc"'"':1988_r.doc}
+{browse `"/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/1988"' :dir}{com} : {txt}{stata `"seeout using "1988_r.txt""':seeout}
+
+{com}. 
+{txt}end of do-file
+
+{com}. exit

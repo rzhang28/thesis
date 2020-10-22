@@ -1,0 +1,63 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/thesis/clean_data/1984.smcl
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}17 Oct 2020, 22:08:20
+{txt}
+{com}. 
+. * 1984 Democratic primaries
+. 
+. * Load in a STATA data set
+. use df84cm_d
+{txt}(Written by R.              )
+
+{com}. 
+. * Test
+. clogit VoteCandidate NORMALIZED_FT NORMALIZED_VIABILITY NORMALIZED_ELECTABILITY NORMALIZED_IDEOLOGY TRAITS, group(ID)
+{txt}note: 158 groups (332 obs) dropped because of all positive or
+      all negative outcomes.
+{res}
+{txt}Iteration 0:{space 3}log likelihood = {res:-514.23592}  
+Iteration 1:{space 3}log likelihood = {res:-495.68772}  
+Iteration 2:{space 3}log likelihood = {res:-490.63929}  
+Iteration 3:{space 3}log likelihood = {res:-490.62692}  
+Iteration 4:{space 3}log likelihood = {res:-490.62691}  
+{res}
+{txt}Conditional (fixed-effects) logistic regression
+
+{col 49}Number of obs{col 67}= {res}     3,034
+{txt}{col 49}LR chi2({res}5{txt}){col 67}= {res}   1225.17
+{txt}{col 49}Prob > chi2{col 67}= {res}    0.0000
+{txt}Log likelihood = {res}-490.62691{txt}{col 49}Pseudo R2{col 67}= {res}    0.5553
+
+{txt}{hline 24}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}          VoteCandidate{col 25}{c |}      Coef.{col 37}   Std. Err.{col 49}      z{col 57}   P>|z|{col 65}     [95% Con{col 78}f. Interval]
+{hline 24}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 10}NORMALIZED_FT {c |}{col 25}{res}{space 2} 2.278967{col 37}{space 2} .1678872{col 48}{space 1}   13.57{col 57}{space 3}0.000{col 65}{space 4} 1.949914{col 78}{space 3}  2.60802
+{txt}{space 3}NORMALIZED_VIABILITY {c |}{col 25}{res}{space 2} 2.658888{col 37}{space 2}  .346203{col 48}{space 1}    7.68{col 57}{space 3}0.000{col 65}{space 4} 1.980343{col 78}{space 3} 3.337433
+{txt}NORMALIZED_ELECTABILITY {c |}{col 25}{res}{space 2}  2.44823{col 37}{space 2} .3848335{col 48}{space 1}    6.36{col 57}{space 3}0.000{col 65}{space 4} 1.693971{col 78}{space 3}  3.20249
+{txt}{space 4}NORMALIZED_IDEOLOGY {c |}{col 25}{res}{space 2}-.5272799{col 37}{space 2} .1234961{col 48}{space 1}   -4.27{col 57}{space 3}0.000{col 65}{space 4}-.7693277{col 78}{space 3}-.2852321
+{txt}{space 17}TRAITS {c |}{col 25}{res}{space 2} 4.798959{col 37}{space 2}   .66469{col 48}{space 1}    7.22{col 57}{space 3}0.000{col 65}{space 4}  3.49619{col 78}{space 3} 6.101727
+{txt}{hline 24}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{com}. cd "/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/1984"
+{res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/1984
+{txt}
+{com}. outreg2 using 1984_d.doc, replace 
+{txt}{stata `"shellout using `"1984_d.doc"'"':1984_d.doc}
+{browse `"/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/1984"' :dir}{com} : {txt}{stata `"seeout using "1984_d.txt""':seeout}
+
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/wp/cwmrq5v9115gygh6bzyqpqmw0000gn/T//SD19587.000000"
+{txt}
+{com}. * Ryan Zhang
+. * 1988
+. 
+. clear all
+{res}{txt}
+{com}. capture log close
+{smcl}
+{com}{sf}{ul off}

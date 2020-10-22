@@ -1,0 +1,52 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/thesis/clean_data/2004.smcl
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}21 Oct 2020, 23:04:37
+{txt}
+{com}. 
+. * 2004 Democratic primaries (nh)
+. 
+. * Load in a STATA data set
+. use df04_nh_d
+{txt}(Written by R.              )
+
+{com}. 
+. * Test
+. clogit VoteCandidate NORMALIZED_FT NORMALIZED_VIABILITY NORMALIZED_ELECTABILITY NORMALIZED_IDEOLOGY, group(ID)
+{res}
+{txt}Iteration 0:{space 3}log likelihood = {res:-3.1791805}  
+Iteration 1:{space 3}log likelihood = {res:-2.3595267}  
+Iteration 2:{space 3}log likelihood = {res:-2.3279642}  
+Iteration 3:{space 3}log likelihood = {res:-2.3273744}  
+Iteration 4:{space 3}log likelihood = {res:-2.3273739}  
+Iteration 5:{space 3}log likelihood = {res:-2.3273739}  
+{res}
+{txt}Conditional (fixed-effects) logistic regression
+
+{col 49}Number of obs{col 67}= {res}        16
+{txt}{col 49}LR chi2({res}4{txt}){col 67}= {res}      6.44
+{txt}{col 49}Prob > chi2{col 67}= {res}    0.1689
+{txt}Log likelihood = {res}-2.3273739{txt}{col 49}Pseudo R2{col 67}= {res}    0.5803
+
+{txt}{hline 24}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}          VoteCandidate{col 25}{c |}      Coef.{col 37}   Std. Err.{col 49}      z{col 57}   P>|z|{col 65}     [95% Con{col 78}f. Interval]
+{hline 24}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 10}NORMALIZED_FT {c |}{col 25}{res}{space 2} -3.58008{col 37}{space 2} 5.204265{col 48}{space 1}   -0.69{col 57}{space 3}0.492{col 65}{space 4}-13.78025{col 78}{space 3} 6.620091
+{txt}{space 3}NORMALIZED_VIABILITY {c |}{col 25}{res}{space 2} 22.29589{col 37}{space 2}  28.5554{col 48}{space 1}    0.78{col 57}{space 3}0.435{col 65}{space 4}-33.67166{col 78}{space 3} 78.26344
+{txt}NORMALIZED_ELECTABILITY {c |}{col 25}{res}{space 2} 13.04475{col 37}{space 2} 13.46913{col 48}{space 1}    0.97{col 57}{space 3}0.333{col 65}{space 4}-13.35425{col 78}{space 3} 39.44376
+{txt}{space 4}NORMALIZED_IDEOLOGY {c |}{col 25}{res}{space 2} 5.288755{col 37}{space 2} 6.783446{col 48}{space 1}    0.78{col 57}{space 3}0.436{col 65}{space 4}-8.006555{col 78}{space 3} 18.58406
+{txt}{hline 24}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{com}. cd "/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2004"
+{res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2004
+{txt}
+{com}. outreg2 using 2004_nh_d.xls
+{txt}{browse `"2004_nh_d.xls"'}
+{browse `"/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2004"' :dir}{com} : {txt}{stata `"seeout using "2004_nh_d.txt""':seeout}
+
+{com}. 
+{txt}end of do-file
+
+{com}. 

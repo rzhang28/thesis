@@ -1,0 +1,151 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/thesis/clean_data/2008.smcl
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}21 Oct 2020, 23:07:05
+{txt}
+{com}. 
+. * 2008 Democratic primaries (phone)
+. 
+. * Load in a STATA data set
+. use df08phone_d
+{txt}(Written by R.              )
+
+{com}. 
+. * Test
+. clogit VoteCandidate NORMALIZED_FT NORMALIZED_VIABILITY NORMALIZED_ELECTABILITY NORMALIZED_IDEOLOGY TRAITS, group(ID)
+{txt}note: 36 groups (50 obs) dropped because of all positive or
+      all negative outcomes.
+{res}
+{txt}Iteration 0:{space 3}log likelihood = {res: -1626.556}  
+Iteration 1:{space 3}log likelihood = {res:-1482.9997}  
+Iteration 2:{space 3}log likelihood = {res: -1458.979}  
+Iteration 3:{space 3}log likelihood = {res: -1458.784}  
+Iteration 4:{space 3}log likelihood = {res:-1458.7839}  
+{res}
+{txt}Conditional (fixed-effects) logistic regression
+
+{col 49}Number of obs{col 67}= {res}    10,775
+{txt}{col 49}LR chi2({res}5{txt}){col 67}= {res}   4969.10
+{txt}{col 49}Prob > chi2{col 67}= {res}    0.0000
+{txt}Log likelihood = {res}-1458.7839{txt}{col 49}Pseudo R2{col 67}= {res}    0.6301
+
+{txt}{hline 24}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}          VoteCandidate{col 25}{c |}      Coef.{col 37}   Std. Err.{col 49}      z{col 57}   P>|z|{col 65}     [95% Con{col 78}f. Interval]
+{hline 24}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 10}NORMALIZED_FT {c |}{col 25}{res}{space 2}  2.21147{col 37}{space 2} .0958051{col 48}{space 1}   23.08{col 57}{space 3}0.000{col 65}{space 4} 2.023695{col 78}{space 3} 2.399244
+{txt}{space 3}NORMALIZED_VIABILITY {c |}{col 25}{res}{space 2} 2.955926{col 37}{space 2} .3365108{col 48}{space 1}    8.78{col 57}{space 3}0.000{col 65}{space 4} 2.296377{col 78}{space 3} 3.615475
+{txt}NORMALIZED_ELECTABILITY {c |}{col 25}{res}{space 2} 2.816038{col 37}{space 2}  .377719{col 48}{space 1}    7.46{col 57}{space 3}0.000{col 65}{space 4} 2.075723{col 78}{space 3} 3.556354
+{txt}{space 4}NORMALIZED_IDEOLOGY {c |}{col 25}{res}{space 2}-.3329166{col 37}{space 2} .0781311{col 48}{space 1}   -4.26{col 57}{space 3}0.000{col 65}{space 4}-.4860507{col 78}{space 3}-.1797825
+{txt}{space 17}TRAITS {c |}{col 25}{res}{space 2} 8.834776{col 37}{space 2} .4666574{col 48}{space 1}   18.93{col 57}{space 3}0.000{col 65}{space 4} 7.920144{col 78}{space 3} 9.749407
+{txt}{hline 24}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{com}. cd "/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2008"
+{res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2008
+{txt}
+{com}. outreg2 using 2008_phone_d.xls 
+{txt}{browse `"2008_phone_d.xls"'}
+{browse `"/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2008"' :dir}{com} : {txt}{stata `"seeout using "2008_phone_d.txt""':seeout}
+
+{com}. 
+. * 2008 Republican primaries (phone)
+. 
+. * Load in a STATA data set
+. cd "/Users/ryan/Google Drive/2020_2021/Thesis/Data/thesis/clean_data"
+{res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/thesis/clean_data
+{txt}
+{com}. use df08phone_r
+{txt}(Written by R.              )
+
+{com}. 
+. * Test
+. clogit VoteCandidate NORMALIZED_FT NORMALIZED_VIABILITY NORMALIZED_ELECTABILITY NORMALIZED_IDEOLOGY TRAITS, group(ID)
+{txt}note: 31 groups (40 obs) dropped because of all positive or
+      all negative outcomes.
+{res}
+{txt}Iteration 0:{space 3}log likelihood = {res:-1345.7547}  
+Iteration 1:{space 3}log likelihood = {res: -1277.357}  
+Iteration 2:{space 3}log likelihood = {res:-1208.8529}  
+Iteration 3:{space 3}log likelihood = {res:-1208.2559}  
+Iteration 4:{space 3}log likelihood = {res:-1208.2554}  
+Iteration 5:{space 3}log likelihood = {res:-1208.2554}  
+{res}
+{txt}Conditional (fixed-effects) logistic regression
+
+{col 49}Number of obs{col 67}= {res}     8,786
+{txt}{col 49}LR chi2({res}5{txt}){col 67}= {res}   4011.52
+{txt}{col 49}Prob > chi2{col 67}= {res}    0.0000
+{txt}Log likelihood = {res}-1208.2554{txt}{col 49}Pseudo R2{col 67}= {res}    0.6241
+
+{txt}{hline 24}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}          VoteCandidate{col 25}{c |}      Coef.{col 37}   Std. Err.{col 49}      z{col 57}   P>|z|{col 65}     [95% Con{col 78}f. Interval]
+{hline 24}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 10}NORMALIZED_FT {c |}{col 25}{res}{space 2} 1.935656{col 37}{space 2} .0949364{col 48}{space 1}   20.39{col 57}{space 3}0.000{col 65}{space 4} 1.749584{col 78}{space 3} 2.121728
+{txt}{space 3}NORMALIZED_VIABILITY {c |}{col 25}{res}{space 2} 1.327452{col 37}{space 2} .3248502{col 48}{space 1}    4.09{col 57}{space 3}0.000{col 65}{space 4} .6907575{col 78}{space 3} 1.964147
+{txt}NORMALIZED_ELECTABILITY {c |}{col 25}{res}{space 2} 2.819889{col 37}{space 2} .3537172{col 48}{space 1}    7.97{col 57}{space 3}0.000{col 65}{space 4} 2.126617{col 78}{space 3} 3.513162
+{txt}{space 4}NORMALIZED_IDEOLOGY {c |}{col 25}{res}{space 2}-.4518191{col 37}{space 2} .0803904{col 48}{space 1}   -5.62{col 57}{space 3}0.000{col 65}{space 4}-.6093813{col 78}{space 3}-.2942568
+{txt}{space 17}TRAITS {c |}{col 25}{res}{space 2}  6.96738{col 37}{space 2} .4516473{col 48}{space 1}   15.43{col 57}{space 3}0.000{col 65}{space 4} 6.082167{col 78}{space 3} 7.852592
+{txt}{hline 24}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{com}. cd "/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2008"
+{res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2008
+{txt}
+{com}. outreg2 using 2008_phone_r.xls 
+{txt}{browse `"2008_phone_r.xls"'}
+{browse `"/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2008"' :dir}{com} : {txt}{stata `"seeout using "2008_phone_r.txt""':seeout}
+
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/wp/cwmrq5v9115gygh6bzyqpqmw0000gn/T//SD51814.000000"
+{txt}
+{com}. 
+. * Load in a STATA data set
+. cd "/Users/ryan/Google Drive/2020_2021/Thesis/Data/thesis/clean_data"
+{res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/thesis/clean_data
+{txt}
+{com}. use df08phone_r
+{txt}(Written by R.              )
+
+{com}. 
+. * Test
+. clogit VoteCandidate NORMALIZED_FT NORMALIZED_VIABILITY NORMALIZED_ELECTABILITY NORMALIZED_IDEOLOGY TRAITS, group(ID)
+{txt}note: 31 groups (40 obs) dropped because of all positive or
+      all negative outcomes.
+{res}
+{txt}Iteration 0:{space 3}log likelihood = {res:-1345.7547}  
+Iteration 1:{space 3}log likelihood = {res: -1277.357}  
+Iteration 2:{space 3}log likelihood = {res:-1208.8529}  
+Iteration 3:{space 3}log likelihood = {res:-1208.2559}  
+Iteration 4:{space 3}log likelihood = {res:-1208.2554}  
+Iteration 5:{space 3}log likelihood = {res:-1208.2554}  
+{res}
+{txt}Conditional (fixed-effects) logistic regression
+
+{col 49}Number of obs{col 67}= {res}     8,786
+{txt}{col 49}LR chi2({res}5{txt}){col 67}= {res}   4011.52
+{txt}{col 49}Prob > chi2{col 67}= {res}    0.0000
+{txt}Log likelihood = {res}-1208.2554{txt}{col 49}Pseudo R2{col 67}= {res}    0.6241
+
+{txt}{hline 24}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}          VoteCandidate{col 25}{c |}      Coef.{col 37}   Std. Err.{col 49}      z{col 57}   P>|z|{col 65}     [95% Con{col 78}f. Interval]
+{hline 24}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 10}NORMALIZED_FT {c |}{col 25}{res}{space 2} 1.935656{col 37}{space 2} .0949364{col 48}{space 1}   20.39{col 57}{space 3}0.000{col 65}{space 4} 1.749584{col 78}{space 3} 2.121728
+{txt}{space 3}NORMALIZED_VIABILITY {c |}{col 25}{res}{space 2} 1.327452{col 37}{space 2} .3248502{col 48}{space 1}    4.09{col 57}{space 3}0.000{col 65}{space 4} .6907575{col 78}{space 3} 1.964147
+{txt}NORMALIZED_ELECTABILITY {c |}{col 25}{res}{space 2} 2.819889{col 37}{space 2} .3537172{col 48}{space 1}    7.97{col 57}{space 3}0.000{col 65}{space 4} 2.126617{col 78}{space 3} 3.513162
+{txt}{space 4}NORMALIZED_IDEOLOGY {c |}{col 25}{res}{space 2}-.4518191{col 37}{space 2} .0803904{col 48}{space 1}   -5.62{col 57}{space 3}0.000{col 65}{space 4}-.6093813{col 78}{space 3}-.2942568
+{txt}{space 17}TRAITS {c |}{col 25}{res}{space 2}  6.96738{col 37}{space 2} .4516473{col 48}{space 1}   15.43{col 57}{space 3}0.000{col 65}{space 4} 6.082167{col 78}{space 3} 7.852592
+{txt}{hline 24}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{com}. cd "/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2008"
+{res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2008
+{txt}
+{com}. outreg2 using 2008_phone_r.xls 
+{txt}{browse `"2008_phone_r.xls"'}
+{browse `"/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2008"' :dir}{com} : {txt}{stata `"seeout using "2008_phone_r.txt""':seeout}
+
+{com}. 
+{txt}end of do-file
+
+{com}. 

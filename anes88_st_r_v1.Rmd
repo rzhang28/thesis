@@ -1,0 +1,316 @@
+---
+title: "anes"
+author: "Ryan Zhang"
+date: "10/12/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(Hmisc)
+library(rqPen)
+library(vctrs)
+library(foreign)
+
+```
+
+
+# Reading Data
+
+```{r warning = FALSE}
+
+# Reading in the three datasets.
+
+anes88_national <- spss.get("raw_data/anes/anes88-national.POR", use.value.labels=TRUE)
+anes88_st <- spss.get("raw_data/anes/anes88-super-tuesday.POR", use.value.labels=TRUE)
+
+```
+
+
+## Cleaning Data (Part One)
+
+# ```{r}
+# 
+# # Cleaning the 1988 dataset
+# # Case 0
+# 
+# anes88_st_clean_0 <- anes88_st %>%
+#   
+#   # Voting from VST0457 to VST0462
+#   # Feeling thermometers from VST0171 to VST0189
+#   # Traits from VST0301 to VST0424
+#   # Ideology from VST0425 to VST0441
+#   # Viability from VST0229 to VST0241
+#   # Electability from VST0242 to VST0254
+#   
+#   select(VST0001, VST0457:VST0462, VST0171:VST0189, VST0301:VST0424,
+#          VST0425:VST0441, VST0229:VST0241, VST0242:VST0254)
+# 
+# # Case 1
+# 
+# anes88_st_clean_1 <- anes88_st %>%
+# 
+#   # Voting from VST1528 to VST1561
+#   # Feeling thermometers from VST1301 to VST1317
+#   # Traits from VST1409 to VST1527
+#   # Ideology not asked
+#   # Viability from VST1322 to VST1331
+#   # Electability from VST1332 to VST1341 
+# 
+#   select(VST1001, VST1528:VST1561, VST1301:VST1317, VST1409:VST1527,
+#          VST1322:VST1331, VST1332:VST1341)
+# 
+# ```
+
+## Cleaning Data (Part Two)
+
+## Repositioning columns  
+
+```{r}
+df88st <- anes88_st %>%
+  
+  # Select ID, voting, lib/con and feeling thermometer, viability, electability, ...
+  
+  # Voting  VST0461.
+  # Feeling thermometers from VST0171 to VST0189
+  # Traits from VST0301 to VST0424
+  # Ideology from VST0425 to VST0441
+  # Viability from VST0229 to VST0241
+  # Electability from VST0242 to VST0254  
+  
+  # select(VST0001, VST0459, 
+  #        VST0171, VST0172, VST0173, VST0175, VST0176,
+  #        VST0229, VST0230, VST0231, VST0233, VST0234,
+  #        VST0242, VST0243, VST0244, VST0246, VST0247,
+  #        
+  #        VST0425, 
+  #        VST0428, VST0429, VST0430, VST0432, VST0433,
+  #        
+  #        VST0304, VST0306, VST0307, VST0308, 
+  #        VST0312, VST0314, VST0315, VST0316, 
+  #        VST0320, VST0322, VST0323, VST0324,
+  #        VST0336, VST0338, VST0339, VST0340, 
+  #        VST0344, VST0346, VST0347, VST0348
+  #        )
+
+  select(VST0001, VST0461, 
+         VST0178, VST0179, VST0180, VST0181, VST0182, VST0183,
+         VST0236, VST0237, VST0238, VST0239, VST0240, VST0241,
+         VST0249, VST0250, VST0251, VST0252, VST0253, VST0254,
+         
+         VST0425, 
+         VST0435, VST0436, VST0437, VST0438, VST0439, VST0440,
+         
+         VST0360, VST0362, VST0363, VST0364, 
+         VST0368, VST0370, VST0371, VST0372, 
+         VST0376, VST0378, VST0379, VST0380,
+         VST0404, VST0406, VST0407, VST0408, 
+         VST0412, VST0414, VST0415, VST0416,
+         VST0420, VST0422, VST0423, VST0424  
+         )
+
+# rename columns
+
+my_candidate <- c("BUSH","HAIG","ROBERTSON","DOLE","KEMP", "DUPONT")
+my_candidate_id <- as.integer(c(51, 54, 56, 52, 55, 53))
+
+my_names <- c("ID", "voting", 
+              "Feeling1", "Feeling2", "Feeling3", "Feeling4", "Feeling5", "Feeling6",
+              "Viability1", "Viability2", "Viability3", "Viability4", "Viability5",  "Viability6",
+              "Electability1", "Electability2", "Electability3", "Electability4", "Electability5", "Electability6",
+              
+              "Ideology", 
+              "Ideology1", "Ideology2", "Ideology3", "Ideology4", "Ideology5", "Ideology6",
+              
+              "Inspire1", "Decent1", "Cares1", "Know1",
+              "Inspire2", "Decent2", "Cares2", "Know2",
+              "Inspire3", "Decent3", "Cares3", "Know3",
+              "Inspire4", "Decent4", "Cares4", "Know4",
+              "Inspire5", "Decent5", "Cares5", "Know5",
+              "Inspire6", "Decent6", "Cares6", "Know6"
+              )
+
+colnames(df88st) <- my_names
+```
+
+
+```{r}
+df <- data.frame(my_candidate_id, my_candidate, stringsAsFactors=FALSE)
+df88st <-merge(df88st, df, by.x = "voting", by.y = "my_candidate_id", all.x=TRUE)
+names(df88st)[names(df88st)=="my_candidate"] <- "VoteCandidate"
+```
+
+
+```{r eval=FALSE, include=FALSE}
+
+# verify column renaming, candidates and their number 1-5 mapping must be correct.
+
+str(df88st)
+
+```
+
+
+## Normalize ratings
+
+```{r warning=FALSE}
+
+# 1) Normalize feeling thermometers
+
+my_rescale1 <- function(X) round((X - min(X, na.rm = TRUE))/ (max(X, na.rm = TRUE) - min(X, na.rm = TRUE)), 6)
+
+# NORMALIZED_FT
+df88st[, c("NORMALIZED_FT1", "NORMALIZED_FT2", "NORMALIZED_FT3", "NORMALIZED_FT4", "NORMALIZED_FT5", "NORMALIZED_FT6")] <- t(apply(df88st[, c("Feeling1", "Feeling2", "Feeling3", "Feeling4", "Feeling5", "Feeling6")], MARGIN = 1, FUN = my_rescale1))
+
+
+# 2) Normalize viability
+
+my_rescale2 <- function(X) round(X / sum(X, na.rm = TRUE), 6)
+
+# NORMALIZED_VIABILITY
+df88st[, c("NORMALIZED_VIABILITY1", "NORMALIZED_VIABILITY2", "NORMALIZED_VIABILITY3", "NORMALIZED_VIABILITY4", "NORMALIZED_VIABILITY5", "NORMALIZED_VIABILITY6")] <- t(apply(df88st[, c("Viability1", "Viability2", "Viability3", "Viability4", "Viability5", "Viability6")], MARGIN = 1, FUN = my_rescale2))
+
+# NORMALIZED_ELECTABILITY 
+df88st[, c("NORMALIZED_ELECTABILITY1", "NORMALIZED_ELECTABILITY2", "NORMALIZED_ELECTABILITY3", "NORMALIZED_ELECTABILITY4", "NORMALIZED_ELECTABILITY5", "NORMALIZED_ELECTABILITY6")] <- t(apply(df88st[, c("Electability1", "Electability2", "Electability3", "Electability4", "Electability5", "Electability6")], MARGIN = 1, FUN = my_rescale2))
+
+
+# 3) Manipulate ideological distance
+
+# IDEOLOGY
+df88st[, c("NORMALIZED_IDEOLOGY1", "NORMALIZED_IDEOLOGY2", "NORMALIZED_IDEOLOGY3", "NORMALIZED_IDEOLOGY4", "NORMALIZED_IDEOLOGY5", "NORMALIZED_IDEOLOGY6")] <- square(df88st[, c("Ideology1", "Ideology2", "Ideology3", "Ideology4", "Ideology5", "Ideology6")] - df88st[, "Ideology"])
+
+# rescale ideological distance
+
+df88st[, c("NORMALIZED_IDEOLOGY1", "NORMALIZED_IDEOLOGY2", "NORMALIZED_IDEOLOGY3", "NORMALIZED_IDEOLOGY4", "NORMALIZED_IDEOLOGY5", "NORMALIZED_IDEOLOGY6")] <- t(apply(df88st[, c("NORMALIZED_IDEOLOGY1", "NORMALIZED_IDEOLOGY2", "NORMALIZED_IDEOLOGY3", "NORMALIZED_IDEOLOGY4", "NORMALIZED_IDEOLOGY5", "NORMALIZED_IDEOLOGY6")], MARGIN = 1, FUN = my_rescale1))
+
+
+# 4) Average candidate traits
+
+# TRAITS
+df88st$TRAITS1 = abs(rowMeans(df88st[, c("Inspire1", "Decent1", "Cares1", "Know1")], na.rm = TRUE) - 6) / 5
+df88st$TRAITS2 = abs(rowMeans(df88st[, c("Inspire2", "Decent2", "Cares2", "Know2")], na.rm = TRUE) - 6) / 5
+df88st$TRAITS3 = abs(rowMeans(df88st[, c("Inspire3", "Decent3", "Cares3", "Know3")], na.rm = TRUE) - 6) / 5
+df88st$TRAITS4 = abs(rowMeans(df88st[, c("Inspire4", "Decent4", "Cares4", "Know4")], na.rm = TRUE) - 6) / 5
+df88st$TRAITS5 = abs(rowMeans(df88st[, c("Inspire5", "Decent5", "Cares5", "Know5")], na.rm = TRUE) - 6) / 5
+df88st$TRAITS6 = abs(rowMeans(df88st[, c("Inspire6", "Decent6", "Cares6", "Know6")], na.rm = TRUE) - 6) / 5
+
+# 5) Convert NaN to NA
+
+df88st[df88st=="NaN"] <- NA
+
+```
+ 
+ 
+```{r}
+
+# verify  calculations
+
+df88st[, c("NORMALIZED_FT1", "NORMALIZED_FT2", "NORMALIZED_FT3", "NORMALIZED_FT4", "NORMALIZED_FT5", "NORMALIZED_FT6", "Feeling1", "Feeling2", "Feeling3", "Feeling4", "Feeling5", "Feeling6")]
+df88st[, c("NORMALIZED_VIABILITY1", "NORMALIZED_VIABILITY2", "NORMALIZED_VIABILITY3", "NORMALIZED_VIABILITY4", "NORMALIZED_VIABILITY5", "NORMALIZED_VIABILITY6", "Viability1", "Viability2", "Viability3", "Viability4", "Viability5", "Viability6")]
+df88st[, c("NORMALIZED_ELECTABILITY1", "NORMALIZED_ELECTABILITY2", "NORMALIZED_ELECTABILITY3", "NORMALIZED_ELECTABILITY4", "NORMALIZED_ELECTABILITY5", "NORMALIZED_ELECTABILITY6", "Electability1", "Electability2", "Electability3", "Electability4", "Electability5", "Electability6")]
+df88st[, c("NORMALIZED_IDEOLOGY1", "NORMALIZED_IDEOLOGY2", "NORMALIZED_IDEOLOGY3", "NORMALIZED_IDEOLOGY4", "NORMALIZED_IDEOLOGY5", "NORMALIZED_IDEOLOGY6", "Ideology1", "Ideology2", "Ideology3", "Ideology4", "Ideology5", "Ideology6")]
+df88st[, c("TRAITS1", "Inspire1", "Decent1", "Cares1", "Know1")]
+df88st[, c("TRAITS2", "Inspire2", "Decent2", "Cares2", "Know2")]
+df88st[, c("TRAITS3", "Inspire3", "Decent3", "Cares3", "Know3")]
+df88st[, c("TRAITS4", "Inspire4", "Decent4", "Cares4", "Know4")]
+df88st[, c("TRAITS5", "Inspire5", "Decent5", "Cares5", "Know5")]
+df88st[, c("TRAITS6", "Inspire6", "Decent6", "Cares6", "Know6")]
+
+```
+ 
+ 
+## Pivoting Data (Part Two)
+
+```{r}
+
+# 1) Subset: df88st_normalized_ft
+
+my_cols <- c("ID", "VoteCandidate", "NORMALIZED_FT1", "NORMALIZED_FT2", "NORMALIZED_FT3", "NORMALIZED_FT4", "NORMALIZED_FT5", "NORMALIZED_FT6")
+df <- df88st[, my_cols]
+colnames(df) <- c("ID", "VoteCandidate", my_candidate)
+
+df <- df %>%
+  pivot_longer(names_to = "Candidate", 
+               values_to = "NORMALIZED_FT", 
+               cols = -c(ID, VoteCandidate))
+df_final <- df
+
+
+# 2) Subset: df88st_normalized_viability
+
+my_cols <- c("ID", "NORMALIZED_VIABILITY1", "NORMALIZED_VIABILITY2", "NORMALIZED_VIABILITY3", "NORMALIZED_VIABILITY4", "NORMALIZED_VIABILITY5", "NORMALIZED_VIABILITY6")
+df <- df88st[, my_cols]
+colnames(df) <- c("ID", my_candidate)
+
+df <- df %>%
+  pivot_longer(names_to = "Candidate", 
+               values_to = "NORMALIZED_VIABILITY", 
+               cols = -ID)
+
+df_final = merge(df_final, df, by=c("ID", "Candidate"))
+
+# convert VotingCandata to 1, 0
+df_final$VoteCandidate <-  1 * (df_final$Candidate == df_final$VoteCandidate)
+
+# 3) Subset: df88st_normalized_electability
+
+my_cols <- c("ID", "NORMALIZED_ELECTABILITY1", "NORMALIZED_ELECTABILITY2", "NORMALIZED_ELECTABILITY3", "NORMALIZED_ELECTABILITY4", "NORMALIZED_ELECTABILITY5", "NORMALIZED_ELECTABILITY6")
+df <- df88st[, my_cols]
+colnames(df) <- c("ID", my_candidate)
+
+df <- df %>%
+  pivot_longer(names_to = "Candidate", 
+               values_to = "NORMALIZED_ELECTABILITY", 
+               cols = -ID)
+
+df_final = merge(df_final, df, by=c("ID", "Candidate"))
+
+
+# 4) Subset: df88st_normalized_ideology
+
+my_cols <- c("ID", "NORMALIZED_IDEOLOGY1", "NORMALIZED_IDEOLOGY2", "NORMALIZED_IDEOLOGY3", "NORMALIZED_IDEOLOGY4", "NORMALIZED_IDEOLOGY5", "NORMALIZED_IDEOLOGY6")
+df <- df88st[, my_cols]
+colnames(df) <- c("ID", my_candidate)
+
+df <- df %>%
+  pivot_longer(names_to = "Candidate", 
+               values_to = "NORMALIZED_IDEOLOGY", 
+               cols = -ID)
+
+df_final = merge(df_final, df, by=c("ID", "Candidate"))
+
+
+# 5) Subset: df88st_traits
+
+my_cols <- c("ID", "TRAITS1", "TRAITS2", "TRAITS3", "TRAITS4", "TRAITS5", "TRAITS6")
+df <- df88st[, my_cols]
+colnames(df) <- c("ID", my_candidate)
+
+df <- df %>%
+  pivot_longer(names_to = "Candidate", 
+               values_to = "TRAITS", 
+               cols = -ID)
+
+df_final = merge(df_final, df, by=c("ID", "Candidate"))
+
+```
+
+
+## Writing Cleaned Dataset
+
+```{r}
+
+df_final %>%
+  drop_na() %>%
+  write.dta("clean_data/df88st_r.dta")
+
+```
+
+
+```{r include=FALSE}
+
+rm(list=ls())
+
+```
+

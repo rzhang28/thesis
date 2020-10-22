@@ -1,0 +1,73 @@
+---
+title: "naes"
+author: "Ryan Zhang"
+date: "10/12/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(foreign)
+
+```
+
+```{r warning = FALSE}
+
+naes08_online <- read.spss("raw_data/naes/naes08-online-wave-2-data-full.sav",
+                  to.data.frame=TRUE)
+naes08_phone <- read.spss("raw_data/naes/naes08-phone-nat-rcs-data-full.sav",
+                  to.data.frame=TRUE)
+naes04 <- read.spss("raw_data/naes/naes04-nh.sav", to.data.frame=TRUE)
+
+# naes00? 
+```
+
+```{r}
+
+# Cleaning the 2008 dataset
+# Online version
+
+naes08_online_clean_d <- naes08_online %>%
+  
+  # Voting RBa, RCa, RCb
+  # Feeling thermometers ABc02_2, ABe02_2, ABo02_2
+  # Traits not asked.
+  # Ideology ABc05_2, ABe05_2, ABo05_2
+  # Viability NA04, NA05 
+  # Electability NB01, NB02, NB03
+  
+# Cleaning the 2008 dataset
+# Phone version
+
+naes08_phone_clean_d <- naes08_phone %>%
+
+  # Voting RBa, RBb, RCa, RCb
+  # Feeling thermometers ABc01, ABc02, ABe01, ABo01, ABo02, ABo03
+  # Traits ABc04, ABc05, ABc06, ABc07, ABe03, ABe04, ABe05, ABe06, ABo05, ABo06, ABo07, ABo08
+  # Ideology ABb02, ABc03, ABe02, ABo04
+  # Viability from NAa01 to NAa08
+  # Electability from NBa01 to NBa07 
+  
+# Cleaning the 2004 dataset
+  
+naes04_clean_d <- naes04 %>%
+
+  # Voting cRB13
+  # Feeling thermometers cAB01, cAC04, cAC17, cAC26, cAC35, cAC44
+  # Traits from cAC06 to cAC11, from cAC18 to cAC23, from cAC27 to cAC32, from cAC36 to cAC41, from cAC45 to cAC50
+  # Ideology cAB27, cAC14, cAC25, cAC34, cAC43, cAC52
+  # Viability from cNA01 to cNA06
+  # Electability from cNA09 to cNA26
+
+naes04_clean_d <- naes04 %>%
+    
+naes08_phone_clean <- naes08_phone %>%
+  filter(!is.na(AAr02_c)) 
+
+naes08_phone_clean %>%
+  ggplot(aes(x = AAr02_c)) + 
+    geom_histogram(stat = "count")
+```
+
