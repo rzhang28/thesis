@@ -31,8 +31,6 @@ naes00[naes00 == 999] <- NA
 
 ## Cleaning Data
 
-## Repositioning columns  
-
 ```{r}
 
 df00 <- naes00 %>%
@@ -233,6 +231,21 @@ df <- df %>%
                cols = -ID)
 
 df_final = merge(df_final, df, by = c("ID", "Candidate"))
+
+```
+
+
+```{r}
+
+# Create new columns using candidate names, assign 0 to all
+df_final[, sort(my_candidate)] <- 0
+
+# Get index when intersection column name/value matches
+my_index <- cbind(seq_len(nrow(df_final)), 
+                  match(df_final$Candidate, names(df_final)[-1]))
+
+# Assign 1 to my_index cells
+df_final[-1][my_index] <- 1
 
 ```
 

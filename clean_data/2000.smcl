@@ -1,9 +1,9 @@
 {smcl}
-{txt}{sf}{ul off}{.-}
+{com}{sf}{ul off}{txt}{.-}
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/thesis/clean_data/2000.smcl
   {txt}log type:  {res}smcl
- {txt}opened on:  {res}17 Oct 2020, 22:22:01
+ {txt}opened on:  {res}22 Oct 2020, 02:19:38
 {txt}
 {com}. 
 . * 2000 Democratic primaries (national)
@@ -14,164 +14,38 @@
 
 {com}. 
 . * Test
-. clogit VoteCandidate NORMALIZED_FT NORMALIZED_VIABILITY NORMALIZED_ELECTABILITY NORMALIZED_IDEOLOGY, group(Candidate)
+. clogit VoteCandidate BRADLEY NORMALIZED_FT NORMALIZED_VIABILITY NORMALIZED_ELECTABILITY NORMALIZED_IDEOLOGY, group(Candidate)
 {txt}note: multiple positive outcomes within groups encountered.
+note: BRADLEY omitted because of no within-group variance.
 {res}
-{txt}Iteration 0:{space 3}log likelihood = {res:-281.77482}  
-Iteration 1:{space 3}log likelihood = {res:-281.11162}  
-Iteration 2:{space 3}log likelihood = {res:-281.10704}  
-Iteration 3:{space 3}log likelihood = {res:-281.10704}  
+{txt}Iteration 0:{space 3}log likelihood = {res:-165.99335}  
+Iteration 1:{space 3}log likelihood = {res: -164.0401}  
+Iteration 2:{space 3}log likelihood = {res: -164.0311}  
+Iteration 3:{space 3}log likelihood = {res: -164.0311}  
 {res}
 {txt}Conditional (fixed-effects) logistic regression
 
-{col 49}Number of obs{col 67}= {res}       564
-{txt}{col 49}LR chi2({res}4{txt}){col 67}= {res}    129.21
+{col 49}Number of obs{col 67}= {res}       560
+{txt}{col 49}LR chi2({res}4{txt}){col 67}= {res}    357.24
 {txt}{col 49}Prob > chi2{col 67}= {res}    0.0000
-{txt}Log likelihood = {res}-281.10704{txt}{col 49}Pseudo R2{col 67}= {res}    0.1869
+{txt}Log likelihood = {res} -164.0311{txt}{col 49}Pseudo R2{col 67}= {res}    0.5213
 
 {txt}{hline 24}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
 {col 1}          VoteCandidate{col 25}{c |}      Coef.{col 37}   Std. Err.{col 49}      z{col 57}   P>|z|{col 65}     [95% Con{col 78}f. Interval]
 {hline 24}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{space 10}NORMALIZED_FT {c |}{col 25}{res}{space 2} 1.18e-14{col 37}{space 2} .2240231{col 48}{space 1}    0.00{col 57}{space 3}1.000{col 65}{space 4}-.4390771{col 78}{space 3} .4390771
-{txt}{space 3}NORMALIZED_VIABILITY {c |}{col 25}{res}{space 2} 3.391936{col 37}{space 2} .4346969{col 48}{space 1}    7.80{col 57}{space 3}0.000{col 65}{space 4} 2.539946{col 78}{space 3} 4.243927
-{txt}NORMALIZED_ELECTABILITY {c |}{col 25}{res}{space 2} 1.856879{col 37}{space 2} .4686638{col 48}{space 1}    3.96{col 57}{space 3}0.000{col 65}{space 4} .9383152{col 78}{space 3} 2.775444
-{txt}{space 4}NORMALIZED_IDEOLOGY {c |}{col 25}{res}{space 2}-1.65e-15{col 37}{space 2} .2813722{col 48}{space 1}   -0.00{col 57}{space 3}1.000{col 65}{space 4}-.5514794{col 78}{space 3} .5514794
+{space 16}BRADLEY {c |}{col 25}{res}{space 2}        0{col 37}{txt}  (omitted)
+{space 10}NORMALIZED_FT {c |}{col 25}{res}{space 2} 4.286628{col 37}{space 2}  .368015{col 48}{space 1}   11.65{col 57}{space 3}0.000{col 65}{space 4} 3.565331{col 78}{space 3} 5.007924
+{txt}{space 3}NORMALIZED_VIABILITY {c |}{col 25}{res}{space 2} 1.787349{col 37}{space 2} .5603592{col 48}{space 1}    3.19{col 57}{space 3}0.001{col 65}{space 4} .6890657{col 78}{space 3} 2.885633
+{txt}NORMALIZED_ELECTABILITY {c |}{col 25}{res}{space 2}  2.13389{col 37}{space 2} .6399482{col 48}{space 1}    3.33{col 57}{space 3}0.001{col 65}{space 4} .8796143{col 78}{space 3} 3.388165
+{txt}{space 4}NORMALIZED_IDEOLOGY {c |}{col 25}{res}{space 2}-.7334087{col 37}{space 2} .3319487{col 48}{space 1}   -2.21{col 57}{space 3}0.027{col 65}{space 4}-1.384016{col 78}{space 3}-.0828013
 {txt}{hline 24}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
 
 {com}. cd "/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2000"
 {res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2000
 {txt}
-{com}. outreg2 using 2000_national_d.doc 
-{txt}{stata `"shellout using `"2000_national_d.doc"'"':2000_national_d.doc}
+{com}. outreg2 using 2000_national_d.xls, replace 
+{txt}{browse `"2000_national_d.xls"'}
 {browse `"/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2000"' :dir}{com} : {txt}{stata `"seeout using "2000_national_d.txt""':seeout}
-
-{com}. 
-. * 2000 Democratic primaries (ia)
-. 
-. * Load in a STATA data set
-. cd "/Users/ryan/Google Drive/2020_2021/Thesis/Data/thesis/clean_data"
-{res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/thesis/clean_data
-{txt}
-{com}. use df00_ia_d
-{txt}(Written by R.              )
-
-{com}. 
-. * Test
-. clogit VoteCandidate NORMALIZED_FT NORMALIZED_VIABILITY NORMALIZED_ELECTABILITY NORMALIZED_IDEOLOGY, group(Candidate)
-{txt}note: multiple positive outcomes within groups encountered.
-{res}
-{txt}Iteration 0:{space 3}log likelihood = {res:-77.684094}  
-Iteration 1:{space 3}log likelihood = {res:-77.677828}  
-Iteration 2:{space 3}log likelihood = {res:-77.677827}  
-{res}
-{txt}Conditional (fixed-effects) logistic regression
-
-{col 49}Number of obs{col 67}= {res}       237
-{txt}{col 49}LR chi2({res}4{txt}){col 67}= {res}    148.66
-{txt}{col 49}Prob > chi2{col 67}= {res}    0.0000
-{txt}Log likelihood = {res}-77.677827{txt}{col 49}Pseudo R2{col 67}= {res}    0.4890
-
-{txt}{hline 24}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{col 1}          VoteCandidate{col 25}{c |}      Coef.{col 37}   Std. Err.{col 49}      z{col 57}   P>|z|{col 65}     [95% Con{col 78}f. Interval]
-{hline 24}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{space 10}NORMALIZED_FT {c |}{col 25}{res}{space 2} 3.024783{col 37}{space 2} .4754308{col 48}{space 1}    6.36{col 57}{space 3}0.000{col 65}{space 4} 2.092955{col 78}{space 3}  3.95661
-{txt}{space 3}NORMALIZED_VIABILITY {c |}{col 25}{res}{space 2} 4.391445{col 37}{space 2} 1.064332{col 48}{space 1}    4.13{col 57}{space 3}0.000{col 65}{space 4} 2.305391{col 78}{space 3} 6.477498
-{txt}NORMALIZED_ELECTABILITY {c |}{col 25}{res}{space 2} 2.241779{col 37}{space 2} 1.041855{col 48}{space 1}    2.15{col 57}{space 3}0.031{col 65}{space 4} .1997815{col 78}{space 3} 4.283777
-{txt}{space 4}NORMALIZED_IDEOLOGY {c |}{col 25}{res}{space 2}-.6673809{col 37}{space 2} .4854792{col 48}{space 1}   -1.37{col 57}{space 3}0.169{col 65}{space 4}-1.618903{col 78}{space 3} .2841409
-{txt}{hline 24}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-
-{com}. cd "/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2000"
-{res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2000
-{txt}
-{com}. outreg2 using 2000_ia_d.doc 
-{txt}{stata `"shellout using `"2000_ia_d.doc"'"':2000_ia_d.doc}
-{browse `"/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2000"' :dir}{com} : {txt}{stata `"seeout using "2000_ia_d.txt""':seeout}
-
-{com}. 
-. * 2000 Democratic primaries (nh)
-. 
-. * Load in a STATA data set
-. cd "/Users/ryan/Google Drive/2020_2021/Thesis/Data/thesis/clean_data"
-{res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/thesis/clean_data
-{txt}
-{com}. use df00_nh_d
-{txt}(Written by R.              )
-
-{com}. 
-. * Test
-. clogit VoteCandidate NORMALIZED_FT NORMALIZED_VIABILITY NORMALIZED_ELECTABILITY NORMALIZED_IDEOLOGY, group(Candidate)
-{txt}note: multiple positive outcomes within groups encountered.
-{res}
-{txt}Iteration 0:{space 3}log likelihood = {res:-71.148893}  
-Iteration 1:{space 3}log likelihood = {res:-70.991591}  
-Iteration 2:{space 3}log likelihood = {res:-70.991432}  
-Iteration 3:{space 3}log likelihood = {res:-70.991432}  
-{res}
-{txt}Conditional (fixed-effects) logistic regression
-
-{col 49}Number of obs{col 67}= {res}       341
-{txt}{col 49}LR chi2({res}4{txt}){col 67}= {res}    318.06
-{txt}{col 49}Prob > chi2{col 67}= {res}    0.0000
-{txt}Log likelihood = {res}-70.991432{txt}{col 49}Pseudo R2{col 67}= {res}    0.6914
-
-{txt}{hline 24}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{col 1}          VoteCandidate{col 25}{c |}      Coef.{col 37}   Std. Err.{col 49}      z{col 57}   P>|z|{col 65}     [95% Con{col 78}f. Interval]
-{hline 24}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{space 10}NORMALIZED_FT {c |}{col 25}{res}{space 2}    6.412{col 37}{space 2} .7633943{col 48}{space 1}    8.40{col 57}{space 3}0.000{col 65}{space 4} 4.915775{col 78}{space 3} 7.908226
-{txt}{space 3}NORMALIZED_VIABILITY {c |}{col 25}{res}{space 2} 5.476313{col 37}{space 2} 1.087109{col 48}{space 1}    5.04{col 57}{space 3}0.000{col 65}{space 4} 3.345619{col 78}{space 3} 7.607007
-{txt}NORMALIZED_ELECTABILITY {c |}{col 25}{res}{space 2} 2.415944{col 37}{space 2} .8527508{col 48}{space 1}    2.83{col 57}{space 3}0.005{col 65}{space 4} .7445828{col 78}{space 3} 4.087304
-{txt}{space 4}NORMALIZED_IDEOLOGY {c |}{col 25}{res}{space 2}-.5176675{col 37}{space 2} .5555069{col 48}{space 1}   -0.93{col 57}{space 3}0.351{col 65}{space 4}-1.606441{col 78}{space 3}  .571106
-{txt}{hline 24}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-
-{com}. cd "/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2000"
-{res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2000
-{txt}
-{com}. outreg2 using 2000_nh_d.doc 
-{txt}{stata `"shellout using `"2000_nh_d.doc"'"':2000_nh_d.doc}
-{browse `"/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2000"' :dir}{com} : {txt}{stata `"seeout using "2000_nh_d.txt""':seeout}
-
-{com}. 
-. * 2000 Democratic primaries (super)
-. 
-. * Load in a STATA data set
-. cd "/Users/ryan/Google Drive/2020_2021/Thesis/Data/thesis/clean_data"
-{res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/thesis/clean_data
-{txt}
-{com}. use df00_super_d
-{txt}(Written by R.              )
-
-{com}. 
-. * Test
-. clogit VoteCandidate NORMALIZED_FT NORMALIZED_VIABILITY NORMALIZED_ELECTABILITY NORMALIZED_IDEOLOGY, group(Candidate)
-{txt}note: multiple positive outcomes within groups encountered.
-{res}
-{txt}Iteration 0:{space 3}log likelihood = {res:-210.58282}  
-Iteration 1:{space 3}log likelihood = {res:-210.50056}  
-Iteration 2:{space 3}log likelihood = {res:-210.50051}  
-Iteration 3:{space 3}log likelihood = {res:-210.50051}  
-{res}
-{txt}Conditional (fixed-effects) logistic regression
-
-{col 49}Number of obs{col 67}= {res}       631
-{txt}{col 49}LR chi2({res}4{txt}){col 67}= {res}    339.64
-{txt}{col 49}Prob > chi2{col 67}= {res}    0.0000
-{txt}Log likelihood = {res}-210.50051{txt}{col 49}Pseudo R2{col 67}= {res}    0.4465
-
-{txt}{hline 24}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{col 1}          VoteCandidate{col 25}{c |}      Coef.{col 37}   Std. Err.{col 49}      z{col 57}   P>|z|{col 65}     [95% Con{col 78}f. Interval]
-{hline 24}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{space 10}NORMALIZED_FT {c |}{col 25}{res}{space 2} 3.336564{col 37}{space 2}  .307314{col 48}{space 1}   10.86{col 57}{space 3}0.000{col 65}{space 4}  2.73424{col 78}{space 3} 3.938889
-{txt}{space 3}NORMALIZED_VIABILITY {c |}{col 25}{res}{space 2} 4.240773{col 37}{space 2} .5369827{col 48}{space 1}    7.90{col 57}{space 3}0.000{col 65}{space 4} 3.188306{col 78}{space 3}  5.29324
-{txt}NORMALIZED_ELECTABILITY {c |}{col 25}{res}{space 2} 1.600949{col 37}{space 2} .5315939{col 48}{space 1}    3.01{col 57}{space 3}0.003{col 65}{space 4} .5590438{col 78}{space 3} 2.642854
-{txt}{space 4}NORMALIZED_IDEOLOGY {c |}{col 25}{res}{space 2}  .453019{col 37}{space 2}  .313248{col 48}{space 1}    1.45{col 57}{space 3}0.148{col 65}{space 4}-.1609358{col 78}{space 3} 1.066974
-{txt}{hline 24}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-
-{com}. cd "/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2000"
-{res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2000
-{txt}
-{com}. outreg2 using 2000_super_d.doc 
-{txt}{stata `"shellout using `"2000_super_d.doc"'"':2000_super_d.doc}
-{browse `"/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2000"' :dir}{com} : {txt}{stata `"seeout using "2000_super_d.txt""':seeout}
 
 {com}. 
 . * 2000 Republican primaries (national)
@@ -185,122 +59,82 @@ Iteration 3:{space 3}log likelihood = {res:-210.50051}
 
 {com}. 
 . * Test
-. clogit VoteCandidate NORMALIZED_FT NORMALIZED_VIABILITY NORMALIZED_ELECTABILITY NORMALIZED_IDEOLOGY, group(Candidate)
+. clogit VoteCandidate MCCAIN NORMALIZED_FT NORMALIZED_VIABILITY NORMALIZED_ELECTABILITY NORMALIZED_IDEOLOGY, group(Candidate)
 {txt}note: multiple positive outcomes within groups encountered.
+note: MCCAIN omitted because of no within-group variance.
 {res}
-{txt}Iteration 0:{space 3}log likelihood = {res:-360.99428}  
-Iteration 1:{space 3}log likelihood = {res:-359.66649}  
-Iteration 2:{space 3}log likelihood = {res:-359.66625}  
-Iteration 3:{space 3}log likelihood = {res:-359.66625}  
+{txt}Iteration 0:{space 3}log likelihood = {res:-156.12291}  
+Iteration 1:{space 3}log likelihood = {res:-155.96796}  
+Iteration 2:{space 3}log likelihood = {res:-155.96787}  
+Iteration 3:{space 3}log likelihood = {res:-155.96787}  
 {res}
 {txt}Conditional (fixed-effects) logistic regression
 
 {col 49}Number of obs{col 67}= {res}       678
-{txt}{col 49}LR chi2({res}4{txt}){col 67}= {res}    162.99
+{txt}{col 49}LR chi2({res}4{txt}){col 67}= {res}    570.39
 {txt}{col 49}Prob > chi2{col 67}= {res}    0.0000
-{txt}Log likelihood = {res}-359.66625{txt}{col 49}Pseudo R2{col 67}= {res}    0.1847
+{txt}Log likelihood = {res}-155.96787{txt}{col 49}Pseudo R2{col 67}= {res}    0.6465
 
 {txt}{hline 24}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
 {col 1}          VoteCandidate{col 25}{c |}      Coef.{col 37}   Std. Err.{col 49}      z{col 57}   P>|z|{col 65}     [95% Con{col 78}f. Interval]
 {hline 24}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{space 10}NORMALIZED_FT {c |}{col 25}{res}{space 2} 1.27e-15{col 37}{space 2} .1972524{col 48}{space 1}    0.00{col 57}{space 3}1.000{col 65}{space 4}-.3866077{col 78}{space 3} .3866077
-{txt}{space 3}NORMALIZED_VIABILITY {c |}{col 25}{res}{space 2} 6.567859{col 37}{space 2} .7511043{col 48}{space 1}    8.74{col 57}{space 3}0.000{col 65}{space 4} 5.095722{col 78}{space 3} 8.039996
-{txt}NORMALIZED_ELECTABILITY {c |}{col 25}{res}{space 2} 1.416959{col 37}{space 2} .4106489{col 48}{space 1}    3.45{col 57}{space 3}0.001{col 65}{space 4} .6121017{col 78}{space 3} 2.221816
-{txt}{space 4}NORMALIZED_IDEOLOGY {c |}{col 25}{res}{space 2}-4.51e-15{col 37}{space 2} .2481471{col 48}{space 1}   -0.00{col 57}{space 3}1.000{col 65}{space 4}-.4863594{col 78}{space 3} .4863594
+{space 17}MCCAIN {c |}{col 25}{res}{space 2}        0{col 37}{txt}  (omitted)
+{space 10}NORMALIZED_FT {c |}{col 25}{res}{space 2} 5.197386{col 37}{space 2} .3669486{col 48}{space 1}   14.16{col 57}{space 3}0.000{col 65}{space 4}  4.47818{col 78}{space 3} 5.916592
+{txt}{space 3}NORMALIZED_VIABILITY {c |}{col 25}{res}{space 2} 3.910822{col 37}{space 2} .9855012{col 48}{space 1}    3.97{col 57}{space 3}0.000{col 65}{space 4} 1.979276{col 78}{space 3} 5.842369
+{txt}NORMALIZED_ELECTABILITY {c |}{col 25}{res}{space 2} .5367152{col 37}{space 2} .6293369{col 48}{space 1}    0.85{col 57}{space 3}0.394{col 65}{space 4}-.6967624{col 78}{space 3} 1.770193
+{txt}{space 4}NORMALIZED_IDEOLOGY {c |}{col 25}{res}{space 2}-.2210533{col 37}{space 2} .3623208{col 48}{space 1}   -0.61{col 57}{space 3}0.542{col 65}{space 4} -.931189{col 78}{space 3} .4890825
 {txt}{hline 24}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
 
 {com}. cd "/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2000"
 {res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2000
 {txt}
-{com}. outreg2 using 2000_national_r.doc 
-{txt}{stata `"shellout using `"2000_national_r.doc"'"':2000_national_r.doc}
+{com}. outreg2 using 2000_national_r.xls, replace
+{txt}{browse `"2000_national_r.xls"'}
 {browse `"/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2000"' :dir}{com} : {txt}{stata `"seeout using "2000_national_r.txt""':seeout}
 
 {com}. 
-. * 2000 Republican primaries (ia)
+. * 2000 Democratic primaries (super)
 . 
 . * Load in a STATA data set
 . cd "/Users/ryan/Google Drive/2020_2021/Thesis/Data/thesis/clean_data"
 {res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/thesis/clean_data
 {txt}
-{com}. use df00_ia_r
+{com}. use df00_super_d
 {txt}(Written by R.              )
 
 {com}. 
 . * Test
-. clogit VoteCandidate NORMALIZED_FT NORMALIZED_VIABILITY NORMALIZED_ELECTABILITY NORMALIZED_IDEOLOGY, group(Candidate)
+. clogit VoteCandidate BRADLEY NORMALIZED_FT NORMALIZED_VIABILITY NORMALIZED_ELECTABILITY NORMALIZED_IDEOLOGY, group(Candidate)
 {txt}note: multiple positive outcomes within groups encountered.
+note: BRADLEY omitted because of no within-group variance.
 {res}
-{txt}Iteration 0:{space 3}log likelihood = {res:-37.053237}  
-Iteration 1:{space 3}log likelihood = {res:-36.821394}  
-Iteration 2:{space 3}log likelihood = {res:-36.820932}  
-Iteration 3:{space 3}log likelihood = {res:-36.820932}  
+{txt}Iteration 0:{space 3}log likelihood = {res:-201.66743}  
+Iteration 1:{space 3}log likelihood = {res:-201.64007}  
+Iteration 2:{space 3}log likelihood = {res:-201.64007}  
 {res}
 {txt}Conditional (fixed-effects) logistic regression
 
-{col 49}Number of obs{col 67}= {res}       192
-{txt}{col 49}LR chi2({res}4{txt}){col 67}= {res}    107.64
+{col 49}Number of obs{col 67}= {res}       722
+{txt}{col 49}LR chi2({res}4{txt}){col 67}= {res}    475.40
 {txt}{col 49}Prob > chi2{col 67}= {res}    0.0000
-{txt}Log likelihood = {res}-36.820932{txt}{col 49}Pseudo R2{col 67}= {res}    0.5938
+{txt}Log likelihood = {res}-201.64007{txt}{col 49}Pseudo R2{col 67}= {res}    0.5410
 
 {txt}{hline 24}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
 {col 1}          VoteCandidate{col 25}{c |}      Coef.{col 37}   Std. Err.{col 49}      z{col 57}   P>|z|{col 65}     [95% Con{col 78}f. Interval]
 {hline 24}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{space 10}NORMALIZED_FT {c |}{col 25}{res}{space 2} 5.015889{col 37}{space 2} .8890046{col 48}{space 1}    5.64{col 57}{space 3}0.000{col 65}{space 4} 3.273472{col 78}{space 3} 6.758306
-{txt}{space 3}NORMALIZED_VIABILITY {c |}{col 25}{res}{space 2} 10.76489{col 37}{space 2} 2.508017{col 48}{space 1}    4.29{col 57}{space 3}0.000{col 65}{space 4}  5.84927{col 78}{space 3} 15.68051
-{txt}NORMALIZED_ELECTABILITY {c |}{col 25}{res}{space 2} 2.913943{col 37}{space 2} 1.363361{col 48}{space 1}    2.14{col 57}{space 3}0.033{col 65}{space 4} .2418044{col 78}{space 3} 5.586082
-{txt}{space 4}NORMALIZED_IDEOLOGY {c |}{col 25}{res}{space 2}-.6460813{col 37}{space 2} .7411487{col 48}{space 1}   -0.87{col 57}{space 3}0.383{col 65}{space 4}-2.098706{col 78}{space 3} .8065435
+{space 16}BRADLEY {c |}{col 25}{res}{space 2}        0{col 37}{txt}  (omitted)
+{space 10}NORMALIZED_FT {c |}{col 25}{res}{space 2} 4.150828{col 37}{space 2} .3142917{col 48}{space 1}   13.21{col 57}{space 3}0.000{col 65}{space 4} 3.534827{col 78}{space 3} 4.766828
+{txt}{space 3}NORMALIZED_VIABILITY {c |}{col 25}{res}{space 2} 4.176364{col 37}{space 2} .5502811{col 48}{space 1}    7.59{col 57}{space 3}0.000{col 65}{space 4} 3.097833{col 78}{space 3} 5.254895
+{txt}NORMALIZED_ELECTABILITY {c |}{col 25}{res}{space 2} 1.901688{col 37}{space 2} .5508866{col 48}{space 1}    3.45{col 57}{space 3}0.001{col 65}{space 4} .8219703{col 78}{space 3} 2.981406
+{txt}{space 4}NORMALIZED_IDEOLOGY {c |}{col 25}{res}{space 2} -.214007{col 37}{space 2} .3046508{col 48}{space 1}   -0.70{col 57}{space 3}0.482{col 65}{space 4}-.8111116{col 78}{space 3} .3830976
 {txt}{hline 24}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
 
 {com}. cd "/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2000"
 {res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2000
 {txt}
-{com}. outreg2 using 2000_ia_r.doc 
-{txt}{stata `"shellout using `"2000_ia_r.doc"'"':2000_ia_r.doc}
-{browse `"/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2000"' :dir}{com} : {txt}{stata `"seeout using "2000_ia_r.txt""':seeout}
-
-{com}. 
-. * 2000 Republican primaries (nh)
-. 
-. * Load in a STATA data set
-. cd "/Users/ryan/Google Drive/2020_2021/Thesis/Data/thesis/clean_data"
-{res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/thesis/clean_data
-{txt}
-{com}. use df00_nh_r
-{txt}(Written by R.              )
-
-{com}. 
-. * Test
-. clogit VoteCandidate NORMALIZED_FT NORMALIZED_VIABILITY NORMALIZED_ELECTABILITY NORMALIZED_IDEOLOGY, group(Candidate)
-{txt}note: multiple positive outcomes within groups encountered.
-{res}
-{txt}Iteration 0:{space 3}log likelihood = {res:-90.351475}  
-Iteration 1:{space 3}log likelihood = {res:-89.630066}  
-Iteration 2:{space 3}log likelihood = {res:-89.626208}  
-Iteration 3:{space 3}log likelihood = {res:-89.626207}  
-{res}
-{txt}Conditional (fixed-effects) logistic regression
-
-{col 49}Number of obs{col 67}= {res}       454
-{txt}{col 49}LR chi2({res}4{txt}){col 67}= {res}    421.02
-{txt}{col 49}Prob > chi2{col 67}= {res}    0.0000
-{txt}Log likelihood = {res}-89.626207{txt}{col 49}Pseudo R2{col 67}= {res}    0.7014
-
-{txt}{hline 24}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{col 1}          VoteCandidate{col 25}{c |}      Coef.{col 37}   Std. Err.{col 49}      z{col 57}   P>|z|{col 65}     [95% Con{col 78}f. Interval]
-{hline 24}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{space 10}NORMALIZED_FT {c |}{col 25}{res}{space 2} 5.842038{col 37}{space 2} .5522221{col 48}{space 1}   10.58{col 57}{space 3}0.000{col 65}{space 4} 4.759703{col 78}{space 3} 6.924374
-{txt}{space 3}NORMALIZED_VIABILITY {c |}{col 25}{res}{space 2} 7.073023{col 37}{space 2} 1.328364{col 48}{space 1}    5.32{col 57}{space 3}0.000{col 65}{space 4} 4.469479{col 78}{space 3} 9.676568
-{txt}NORMALIZED_ELECTABILITY {c |}{col 25}{res}{space 2}-.7964138{col 37}{space 2} .9096098{col 48}{space 1}   -0.88{col 57}{space 3}0.381{col 65}{space 4}-2.579216{col 78}{space 3} .9863887
-{txt}{space 4}NORMALIZED_IDEOLOGY {c |}{col 25}{res}{space 2}-.6760419{col 37}{space 2} .5039893{col 48}{space 1}   -1.34{col 57}{space 3}0.180{col 65}{space 4}-1.663843{col 78}{space 3}  .311759
-{txt}{hline 24}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-
-{com}. cd "/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2000"
-{res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2000
-{txt}
-{com}. outreg2 using 2000_nh_r.doc 
-{txt}{stata `"shellout using `"2000_nh_r.doc"'"':2000_nh_r.doc}
-{browse `"/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2000"' :dir}{com} : {txt}{stata `"seeout using "2000_nh_r.txt""':seeout}
+{com}. outreg2 using 2000_super_d.xls, replace 
+{txt}{browse `"2000_super_d.xls"'}
+{browse `"/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2000"' :dir}{com} : {txt}{stata `"seeout using "2000_super_d.txt""':seeout}
 
 {com}. 
 . * 2000 Republican primaries (super)
@@ -314,37 +148,407 @@ Iteration 3:{space 3}log likelihood = {res:-89.626207}
 
 {com}. 
 . * Test
-. clogit VoteCandidate NORMALIZED_FT NORMALIZED_VIABILITY NORMALIZED_ELECTABILITY NORMALIZED_IDEOLOGY, group(Candidate)
+. clogit VoteCandidate MCCAIN NORMALIZED_FT NORMALIZED_VIABILITY NORMALIZED_ELECTABILITY NORMALIZED_IDEOLOGY, group(Candidate)
 {txt}note: multiple positive outcomes within groups encountered.
+note: MCCAIN omitted because of no within-group variance.
 {res}
-{txt}Iteration 0:{space 3}log likelihood = {res:-197.47301}  
-Iteration 1:{space 3}log likelihood = {res:-197.41212}  
-Iteration 2:{space 3}log likelihood = {res:-197.41211}  
+{txt}Iteration 0:{space 3}log likelihood = {res:-202.85555}  
+Iteration 1:{space 3}log likelihood = {res:-202.82467}  
+Iteration 2:{space 3}log likelihood = {res:-202.82467}  
 {res}
 {txt}Conditional (fixed-effects) logistic regression
 
-{col 49}Number of obs{col 67}= {res}       698
-{txt}{col 49}LR chi2({res}4{txt}){col 67}= {res}    549.13
+{col 49}Number of obs{col 67}= {res}       814
+{txt}{col 49}LR chi2({res}4{txt}){col 67}= {res}    699.02
 {txt}{col 49}Prob > chi2{col 67}= {res}    0.0000
-{txt}Log likelihood = {res}-197.41211{txt}{col 49}Pseudo R2{col 67}= {res}    0.5817
+{txt}Log likelihood = {res}-202.82467{txt}{col 49}Pseudo R2{col 67}= {res}    0.6328
 
 {txt}{hline 24}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
 {col 1}          VoteCandidate{col 25}{c |}      Coef.{col 37}   Std. Err.{col 49}      z{col 57}   P>|z|{col 65}     [95% Con{col 78}f. Interval]
 {hline 24}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{space 10}NORMALIZED_FT {c |}{col 25}{res}{space 2} 3.962474{col 37}{space 2} .3265483{col 48}{space 1}   12.13{col 57}{space 3}0.000{col 65}{space 4} 3.322452{col 78}{space 3} 4.602497
-{txt}{space 3}NORMALIZED_VIABILITY {c |}{col 25}{res}{space 2} 6.778031{col 37}{space 2} .8642587{col 48}{space 1}    7.84{col 57}{space 3}0.000{col 65}{space 4} 5.084115{col 78}{space 3} 8.471947
-{txt}NORMALIZED_ELECTABILITY {c |}{col 25}{res}{space 2} 1.100785{col 37}{space 2} .6075077{col 48}{space 1}    1.81{col 57}{space 3}0.070{col 65}{space 4}-.0899087{col 78}{space 3} 2.291478
-{txt}{space 4}NORMALIZED_IDEOLOGY {c |}{col 25}{res}{space 2} -.583202{col 37}{space 2} .3144198{col 48}{space 1}   -1.85{col 57}{space 3}0.064{col 65}{space 4}-1.199454{col 78}{space 3} .0330495
+{space 17}MCCAIN {c |}{col 25}{res}{space 2}        0{col 37}{txt}  (omitted)
+{space 10}NORMALIZED_FT {c |}{col 25}{res}{space 2} 4.629955{col 37}{space 2} .3209983{col 48}{space 1}   14.42{col 57}{space 3}0.000{col 65}{space 4}  4.00081{col 78}{space 3}   5.2591
+{txt}{space 3}NORMALIZED_VIABILITY {c |}{col 25}{res}{space 2} 5.641755{col 37}{space 2} .9124585{col 48}{space 1}    6.18{col 57}{space 3}0.000{col 65}{space 4} 3.853369{col 78}{space 3} 7.430141
+{txt}NORMALIZED_ELECTABILITY {c |}{col 25}{res}{space 2} 1.248065{col 37}{space 2} .5880581{col 48}{space 1}    2.12{col 57}{space 3}0.034{col 65}{space 4} .0954927{col 78}{space 3} 2.400638
+{txt}{space 4}NORMALIZED_IDEOLOGY {c |}{col 25}{res}{space 2}-.8500233{col 37}{space 2} .2995873{col 48}{space 1}   -2.84{col 57}{space 3}0.005{col 65}{space 4}-1.437204{col 78}{space 3} -.262843
 {txt}{hline 24}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
 
 {com}. cd "/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2000"
 {res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2000
 {txt}
-{com}. outreg2 using 2000_super_r.doc 
-{txt}{stata `"shellout using `"2000_super_r.doc"'"':2000_super_r.doc}
+{com}. outreg2 using 2000_super_r.xls, replace 
+{txt}{browse `"2000_super_r.xls"'}
+{browse `"/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2000"' :dir}{com} : {txt}{stata `"seeout using "2000_super_r.txt""':seeout}
+
+{com}. 
+. * 2000 Democratic primaries (ia)
+. 
+. * Load in a STATA data set
+. cd "/Users/ryan/Google Drive/2020_2021/Thesis/Data/thesis/clean_data"
+{res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/thesis/clean_data
+{txt}
+{com}. use df00_ia_d
+{txt}(Written by R.              )
+
+{com}. 
+. * Test
+. clogit VoteCandidate BRADLEY NORMALIZED_FT NORMALIZED_VIABILITY NORMALIZED_ELECTABILITY NORMALIZED_IDEOLOGY, group(Candidate)
+{txt}note: multiple positive outcomes within groups encountered.
+note: BRADLEY omitted because of no within-group variance.
+{res}
+{txt}Iteration 0:{space 3}log likelihood = {res:-86.662835}  
+Iteration 1:{space 3}log likelihood = {res:-86.605164}  
+Iteration 2:{space 3}log likelihood = {res:-86.605136}  
+Iteration 3:{space 3}log likelihood = {res:-86.605136}  
+{res}
+{txt}Conditional (fixed-effects) logistic regression
+
+{col 49}Number of obs{col 67}= {res}       278
+{txt}{col 49}LR chi2({res}4{txt}){col 67}= {res}    187.56
+{txt}{col 49}Prob > chi2{col 67}= {res}    0.0000
+{txt}Log likelihood = {res}-86.605136{txt}{col 49}Pseudo R2{col 67}= {res}    0.5199
+
+{txt}{hline 24}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}          VoteCandidate{col 25}{c |}      Coef.{col 37}   Std. Err.{col 49}      z{col 57}   P>|z|{col 65}     [95% Con{col 78}f. Interval]
+{hline 24}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 16}BRADLEY {c |}{col 25}{res}{space 2}        0{col 37}{txt}  (omitted)
+{space 10}NORMALIZED_FT {c |}{col 25}{res}{space 2} 3.594599{col 37}{space 2} .4602842{col 48}{space 1}    7.81{col 57}{space 3}0.000{col 65}{space 4} 2.692458{col 78}{space 3} 4.496739
+{txt}{space 3}NORMALIZED_VIABILITY {c |}{col 25}{res}{space 2} 3.663111{col 37}{space 2} .9872917{col 48}{space 1}    3.71{col 57}{space 3}0.000{col 65}{space 4} 1.728055{col 78}{space 3} 5.598167
+{txt}NORMALIZED_ELECTABILITY {c |}{col 25}{res}{space 2} 2.669487{col 37}{space 2} .9205008{col 48}{space 1}    2.90{col 57}{space 3}0.004{col 65}{space 4} .8653387{col 78}{space 3} 4.473636
+{txt}{space 4}NORMALIZED_IDEOLOGY {c |}{col 25}{res}{space 2}-.9192553{col 37}{space 2} .4592184{col 48}{space 1}   -2.00{col 57}{space 3}0.045{col 65}{space 4}-1.819307{col 78}{space 3}-.0192037
+{txt}{hline 24}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{com}. cd "/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2000"
+{res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2000
+{txt}
+{com}. outreg2 using 2000_ia_d.xls, replace 
+{txt}{browse `"2000_ia_d.xls"'}
+{browse `"/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2000"' :dir}{com} : {txt}{stata `"seeout using "2000_ia_d.txt""':seeout}
+
+{com}. 
+. * 2000 Republican primaries (ia)
+. 
+. * Load in a STATA data set
+. cd "/Users/ryan/Google Drive/2020_2021/Thesis/Data/thesis/clean_data"
+{res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/thesis/clean_data
+{txt}
+{com}. use df00_ia_r
+{txt}(Written by R.              )
+
+{com}. 
+. * Test
+. clogit VoteCandidate MCCAIN NORMALIZED_FT NORMALIZED_VIABILITY NORMALIZED_ELECTABILITY NORMALIZED_IDEOLOGY, group(Candidate)
+{txt}note: multiple positive outcomes within groups encountered.
+note: MCCAIN omitted because of no within-group variance.
+{res}
+{txt}Iteration 0:{space 3}log likelihood = {res:-39.203829}  
+Iteration 1:{space 3}log likelihood = {res:-39.156702}  
+Iteration 2:{space 3}log likelihood = {res:-39.156656}  
+Iteration 3:{space 3}log likelihood = {res:-39.156656}  
+{res}
+{txt}Conditional (fixed-effects) logistic regression
+
+{col 49}Number of obs{col 67}= {res}       210
+{txt}{col 49}LR chi2({res}4{txt}){col 67}= {res}    137.93
+{txt}{col 49}Prob > chi2{col 67}= {res}    0.0000
+{txt}Log likelihood = {res}-39.156656{txt}{col 49}Pseudo R2{col 67}= {res}    0.6378
+
+{txt}{hline 24}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}          VoteCandidate{col 25}{c |}      Coef.{col 37}   Std. Err.{col 49}      z{col 57}   P>|z|{col 65}     [95% Con{col 78}f. Interval]
+{hline 24}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 17}MCCAIN {c |}{col 25}{res}{space 2}        0{col 37}{txt}  (omitted)
+{space 10}NORMALIZED_FT {c |}{col 25}{res}{space 2} 5.511345{col 37}{space 2} .7848821{col 48}{space 1}    7.02{col 57}{space 3}0.000{col 65}{space 4} 3.973004{col 78}{space 3} 7.049686
+{txt}{space 3}NORMALIZED_VIABILITY {c |}{col 25}{res}{space 2} 8.652432{col 37}{space 2} 2.762954{col 48}{space 1}    3.13{col 57}{space 3}0.002{col 65}{space 4} 3.237142{col 78}{space 3} 14.06772
+{txt}NORMALIZED_ELECTABILITY {c |}{col 25}{res}{space 2}-.1034561{col 37}{space 2}  1.34386{col 48}{space 1}   -0.08{col 57}{space 3}0.939{col 65}{space 4}-2.737373{col 78}{space 3} 2.530461
+{txt}{space 4}NORMALIZED_IDEOLOGY {c |}{col 25}{res}{space 2}-1.255974{col 37}{space 2} .6753048{col 48}{space 1}   -1.86{col 57}{space 3}0.063{col 65}{space 4}-2.579547{col 78}{space 3}  .067599
+{txt}{hline 24}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{com}. cd "/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2000"
+{res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2000
+{txt}
+{com}. outreg2 using 2000_ia_r.xls, replace
+{txt}{browse `"2000_ia_r.xls"'}
+{browse `"/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2000"' :dir}{com} : {txt}{stata `"seeout using "2000_ia_r.txt""':seeout}
+
+{com}. 
+. * 2000 Democratic primaries (nh)
+. 
+. * Load in a STATA data set
+. cd "/Users/ryan/Google Drive/2020_2021/Thesis/Data/thesis/clean_data"
+{res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/thesis/clean_data
+{txt}
+{com}. use df00_nh_d
+{txt}(Written by R.              )
+
+{com}. 
+. * Test
+. clogit VoteCandidate BRADLEY NORMALIZED_FT NORMALIZED_VIABILITY NORMALIZED_ELECTABILITY NORMALIZED_IDEOLOGY, group(Candidate)
+{txt}note: multiple positive outcomes within groups encountered.
+note: BRADLEY omitted because of no within-group variance.
+{res}
+{txt}Iteration 0:{space 3}log likelihood = {res:-86.054796}  
+Iteration 1:{space 3}log likelihood = {res:-86.039365}  
+Iteration 2:{space 3}log likelihood = {res: -86.03936}  
+{res}
+{txt}Conditional (fixed-effects) logistic regression
+
+{col 49}Number of obs{col 67}= {res}       442
+{txt}{col 49}LR chi2({res}4{txt}){col 67}= {res}    426.93
+{txt}{col 49}Prob > chi2{col 67}= {res}    0.0000
+{txt}Log likelihood = {res} -86.03936{txt}{col 49}Pseudo R2{col 67}= {res}    0.7127
+
+{txt}{hline 24}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}          VoteCandidate{col 25}{c |}      Coef.{col 37}   Std. Err.{col 49}      z{col 57}   P>|z|{col 65}     [95% Con{col 78}f. Interval]
+{hline 24}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 16}BRADLEY {c |}{col 25}{res}{space 2}        0{col 37}{txt}  (omitted)
+{space 10}NORMALIZED_FT {c |}{col 25}{res}{space 2} 6.744882{col 37}{space 2} .6759287{col 48}{space 1}    9.98{col 57}{space 3}0.000{col 65}{space 4} 5.420086{col 78}{space 3} 8.069678
+{txt}{space 3}NORMALIZED_VIABILITY {c |}{col 25}{res}{space 2} 5.134378{col 37}{space 2} .9734398{col 48}{space 1}    5.27{col 57}{space 3}0.000{col 65}{space 4} 3.226471{col 78}{space 3} 7.042285
+{txt}NORMALIZED_ELECTABILITY {c |}{col 25}{res}{space 2} 1.135021{col 37}{space 2} .7848845{col 48}{space 1}    1.45{col 57}{space 3}0.148{col 65}{space 4} -.403324{col 78}{space 3} 2.673367
+{txt}{space 4}NORMALIZED_IDEOLOGY {c |}{col 25}{res}{space 2}-1.118007{col 37}{space 2} .4895761{col 48}{space 1}   -2.28{col 57}{space 3}0.022{col 65}{space 4}-2.077559{col 78}{space 3}-.1584557
+{txt}{hline 24}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{com}. cd "/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2000"
+{res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2000
+{txt}
+{com}. outreg2 using 2000_nh_d.xls, replace 
+{txt}{browse `"2000_nh_d.xls"'}
+{browse `"/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2000"' :dir}{com} : {txt}{stata `"seeout using "2000_nh_d.txt""':seeout}
+
+{com}. 
+. * 2000 Republican primaries (nh)
+. 
+. * Load in a STATA data set
+. cd "/Users/ryan/Google Drive/2020_2021/Thesis/Data/thesis/clean_data"
+{res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/thesis/clean_data
+{txt}
+{com}. use df00_nh_r
+{txt}(Written by R.              )
+
+{com}. 
+. * Test
+. clogit VoteCandidate MCCAIN NORMALIZED_FT NORMALIZED_VIABILITY NORMALIZED_ELECTABILITY NORMALIZED_IDEOLOGY, group(Candidate)
+{txt}note: multiple positive outcomes within groups encountered.
+note: MCCAIN omitted because of no within-group variance.
+{res}
+{txt}Iteration 0:{space 3}log likelihood = {res:-90.427019}  
+Iteration 1:{space 3}log likelihood = {res:-90.213603}  
+Iteration 2:{space 3}log likelihood = {res:-89.713578}  (not concave)
+Iteration 3:{space 3}log likelihood = {res:-89.713578}  (not concave)
+Iteration 4:{space 3}log likelihood = {res:-89.713578}  (not concave)
+Iteration 5:{space 3}log likelihood = {res:-89.713578}  (not concave)
+Iteration 6:{space 3}log likelihood = {res:-89.713578}  (not concave)
+Iteration 7:{space 3}log likelihood = {res:-89.713578}  (not concave)
+Iteration 8:{space 3}log likelihood = {res:-89.713578}  (not concave)
+Iteration 9:{space 3}log likelihood = {res:-89.713578}  (not concave)
+Iteration 10:{space 2}log likelihood = {res:-89.713578}  (not concave)
+Iteration 11:{space 2}log likelihood = {res:-89.713578}  (not concave)
+Iteration 12:{space 2}log likelihood = {res:-89.713578}  (not concave)
+Iteration 13:{space 2}log likelihood = {res:-89.713578}  (not concave)
+Iteration 14:{space 2}log likelihood = {res:-89.713578}  (not concave)
+{res}{err}{hline 2}Break{hline 2}
+{txt}{search r(1), local:r(1);}
+
+end of do-file
+
+{err}{hline 2}Break{hline 2}
+{txt}{search r(1), local:r(1);}
+
+{com}. do "/var/folders/wp/cwmrq5v9115gygh6bzyqpqmw0000gn/T//SD55263.000000"
+{txt}
+{com}. 
+. * 2000 Democratic primaries (super)
+. 
+. * Load in a STATA data set
+. cd "/Users/ryan/Google Drive/2020_2021/Thesis/Data/thesis/clean_data"
+{res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/thesis/clean_data
+{txt}
+{com}. use df00_super_d
+{txt}(Written by R.              )
+
+{com}. 
+. * Test
+. clogit VoteCandidate BRADLEY NORMALIZED_FT NORMALIZED_VIABILITY NORMALIZED_ELECTABILITY NORMALIZED_IDEOLOGY, group(Candidate)
+{txt}note: multiple positive outcomes within groups encountered.
+note: BRADLEY omitted because of no within-group variance.
+{res}
+{txt}Iteration 0:{space 3}log likelihood = {res:-201.66743}  
+Iteration 1:{space 3}log likelihood = {res:-201.64007}  
+Iteration 2:{space 3}log likelihood = {res:-201.64007}  
+{res}
+{txt}Conditional (fixed-effects) logistic regression
+
+{col 49}Number of obs{col 67}= {res}       722
+{txt}{col 49}LR chi2({res}4{txt}){col 67}= {res}    475.40
+{txt}{col 49}Prob > chi2{col 67}= {res}    0.0000
+{txt}Log likelihood = {res}-201.64007{txt}{col 49}Pseudo R2{col 67}= {res}    0.5410
+
+{txt}{hline 24}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}          VoteCandidate{col 25}{c |}      Coef.{col 37}   Std. Err.{col 49}      z{col 57}   P>|z|{col 65}     [95% Con{col 78}f. Interval]
+{hline 24}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 16}BRADLEY {c |}{col 25}{res}{space 2}        0{col 37}{txt}  (omitted)
+{space 10}NORMALIZED_FT {c |}{col 25}{res}{space 2} 4.150828{col 37}{space 2} .3142917{col 48}{space 1}   13.21{col 57}{space 3}0.000{col 65}{space 4} 3.534827{col 78}{space 3} 4.766828
+{txt}{space 3}NORMALIZED_VIABILITY {c |}{col 25}{res}{space 2} 4.176364{col 37}{space 2} .5502811{col 48}{space 1}    7.59{col 57}{space 3}0.000{col 65}{space 4} 3.097833{col 78}{space 3} 5.254895
+{txt}NORMALIZED_ELECTABILITY {c |}{col 25}{res}{space 2} 1.901688{col 37}{space 2} .5508866{col 48}{space 1}    3.45{col 57}{space 3}0.001{col 65}{space 4} .8219703{col 78}{space 3} 2.981406
+{txt}{space 4}NORMALIZED_IDEOLOGY {c |}{col 25}{res}{space 2} -.214007{col 37}{space 2} .3046508{col 48}{space 1}   -0.70{col 57}{space 3}0.482{col 65}{space 4}-.8111116{col 78}{space 3} .3830976
+{txt}{hline 24}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{com}. cd "/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2000"
+{res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2000
+{txt}
+{com}. outreg2 using 2000_super_d.xls, replace 
+{txt}{browse `"2000_super_d.xls"'}
+{browse `"/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2000"' :dir}{com} : {txt}{stata `"seeout using "2000_super_d.txt""':seeout}
+
+{com}. 
+. * 2000 Republican primaries (super)
+. 
+. * Load in a STATA data set
+. cd "/Users/ryan/Google Drive/2020_2021/Thesis/Data/thesis/clean_data"
+{res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/thesis/clean_data
+{txt}
+{com}. use df00_super_r
+{txt}(Written by R.              )
+
+{com}. 
+. * Test
+. clogit VoteCandidate MCCAIN NORMALIZED_FT NORMALIZED_VIABILITY NORMALIZED_ELECTABILITY NORMALIZED_IDEOLOGY, group(Candidate)
+{txt}note: multiple positive outcomes within groups encountered.
+note: MCCAIN omitted because of no within-group variance.
+{res}
+{txt}Iteration 0:{space 3}log likelihood = {res:-202.85555}  
+Iteration 1:{space 3}log likelihood = {res:-202.82467}  
+Iteration 2:{space 3}log likelihood = {res:-202.82467}  
+{res}
+{txt}Conditional (fixed-effects) logistic regression
+
+{col 49}Number of obs{col 67}= {res}       814
+{txt}{col 49}LR chi2({res}4{txt}){col 67}= {res}    699.02
+{txt}{col 49}Prob > chi2{col 67}= {res}    0.0000
+{txt}Log likelihood = {res}-202.82467{txt}{col 49}Pseudo R2{col 67}= {res}    0.6328
+
+{txt}{hline 24}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}          VoteCandidate{col 25}{c |}      Coef.{col 37}   Std. Err.{col 49}      z{col 57}   P>|z|{col 65}     [95% Con{col 78}f. Interval]
+{hline 24}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 17}MCCAIN {c |}{col 25}{res}{space 2}        0{col 37}{txt}  (omitted)
+{space 10}NORMALIZED_FT {c |}{col 25}{res}{space 2} 4.629955{col 37}{space 2} .3209983{col 48}{space 1}   14.42{col 57}{space 3}0.000{col 65}{space 4}  4.00081{col 78}{space 3}   5.2591
+{txt}{space 3}NORMALIZED_VIABILITY {c |}{col 25}{res}{space 2} 5.641755{col 37}{space 2} .9124585{col 48}{space 1}    6.18{col 57}{space 3}0.000{col 65}{space 4} 3.853369{col 78}{space 3} 7.430141
+{txt}NORMALIZED_ELECTABILITY {c |}{col 25}{res}{space 2} 1.248065{col 37}{space 2} .5880581{col 48}{space 1}    2.12{col 57}{space 3}0.034{col 65}{space 4} .0954927{col 78}{space 3} 2.400638
+{txt}{space 4}NORMALIZED_IDEOLOGY {c |}{col 25}{res}{space 2}-.8500233{col 37}{space 2} .2995873{col 48}{space 1}   -2.84{col 57}{space 3}0.005{col 65}{space 4}-1.437204{col 78}{space 3} -.262843
+{txt}{hline 24}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{com}. cd "/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2000"
+{res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2000
+{txt}
+{com}. outreg2 using 2000_super_r.xls, replace 
+{txt}{browse `"2000_super_r.xls"'}
 {browse `"/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2000"' :dir}{com} : {txt}{stata `"seeout using "2000_super_r.txt""':seeout}
 
 {com}. 
 {txt}end of do-file
 
-{com}. exit
+{com}. do "/var/folders/wp/cwmrq5v9115gygh6bzyqpqmw0000gn/T//SD55263.000000"
+{txt}
+{com}. * 2000 Democratic primaries (super)
+. 
+. * Load in a STATA data set
+. cd "/Users/ryan/Google Drive/2020_2021/Thesis/Data/thesis/clean_data"
+{res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/thesis/clean_data
+{txt}
+{com}. use df00_super_d
+{txt}(Written by R.              )
+
+{com}. 
+. * Test
+. clogit VoteCandidate GORE BRADLEY NORMALIZED_FT NORMALIZED_VIABILITY NORMALIZED_ELECTABILITY NORMALIZED_IDEOLOGY, group(Candidate)
+{txt}note: BRADLEY omitted because of collinearity
+note: multiple positive outcomes within groups encountered.
+note: GORE omitted because of no within-group variance.
+{res}
+{txt}Iteration 0:{space 3}log likelihood = {res:-201.66743}  
+Iteration 1:{space 3}log likelihood = {res:-201.64007}  
+Iteration 2:{space 3}log likelihood = {res:-201.64007}  
+{res}
+{txt}Conditional (fixed-effects) logistic regression
+
+{col 49}Number of obs{col 67}= {res}       722
+{txt}{col 49}LR chi2({res}4{txt}){col 67}= {res}    475.40
+{txt}{col 49}Prob > chi2{col 67}= {res}    0.0000
+{txt}Log likelihood = {res}-201.64007{txt}{col 49}Pseudo R2{col 67}= {res}    0.5410
+
+{txt}{hline 24}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}          VoteCandidate{col 25}{c |}      Coef.{col 37}   Std. Err.{col 49}      z{col 57}   P>|z|{col 65}     [95% Con{col 78}f. Interval]
+{hline 24}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 19}GORE {c |}{col 25}{res}{space 2}        0{col 37}{txt}  (omitted)
+{space 16}BRADLEY {c |}{col 25}{res}{space 2}        0{col 37}{txt}  (omitted)
+{space 10}NORMALIZED_FT {c |}{col 25}{res}{space 2} 4.150828{col 37}{space 2} .3142917{col 48}{space 1}   13.21{col 57}{space 3}0.000{col 65}{space 4} 3.534827{col 78}{space 3} 4.766828
+{txt}{space 3}NORMALIZED_VIABILITY {c |}{col 25}{res}{space 2} 4.176364{col 37}{space 2} .5502811{col 48}{space 1}    7.59{col 57}{space 3}0.000{col 65}{space 4} 3.097833{col 78}{space 3} 5.254895
+{txt}NORMALIZED_ELECTABILITY {c |}{col 25}{res}{space 2} 1.901688{col 37}{space 2} .5508866{col 48}{space 1}    3.45{col 57}{space 3}0.001{col 65}{space 4} .8219703{col 78}{space 3} 2.981406
+{txt}{space 4}NORMALIZED_IDEOLOGY {c |}{col 25}{res}{space 2} -.214007{col 37}{space 2} .3046508{col 48}{space 1}   -0.70{col 57}{space 3}0.482{col 65}{space 4}-.8111116{col 78}{space 3} .3830976
+{txt}{hline 24}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{com}. cd "/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2000"
+{res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2000
+{txt}
+{com}. outreg2 using 2000_super_d.xls, replace 
+{txt}{browse `"2000_super_d.xls"'}
+{browse `"/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2000"' :dir}{com} : {txt}{stata `"seeout using "2000_super_d.txt""':seeout}
+
+{com}. 
+. * 2000 Republican primaries (super)
+. 
+. * Load in a STATA data set
+. cd "/Users/ryan/Google Drive/2020_2021/Thesis/Data/thesis/clean_data"
+{res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/thesis/clean_data
+{txt}
+{com}. use df00_super_r
+{txt}(Written by R.              )
+
+{com}. 
+. * Test
+. clogit VoteCandidate BUSH MCCAIN NORMALIZED_FT NORMALIZED_VIABILITY NORMALIZED_ELECTABILITY NORMALIZED_IDEOLOGY, group(Candidate)
+{txt}note: MCCAIN omitted because of collinearity
+note: multiple positive outcomes within groups encountered.
+note: BUSH omitted because of no within-group variance.
+{res}
+{txt}Iteration 0:{space 3}log likelihood = {res:-202.85555}  
+Iteration 1:{space 3}log likelihood = {res:-202.82467}  
+Iteration 2:{space 3}log likelihood = {res:-202.82467}  
+{res}
+{txt}Conditional (fixed-effects) logistic regression
+
+{col 49}Number of obs{col 67}= {res}       814
+{txt}{col 49}LR chi2({res}4{txt}){col 67}= {res}    699.02
+{txt}{col 49}Prob > chi2{col 67}= {res}    0.0000
+{txt}Log likelihood = {res}-202.82467{txt}{col 49}Pseudo R2{col 67}= {res}    0.6328
+
+{txt}{hline 24}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}          VoteCandidate{col 25}{c |}      Coef.{col 37}   Std. Err.{col 49}      z{col 57}   P>|z|{col 65}     [95% Con{col 78}f. Interval]
+{hline 24}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 19}BUSH {c |}{col 25}{res}{space 2}        0{col 37}{txt}  (omitted)
+{space 17}MCCAIN {c |}{col 25}{res}{space 2}        0{col 37}{txt}  (omitted)
+{space 10}NORMALIZED_FT {c |}{col 25}{res}{space 2} 4.629955{col 37}{space 2} .3209983{col 48}{space 1}   14.42{col 57}{space 3}0.000{col 65}{space 4}  4.00081{col 78}{space 3}   5.2591
+{txt}{space 3}NORMALIZED_VIABILITY {c |}{col 25}{res}{space 2} 5.641755{col 37}{space 2} .9124585{col 48}{space 1}    6.18{col 57}{space 3}0.000{col 65}{space 4} 3.853369{col 78}{space 3} 7.430141
+{txt}NORMALIZED_ELECTABILITY {c |}{col 25}{res}{space 2} 1.248065{col 37}{space 2} .5880581{col 48}{space 1}    2.12{col 57}{space 3}0.034{col 65}{space 4} .0954927{col 78}{space 3} 2.400638
+{txt}{space 4}NORMALIZED_IDEOLOGY {c |}{col 25}{res}{space 2}-.8500233{col 37}{space 2} .2995873{col 48}{space 1}   -2.84{col 57}{space 3}0.005{col 65}{space 4}-1.437204{col 78}{space 3} -.262843
+{txt}{hline 24}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{com}. cd "/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2000"
+{res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2000
+{txt}
+{com}. outreg2 using 2000_super_r.xls, replace 
+{txt}{browse `"2000_super_r.xls"'}
+{browse `"/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2000"' :dir}{com} : {txt}{stata `"seeout using "2000_super_r.txt""':seeout}
+
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/wp/cwmrq5v9115gygh6bzyqpqmw0000gn/T//SD55263.000000"
+{txt}
+{com}. * Ryan Zhang
+. * 2008
+. 
+. clear all
+{res}{txt}
+{com}. capture log close
+{smcl}
+{com}{sf}{ul off}

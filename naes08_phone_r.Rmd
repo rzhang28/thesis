@@ -82,7 +82,8 @@ colnames(df08phone) <- my_names
 ```{r}
 
 df <- data.frame(my_candidate_id, my_candidate, stringsAsFactors=FALSE)
-df08phone <-merge(df08phone, df, by.x = "voting", by.y = "my_candidate_id", all.x=TRUE)
+df08phone <-merge(df08phone, df, by.x = "voting",
+                  by.y = "my_candidate_id", all.x=TRUE)
 names(df08phone)[names(df08phone)=="my_candidate"] <- "VoteCandidate"
 
 ```
@@ -238,7 +239,8 @@ df_final$VoteCandidate <-  1 * (df_final$Candidate == df_final$VoteCandidate)
 
 # 3) Subset: df08phone_normalized_electability
 
-my_cols <- c("ID", "NORMALIZED_ELECTABILITY1", "NORMALIZED_ELECTABILITY2", "NORMALIZED_ELECTABILITY3")
+my_cols <- c("ID", "NORMALIZED_ELECTABILITY1", "NORMALIZED_ELECTABILITY2", 
+             "NORMALIZED_ELECTABILITY3")
 df <- df08phone[, my_cols]
 colnames(df) <- c("ID", my_candidate)
 
@@ -251,7 +253,8 @@ df_final = merge(df_final, df, by=c("ID", "Candidate"))
 
 # 4) Subset: df08phone_normalized_ideology
 
-my_cols <- c("ID", "NORMALIZED_IDEOLOGY1", "NORMALIZED_IDEOLOGY2", "NORMALIZED_IDEOLOGY3")
+my_cols <- c("ID", "NORMALIZED_IDEOLOGY1", "NORMALIZED_IDEOLOGY2", 
+             "NORMALIZED_IDEOLOGY3")
 df <- df08phone[, my_cols]
 colnames(df) <- c("ID", my_candidate)
 
@@ -274,6 +277,21 @@ df <- df %>%
                cols = -ID)
 
 df_final = merge(df_final, df, by = c("ID", "Candidate"))
+
+```
+
+
+```{r}
+
+# Create new columns using candidate names, assign 0 to all
+df_final[, sort(my_candidate)] <- 0
+
+# Get index when intersection column name/value matches
+my_index <- cbind(seq_len(nrow(df_final)), 
+                  match(df_final$Candidate, names(df_final)[-1]))
+
+# Assign 1 to my_index cells
+df_final[-1][my_index] <- 1
 
 ```
 

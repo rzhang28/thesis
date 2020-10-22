@@ -19,7 +19,7 @@ library(foreign)
 
 # Reading Data
 
-```{r warning = FALSE}
+```{r warning=FALSE}
 
 naes04 <- read.spss("raw_data/naes/naes04-nh.sav", to.data.frame=TRUE,
                     use.value.labels=FALSE)
@@ -40,8 +40,6 @@ df04 <- naes04 %>%
   # Viability from cNA01 to cNA06
   # Electability from cNA09 to cNA26
   # Ideology cAB27, cAC14, cAC25, cAC34, cAC43, cAC52
-  # Traits from cAC06 to cAC11, from cAC18 to cAC23, from cAC27 to cAC32, from
-  # cAC36 to cAC41, from cAC45 to cAC50
   
   select(cKEY, cRB06, 
          cAB01, cAC04,
@@ -49,10 +47,7 @@ df04 <- naes04 %>%
          cNA21, cNA15,
          
          cMA06, 
-         cAB27, cAC14,
-         
-         cAB02, cAB03, cAB04, cAB05, cAB06, cAB07, 
-         cAC06, cAC07, cAC08, cAC09, cAC10, cAC11
+         cAB27, cAC14
          )
 
 # Rename columns
@@ -66,10 +61,7 @@ my_names <- c("ID", "voting",
               "Electability1", "Electability2",
               
               "Ideology", 
-              "Ideology1", "Ideology2",
-              
-              "Cares1", "Inspire1", "Lead1", "Trust1", "Values1", "Know1",
-              "Cares2", "Inspire2", "Lead2", "Trust2", "Values2", "Know2"
+              "Ideology1", "Ideology2"
               )
 
 colnames(df04) <- my_names
@@ -157,13 +149,6 @@ df04 <- df04 %>%
                                                temp_max_min, 6))) %>%
   select(-starts_with("temp_") )
 
-# 4) Average candidate traits
-
-df04$TRAITS1 = rowMeans(df04[, c("Cares1", "Inspire1", "Lead1", "Trust1", 
-                                 "Values1", "Know1")], na.rm = TRUE) / 10
-df04$TRAITS2 = rowMeans(df04[, c("Cares2", "Inspire2", "Lead2", "Trust2", 
-                                 "Values2", "Know2")], na.rm = TRUE) / 10
-
 # 5) Convert NaN to NA
 
 df04[df04 == "NaN"] <- NA
@@ -182,10 +167,6 @@ df04[, c("NORMALIZED_ELECTABILITY1", "NORMALIZED_ELECTABILITY2",
          "Electability1", "Electability2")]
 df04[, c("NORMALIZED_IDEOLOGY1", "NORMALIZED_IDEOLOGY2", "Ideology", 
          "Ideology1", "Ideology2")]
-df04[, c("TRAITS1", "Cares1", "Inspire1", "Lead1", "Trust1", "Values1", 
-         "Know1")]
-df04[, c("TRAITS2", "Cares2", "Inspire2", "Lead2", "Trust2", "Values2", 
-         "Know2")]
 
 ```
  
@@ -250,18 +231,20 @@ df <- df %>%
 
 df_final = merge(df_final, df, by=c("ID", "Candidate"))
 
-# 5) Subset: df04_traits
+```
 
-my_cols <- c("ID", "TRAITS1", "TRAITS2")
-df <- df04[, my_cols]
-colnames(df) <- c("ID", my_candidate)
 
-df <- df %>%
-  pivot_longer(names_to = "Candidate", 
-               values_to = "TRAITS", 
-               cols = -ID)
+```{r}
 
-df_final = merge(df_final, df, by = c("ID", "Candidate"))
+# Create new columns using candidate names, assign 0 to all
+df_final[, sort(my_candidate)] <- 0
+
+# Get index when intersection column name/value matches
+my_index <- cbind(seq_len(nrow(df_final)), 
+                  match(df_final$Candidate, names(df_final)[-1]))
+
+# Assign 1 to my_index cells
+df_final[-1][my_index] <- 1
 
 ```
 
@@ -271,7 +254,6 @@ df_final = merge(df_final, df, by = c("ID", "Candidate"))
 ```{r}
 
 df_final_1 <- df_final %>%
-  select(-TRAITS) %>%
   drop_na() 
 
 ```
@@ -280,7 +262,6 @@ df_final_1 <- df_final %>%
 ```{r}
 
 df_final %>%
-  select(-TRAITS) %>%
   drop_na() %>%
   write.dta("clean_data/df04_nh_d.dta")
 
@@ -289,7 +270,7 @@ df_final %>%
 
 ```{r include=FALSE}
 
-rm(list=ls())
+rm(list = ls())
 
 ```
 
