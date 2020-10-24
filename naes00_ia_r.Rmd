@@ -268,6 +268,40 @@ df_final %>%
 ```
 
 
+# Calculating Buckets
+
+```{r}
+
+df_final_2 <- df_final %>%
+  rowwise() %>%
+  mutate(SINCERE = NORMALIZED_FT,
+         STRATEGIC = (NORMALIZED_VIABILITY + NORMALIZED_ELECTABILITY) / 2) %>%
+  select(ID, Candidate, VoteCandidate, SINCERE, STRATEGIC) %>%
+  group_by(ID) %>%
+  mutate(SINCERE_MAX1 = max(SINCERE),
+         STRATEGIC_MAX1 = max(STRATEGIC)) %>%
+  mutate(SINCERE_MAX2 = ifelse(SINCERE == SINCERE_MAX1, 1, 0),
+         STRATEGIC_MAX2 = ifelse(STRATEGIC == STRATEGIC_MAX1, 1, 0)) %>%
+  filter(VoteCandidate == 1) %>%
+  drop_na()
+
+```
+
+
+```{r}
+
+df_final_2 <- df_final_2 %>%
+  group_by(Candidate, SINCERE_MAX2, STRATEGIC_MAX2) %>%
+  count() %>%
+  group_by(Candidate) %>%
+  mutate(percent = n / sum(n))
+
+df_final_2 %>%
+  write.csv("clean_data/df00_ia_r_counts.csv")
+
+```
+
+
 ```{r include=FALSE}
 
 rm(list = ls())
