@@ -3,7 +3,7 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/thesis/clean_data/1988.smcl
   {txt}log type:  {res}smcl
- {txt}opened on:  {res}22 Oct 2020, 02:26:32
+ {txt}opened on:  {res}24 Oct 2020, 12:21:27
 {txt}
 {com}. 
 . * 1988 Democratic primaries
@@ -29,24 +29,80 @@ Iteration 4:{space 3}log likelihood = {res:-101.13804}
 {txt}{col 49}Prob > chi2{col 67}= {res}    0.0000
 {txt}Log likelihood = {res}-101.13804{txt}{col 49}Pseudo R2{col 67}= {res}    0.5782
 
-{txt}{hline 24}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{col 1}          VoteCandidate{col 25}{c |}      Coef.{col 37}   Std. Err.{col 49}      z{col 57}   P>|z|{col 65}     [95% Con{col 78}f. Interval]
-{hline 24}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{space 15}GEPHARDT {c |}{col 25}{res}{space 2}-.5352181{col 37}{space 2}  .356796{col 48}{space 1}   -1.50{col 57}{space 3}0.134{col 65}{space 4}-1.234526{col 78}{space 3} .1640893
-{txt}{space 19}GORE {c |}{col 25}{res}{space 2} .1269985{col 37}{space 2} .3369716{col 48}{space 1}    0.38{col 57}{space 3}0.706{col 65}{space 4}-.5334537{col 78}{space 3} .7874508
-{txt}{space 19}HART {c |}{col 25}{res}{space 2}-.0166025{col 37}{space 2} .6351385{col 48}{space 1}   -0.03{col 57}{space 3}0.979{col 65}{space 4}-1.261451{col 78}{space 3} 1.228246
-{txt}{space 16}JACKSON {c |}{col 25}{res}{space 2} .1255854{col 37}{space 2} .4163841{col 48}{space 1}    0.30{col 57}{space 3}0.763{col 65}{space 4}-.6905124{col 78}{space 3} .9416832
-{txt}{space 10}NORMALIZED_FT {c |}{col 25}{res}{space 2} 3.782129{col 37}{space 2} .6398547{col 48}{space 1}    5.91{col 57}{space 3}0.000{col 65}{space 4} 2.528037{col 78}{space 3} 5.036222
-{txt}{space 3}NORMALIZED_VIABILITY {c |}{col 25}{res}{space 2}  4.37962{col 37}{space 2} 2.305392{col 48}{space 1}    1.90{col 57}{space 3}0.057{col 65}{space 4}-.1388666{col 78}{space 3} 8.898106
-{txt}NORMALIZED_ELECTABILITY {c |}{col 25}{res}{space 2} 1.257531{col 37}{space 2} 1.659791{col 48}{space 1}    0.76{col 57}{space 3}0.449{col 65}{space 4}  -1.9956{col 78}{space 3} 4.510662
-{txt}{space 4}NORMALIZED_IDEOLOGY {c |}{col 25}{res}{space 2}-.5086344{col 37}{space 2} .3872724{col 48}{space 1}   -1.31{col 57}{space 3}0.189{col 65}{space 4}-1.267674{col 78}{space 3} .2504056
-{txt}{space 17}TRAITS {c |}{col 25}{res}{space 2}  4.90119{col 37}{space 2} 1.929068{col 48}{space 1}    2.54{col 57}{space 3}0.011{col 65}{space 4} 1.120287{col 78}{space 3} 8.682093
-{txt}{hline 24}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}     VoteCandidate{col 20}{c |}      Coef.{col 32}   Std. Err.{col 44}      z{col 52}   P>|z|{col 60}     [95% Con{col 73}f. Interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 10}GEPHARDT {c |}{col 20}{res}{space 2}-.5352181{col 32}{space 2}  .356796{col 43}{space 1}   -1.50{col 52}{space 3}0.134{col 60}{space 4}-1.234526{col 73}{space 3} .1640893
+{txt}{space 14}GORE {c |}{col 20}{res}{space 2} .1269985{col 32}{space 2} .3369716{col 43}{space 1}    0.38{col 52}{space 3}0.706{col 60}{space 4}-.5334537{col 73}{space 3} .7874508
+{txt}{space 14}HART {c |}{col 20}{res}{space 2}-.0166025{col 32}{space 2} .6351385{col 43}{space 1}   -0.03{col 52}{space 3}0.979{col 60}{space 4}-1.261451{col 73}{space 3} 1.228246
+{txt}{space 11}JACKSON {c |}{col 20}{res}{space 2} .1255854{col 32}{space 2} .4163841{col 43}{space 1}    0.30{col 52}{space 3}0.763{col 60}{space 4}-.6905124{col 73}{space 3} .9416832
+{txt}{space 5}NORMALIZED_FT {c |}{col 20}{res}{space 2} 3.782129{col 32}{space 2} .6398547{col 43}{space 1}    5.91{col 52}{space 3}0.000{col 60}{space 4} 2.528037{col 73}{space 3} 5.036222
+{txt}NORMALIZED_VIABI~Y {c |}{col 20}{res}{space 2}  4.37962{col 32}{space 2} 2.305392{col 43}{space 1}    1.90{col 52}{space 3}0.057{col 60}{space 4}-.1388666{col 73}{space 3} 8.898106
+{txt}NORMALIZED_ELECT~Y {c |}{col 20}{res}{space 2} 1.257531{col 32}{space 2} 1.659791{col 43}{space 1}    0.76{col 52}{space 3}0.449{col 60}{space 4}  -1.9956{col 73}{space 3} 4.510662
+{txt}NORMALIZED_IDEOL~Y {c |}{col 20}{res}{space 2}-.5086344{col 32}{space 2} .3872724{col 43}{space 1}   -1.31{col 52}{space 3}0.189{col 60}{space 4}-1.267674{col 73}{space 3} .2504056
+{txt}{space 12}TRAITS {c |}{col 20}{res}{space 2}  4.90119{col 32}{space 2} 1.929068{col 43}{space 1}    2.54{col 52}{space 3}0.011{col 60}{space 4} 1.120287{col 73}{space 3} 8.682093
+{txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
 
 {com}. cd "/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/1988"
 {res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/1988
 {txt}
 {com}. outreg2 using 1988_d.xls, replace 
+{txt}{browse `"1988_d.xls"'}
+{browse `"/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/1988"' :dir}{com} : {txt}{stata `"seeout using "1988_d.txt""':seeout}
+
+{com}. listcoef, help
+{res}
+clogit (N=743): Factor change in odds 
+
+{txt}  Odds of:  vs 
+
+{res}{txt}{hline 13}{c TT}{hline 10}{hline 9}{hline 9}{hline 10}
+{col 14}{c |}         b{col 25}        z{col 34}    P>|z|{col 43}       e^b
+{hline 13}{c +}{hline 10}{hline 9}{hline 9}{hline 10}
+{space 4}GEPHARDT {c |}{col 14}{res}{space 1}  -0.5352{col 25}{space 2} -1.500{col 34}{space 2}  0.134{col 43}{space 2}   0.586
+{txt}{space 8}GORE {c |}{col 14}{res}{space 1}   0.1270{col 25}{space 2}  0.377{col 34}{space 2}  0.706{col 43}{space 2}   1.135
+{txt}{space 8}HART {c |}{col 14}{res}{space 1}  -0.0166{col 25}{space 2} -0.026{col 34}{space 2}  0.979{col 43}{space 2}   0.984
+{txt}{space 5}JACKSON {c |}{col 14}{res}{space 1}   0.1256{col 25}{space 2}  0.302{col 34}{space 2}  0.763{col 43}{space 2}   1.134
+{txt}NORMALIZED~T {c |}{col 14}{res}{space 1}   3.7821{col 25}{space 2}  5.911{col 34}{space 2}  0.000{col 43}{space 2}  43.909
+{txt}NOR~IABILITY {c |}{col 14}{res}{space 1}   4.3796{col 25}{space 2}  1.900{col 34}{space 2}  0.057{col 43}{space 2}  79.808
+{txt}NOR~TABILITY {c |}{col 14}{res}{space 1}   1.2575{col 25}{space 2}  0.758{col 34}{space 2}  0.449{col 43}{space 2}   3.517
+{txt}NORMALIZE~GY {c |}{col 14}{res}{space 1}  -0.5086{col 25}{space 2} -1.313{col 34}{space 2}  0.189{col 43}{space 2}   0.601
+{txt}{space 6}TRAITS {c |}{col 14}{res}{space 1}   4.9012{col 25}{space 2}  2.541{col 34}{space 2}  0.011{col 43}{space 2} 134.450
+{txt}{hline 13}{c BT}{hline 10}{hline 9}{hline 9}{hline 10}
+       b = raw coefficient
+       z = z-score for test of b=0
+   P>|z| = p-value for z-test
+     e^b = exp(b) = factor change in odds for unit increase in X
+   SDofX = standard deviation of X
+
+{com}. margins, dydx(_all) post
+{res}
+{txt}Average marginal effects{col 49}Number of obs{col 67}= {res}       743
+{txt}{col 1}Model VCE{col 14}: {res}OIM
+
+{txt}{p2colset 1 14 16 2}{...}
+{p2col:Expression}:{space 1}{res:Pr(VoteCandidate|fixed effect is 0), predict(pu0)}{p_end}
+{p2colreset}{...}
+{txt}{p2colset 1 14 16 2}{...}
+{p2col:dy/dx w.r.t.}:{space 1}{res:GEPHARDT GORE HART JACKSON NORMALIZED_FT NORMALIZED_VIABILITY NORMALIZED_ELECTABILITY NORMALIZED_IDEOLOGY TRAITS}{p_end}
+{p2colreset}{...}
+
+{res}{txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 20}{c |}{col 32} Delta-method
+{col 20}{c |}      dy/dx{col 32}   Std. Err.{col 44}      z{col 52}   P>|z|{col 60}     [95% Con{col 73}f. Interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 10}GEPHARDT {c |}{col 20}{res}{space 2}-.0095125{col 32}{space 2} .0105526{col 43}{space 1}   -0.90{col 52}{space 3}0.367{col 60}{space 4}-.0301953{col 73}{space 3} .0111703
+{txt}{space 14}GORE {c |}{col 20}{res}{space 2} .0022572{col 32}{space 2} .0058948{col 43}{space 1}    0.38{col 52}{space 3}0.702{col 60}{space 4}-.0092965{col 73}{space 3} .0138108
+{txt}{space 14}HART {c |}{col 20}{res}{space 2}-.0002951{col 32}{space 2} .0113966{col 43}{space 1}   -0.03{col 52}{space 3}0.979{col 60}{space 4} -.022632{col 73}{space 3} .0220418
+{txt}{space 11}JACKSON {c |}{col 20}{res}{space 2} .0022321{col 32}{space 2} .0077584{col 43}{space 1}    0.29{col 52}{space 3}0.774{col 60}{space 4}-.0129741{col 73}{space 3} .0174382
+{txt}{space 5}NORMALIZED_FT {c |}{col 20}{res}{space 2} .0672204{col 32}{space 2} .0603541{col 43}{space 1}    1.11{col 52}{space 3}0.265{col 60}{space 4}-.0510715{col 73}{space 3} .1855124
+{txt}NORMALIZED_VIABI~Y {c |}{col 20}{res}{space 2} .0778397{col 32}{space 2} .0689996{col 43}{space 1}    1.13{col 52}{space 3}0.259{col 60}{space 4} -.057397{col 73}{space 3} .2130765
+{txt}NORMALIZED_ELECT~Y {c |}{col 20}{res}{space 2} .0223503{col 32}{space 2} .0353698{col 43}{space 1}    0.63{col 52}{space 3}0.527{col 60}{space 4}-.0469732{col 73}{space 3} .0916739
+{txt}NORMALIZED_IDEOL~Y {c |}{col 20}{res}{space 2}  -.00904{col 32}{space 2} .0117936{col 43}{space 1}   -0.77{col 52}{space 3}0.443{col 60}{space 4}-.0321551{col 73}{space 3}  .014075
+{txt}{space 12}TRAITS {c |}{col 20}{res}{space 2} .0871097{col 32}{space 2} .0462918{col 43}{space 1}    1.88{col 52}{space 3}0.060{col 60}{space 4}-.0036206{col 73}{space 3}   .17784
+{txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. outreg2 using 1988_d.xls
 {txt}{browse `"1988_d.xls"'}
 {browse `"/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/1988"' :dir}{com} : {txt}{stata `"seeout using "1988_d.txt""':seeout}
 
@@ -66,20 +122,74 @@ Iteration 4:{space 3}log likelihood = {res: -104.7613}
 {txt}{col 49}Prob > chi2{col 67}= {res}    0.0000
 {txt}Log likelihood = {res} -104.7613{txt}{col 49}Pseudo R2{col 67}= {res}    0.5631
 
-{txt}{hline 24}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{col 1}          VoteCandidate{col 25}{c |}      Coef.{col 37}   Std. Err.{col 49}      z{col 57}   P>|z|{col 65}     [95% Con{col 78}f. Interval]
-{hline 24}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{space 15}GEPHARDT {c |}{col 25}{res}{space 2}-.5064843{col 37}{space 2} .3456203{col 48}{space 1}   -1.47{col 57}{space 3}0.143{col 65}{space 4}-1.183888{col 78}{space 3} .1709191
-{txt}{space 19}GORE {c |}{col 25}{res}{space 2} .1608457{col 37}{space 2} .3291567{col 48}{space 1}    0.49{col 57}{space 3}0.625{col 65}{space 4}-.4842896{col 78}{space 3} .8059809
-{txt}{space 19}HART {c |}{col 25}{res}{space 2}-.0501995{col 37}{space 2} .6193603{col 48}{space 1}   -0.08{col 57}{space 3}0.935{col 65}{space 4}-1.264123{col 78}{space 3} 1.163724
-{txt}{space 16}JACKSON {c |}{col 25}{res}{space 2}  .479554{col 37}{space 2} .3862818{col 48}{space 1}    1.24{col 57}{space 3}0.214{col 65}{space 4}-.2775444{col 78}{space 3} 1.236652
-{txt}{space 10}NORMALIZED_FT {c |}{col 25}{res}{space 2}   4.5934{col 37}{space 2} .5963837{col 48}{space 1}    7.70{col 57}{space 3}0.000{col 65}{space 4} 3.424509{col 78}{space 3}  5.76229
-{txt}{space 3}NORMALIZED_VIABILITY {c |}{col 25}{res}{space 2} 4.185641{col 37}{space 2} 2.236056{col 48}{space 1}    1.87{col 57}{space 3}0.061{col 65}{space 4}-.1969486{col 78}{space 3}  8.56823
-{txt}NORMALIZED_ELECTABILITY {c |}{col 25}{res}{space 2}  1.74933{col 37}{space 2} 1.619179{col 48}{space 1}    1.08{col 57}{space 3}0.280{col 65}{space 4}-1.424202{col 78}{space 3} 4.922861
-{txt}{space 4}NORMALIZED_IDEOLOGY {c |}{col 25}{res}{space 2}-.6404612{col 37}{space 2} .3695281{col 48}{space 1}   -1.73{col 57}{space 3}0.083{col 65}{space 4}-1.364723{col 78}{space 3} .0838005
-{txt}{hline 24}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}     VoteCandidate{col 20}{c |}      Coef.{col 32}   Std. Err.{col 44}      z{col 52}   P>|z|{col 60}     [95% Con{col 73}f. Interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 10}GEPHARDT {c |}{col 20}{res}{space 2}-.5064843{col 32}{space 2} .3456203{col 43}{space 1}   -1.47{col 52}{space 3}0.143{col 60}{space 4}-1.183888{col 73}{space 3} .1709191
+{txt}{space 14}GORE {c |}{col 20}{res}{space 2} .1608457{col 32}{space 2} .3291567{col 43}{space 1}    0.49{col 52}{space 3}0.625{col 60}{space 4}-.4842896{col 73}{space 3} .8059809
+{txt}{space 14}HART {c |}{col 20}{res}{space 2}-.0501995{col 32}{space 2} .6193603{col 43}{space 1}   -0.08{col 52}{space 3}0.935{col 60}{space 4}-1.264123{col 73}{space 3} 1.163724
+{txt}{space 11}JACKSON {c |}{col 20}{res}{space 2}  .479554{col 32}{space 2} .3862818{col 43}{space 1}    1.24{col 52}{space 3}0.214{col 60}{space 4}-.2775444{col 73}{space 3} 1.236652
+{txt}{space 5}NORMALIZED_FT {c |}{col 20}{res}{space 2}   4.5934{col 32}{space 2} .5963837{col 43}{space 1}    7.70{col 52}{space 3}0.000{col 60}{space 4} 3.424509{col 73}{space 3}  5.76229
+{txt}NORMALIZED_VIABI~Y {c |}{col 20}{res}{space 2} 4.185641{col 32}{space 2} 2.236056{col 43}{space 1}    1.87{col 52}{space 3}0.061{col 60}{space 4}-.1969486{col 73}{space 3}  8.56823
+{txt}NORMALIZED_ELECT~Y {c |}{col 20}{res}{space 2}  1.74933{col 32}{space 2} 1.619179{col 43}{space 1}    1.08{col 52}{space 3}0.280{col 60}{space 4}-1.424202{col 73}{space 3} 4.922861
+{txt}NORMALIZED_IDEOL~Y {c |}{col 20}{res}{space 2}-.6404612{col 32}{space 2} .3695281{col 43}{space 1}   -1.73{col 52}{space 3}0.083{col 60}{space 4}-1.364723{col 73}{space 3} .0838005
+{txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
 
 {com}. outreg2 using 1988_d.xls 
+{txt}{browse `"1988_d.xls"'}
+{browse `"/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/1988"' :dir}{com} : {txt}{stata `"seeout using "1988_d.txt""':seeout}
+
+{com}. listcoef, help
+{res}
+clogit (N=743): Factor change in odds 
+
+{txt}  Odds of:  vs 
+
+{res}{txt}{hline 13}{c TT}{hline 10}{hline 9}{hline 9}{hline 10}
+{col 14}{c |}         b{col 25}        z{col 34}    P>|z|{col 43}       e^b
+{hline 13}{c +}{hline 10}{hline 9}{hline 9}{hline 10}
+{space 4}GEPHARDT {c |}{col 14}{res}{space 1}  -0.5065{col 25}{space 2} -1.465{col 34}{space 2}  0.143{col 43}{space 2}   0.603
+{txt}{space 8}GORE {c |}{col 14}{res}{space 1}   0.1608{col 25}{space 2}  0.489{col 34}{space 2}  0.625{col 43}{space 2}   1.175
+{txt}{space 8}HART {c |}{col 14}{res}{space 1}  -0.0502{col 25}{space 2} -0.081{col 34}{space 2}  0.935{col 43}{space 2}   0.951
+{txt}{space 5}JACKSON {c |}{col 14}{res}{space 1}   0.4796{col 25}{space 2}  1.241{col 34}{space 2}  0.214{col 43}{space 2}   1.615
+{txt}NORMALIZED~T {c |}{col 14}{res}{space 1}   4.5934{col 25}{space 2}  7.702{col 34}{space 2}  0.000{col 43}{space 2}  98.830
+{txt}NOR~IABILITY {c |}{col 14}{res}{space 1}   4.1856{col 25}{space 2}  1.872{col 34}{space 2}  0.061{col 43}{space 2}  65.736
+{txt}NOR~TABILITY {c |}{col 14}{res}{space 1}   1.7493{col 25}{space 2}  1.080{col 34}{space 2}  0.280{col 43}{space 2}   5.751
+{txt}NORMALIZE~GY {c |}{col 14}{res}{space 1}  -0.6405{col 25}{space 2} -1.733{col 34}{space 2}  0.083{col 43}{space 2}   0.527
+{txt}{hline 13}{c BT}{hline 10}{hline 9}{hline 9}{hline 10}
+       b = raw coefficient
+       z = z-score for test of b=0
+   P>|z| = p-value for z-test
+     e^b = exp(b) = factor change in odds for unit increase in X
+   SDofX = standard deviation of X
+
+{com}. margins, dydx(_all) post
+{res}
+{txt}Average marginal effects{col 49}Number of obs{col 67}= {res}       743
+{txt}{col 1}Model VCE{col 14}: {res}OIM
+
+{txt}{p2colset 1 14 16 2}{...}
+{p2col:Expression}:{space 1}{res:Pr(VoteCandidate|fixed effect is 0), predict(pu0)}{p_end}
+{p2colreset}{...}
+{txt}{p2colset 1 14 16 2}{...}
+{p2col:dy/dx w.r.t.}:{space 1}{res:GEPHARDT GORE HART JACKSON NORMALIZED_FT NORMALIZED_VIABILITY NORMALIZED_ELECTABILITY NORMALIZED_IDEOLOGY}{p_end}
+{p2colreset}{...}
+
+{res}{txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 20}{c |}{col 32} Delta-method
+{col 20}{c |}      dy/dx{col 32}   Std. Err.{col 44}      z{col 52}   P>|z|{col 60}     [95% Con{col 73}f. Interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 10}GEPHARDT {c |}{col 20}{res}{space 2}-.0447369{col 32}{space 2} .0328694{col 43}{space 1}   -1.36{col 52}{space 3}0.173{col 60}{space 4}-.1091598{col 73}{space 3}  .019686
+{txt}{space 14}GORE {c |}{col 20}{res}{space 2} .0142072{col 32}{space 2} .0280269{col 43}{space 1}    0.51{col 52}{space 3}0.612{col 60}{space 4}-.0407244{col 73}{space 3} .0691389
+{txt}{space 14}HART {c |}{col 20}{res}{space 2} -.004434{col 32}{space 2}  .054964{col 43}{space 1}   -0.08{col 52}{space 3}0.936{col 60}{space 4}-.1121615{col 73}{space 3} .1032935
+{txt}{space 11}JACKSON {c |}{col 20}{res}{space 2} .0423582{col 32}{space 2}    .0312{col 43}{space 1}    1.36{col 52}{space 3}0.175{col 60}{space 4}-.0187927{col 73}{space 3} .1035091
+{txt}{space 5}NORMALIZED_FT {c |}{col 20}{res}{space 2} .4057271{col 32}{space 2} .0653927{col 43}{space 1}    6.20{col 52}{space 3}0.000{col 60}{space 4} .2775598{col 73}{space 3} .5338945
+{txt}NORMALIZED_VIABI~Y {c |}{col 20}{res}{space 2} .3697105{col 32}{space 2} .1766267{col 43}{space 1}    2.09{col 52}{space 3}0.036{col 60}{space 4} .0235285{col 73}{space 3} .7158925
+{txt}NORMALIZED_ELECT~Y {c |}{col 20}{res}{space 2} .1545153{col 32}{space 2} .1429174{col 43}{space 1}    1.08{col 52}{space 3}0.280{col 60}{space 4}-.1255977{col 73}{space 3} .4346283
+{txt}NORMALIZED_IDEOL~Y {c |}{col 20}{res}{space 2}-.0565708{col 32}{space 2} .0358402{col 43}{space 1}   -1.58{col 52}{space 3}0.114{col 60}{space 4}-.1268163{col 73}{space 3} .0136746
+{txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. outreg2 using 1988_d.xls
 {txt}{browse `"1988_d.xls"'}
 {browse `"/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/1988"' :dir}{com} : {txt}{stata `"seeout using "1988_d.txt""':seeout}
 
@@ -112,23 +222,77 @@ Iteration 4:{space 3}log likelihood = {res:-145.95476}
 {txt}{col 49}Prob > chi2{col 67}= {res}    0.0000
 {txt}Log likelihood = {res}-145.95476{txt}{col 49}Pseudo R2{col 67}= {res}    0.5950
 
-{txt}{hline 24}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{col 1}          VoteCandidate{col 25}{c |}      Coef.{col 37}   Std. Err.{col 49}      z{col 57}   P>|z|{col 65}     [95% Con{col 78}f. Interval]
-{hline 24}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{space 19}DOLE {c |}{col 25}{res}{space 2}-.4355273{col 37}{space 2}  .205761{col 48}{space 1}   -2.12{col 57}{space 3}0.034{col 65}{space 4}-.8388114{col 78}{space 3}-.0322431
-{txt}{space 19}KEMP {c |}{col 25}{res}{space 2}-.6824651{col 37}{space 2}  .385646{col 48}{space 1}   -1.77{col 57}{space 3}0.077{col 65}{space 4}-1.438317{col 78}{space 3} .0733872
-{txt}{space 14}ROBERTSON {c |}{col 25}{res}{space 2}-.9806245{col 37}{space 2} .3928287{col 48}{space 1}   -2.50{col 57}{space 3}0.013{col 65}{space 4}-1.750555{col 78}{space 3}-.2106943
-{txt}{space 10}NORMALIZED_FT {c |}{col 25}{res}{space 2} 3.905472{col 37}{space 2} .5099853{col 48}{space 1}    7.66{col 57}{space 3}0.000{col 65}{space 4} 2.905919{col 78}{space 3} 4.905025
-{txt}{space 3}NORMALIZED_VIABILITY {c |}{col 25}{res}{space 2}  1.15421{col 37}{space 2} 1.536551{col 48}{space 1}    0.75{col 57}{space 3}0.453{col 65}{space 4}-1.857374{col 78}{space 3} 4.165794
-{txt}NORMALIZED_ELECTABILITY {c |}{col 25}{res}{space 2} 3.008328{col 37}{space 2} 1.696016{col 48}{space 1}    1.77{col 57}{space 3}0.076{col 65}{space 4}-.3158037{col 78}{space 3} 6.332459
-{txt}{space 4}NORMALIZED_IDEOLOGY {c |}{col 25}{res}{space 2}-.7137115{col 37}{space 2} .2924581{col 48}{space 1}   -2.44{col 57}{space 3}0.015{col 65}{space 4}-1.286919{col 78}{space 3}-.1405041
-{txt}{space 17}TRAITS {c |}{col 25}{res}{space 2} 5.451202{col 37}{space 2} 1.500702{col 48}{space 1}    3.63{col 57}{space 3}0.000{col 65}{space 4} 2.509881{col 78}{space 3} 8.392523
-{txt}{hline 24}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}     VoteCandidate{col 20}{c |}      Coef.{col 32}   Std. Err.{col 44}      z{col 52}   P>|z|{col 60}     [95% Con{col 73}f. Interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 14}DOLE {c |}{col 20}{res}{space 2}-.4355273{col 32}{space 2}  .205761{col 43}{space 1}   -2.12{col 52}{space 3}0.034{col 60}{space 4}-.8388114{col 73}{space 3}-.0322431
+{txt}{space 14}KEMP {c |}{col 20}{res}{space 2}-.6824651{col 32}{space 2}  .385646{col 43}{space 1}   -1.77{col 52}{space 3}0.077{col 60}{space 4}-1.438317{col 73}{space 3} .0733872
+{txt}{space 9}ROBERTSON {c |}{col 20}{res}{space 2}-.9806245{col 32}{space 2} .3928287{col 43}{space 1}   -2.50{col 52}{space 3}0.013{col 60}{space 4}-1.750555{col 73}{space 3}-.2106943
+{txt}{space 5}NORMALIZED_FT {c |}{col 20}{res}{space 2} 3.905472{col 32}{space 2} .5099853{col 43}{space 1}    7.66{col 52}{space 3}0.000{col 60}{space 4} 2.905919{col 73}{space 3} 4.905025
+{txt}NORMALIZED_VIABI~Y {c |}{col 20}{res}{space 2}  1.15421{col 32}{space 2} 1.536551{col 43}{space 1}    0.75{col 52}{space 3}0.453{col 60}{space 4}-1.857374{col 73}{space 3} 4.165794
+{txt}NORMALIZED_ELECT~Y {c |}{col 20}{res}{space 2} 3.008328{col 32}{space 2} 1.696016{col 43}{space 1}    1.77{col 52}{space 3}0.076{col 60}{space 4}-.3158037{col 73}{space 3} 6.332459
+{txt}NORMALIZED_IDEOL~Y {c |}{col 20}{res}{space 2}-.7137115{col 32}{space 2} .2924581{col 43}{space 1}   -2.44{col 52}{space 3}0.015{col 60}{space 4}-1.286919{col 73}{space 3}-.1405041
+{txt}{space 12}TRAITS {c |}{col 20}{res}{space 2} 5.451202{col 32}{space 2} 1.500702{col 43}{space 1}    3.63{col 52}{space 3}0.000{col 60}{space 4} 2.509881{col 73}{space 3} 8.392523
+{txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
 
 {com}. cd "/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/1988"
 {res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/1988
 {txt}
 {com}. outreg2 using 1988_r.xls, replace
+{txt}{browse `"1988_r.xls"'}
+{browse `"/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/1988"' :dir}{com} : {txt}{stata `"seeout using "1988_r.txt""':seeout}
+
+{com}. listcoef, help
+{res}
+clogit (N=1039): Factor change in odds 
+
+{txt}  Odds of:  vs 
+
+{res}{txt}{hline 13}{c TT}{hline 10}{hline 9}{hline 9}{hline 10}
+{col 14}{c |}         b{col 25}        z{col 34}    P>|z|{col 43}       e^b
+{hline 13}{c +}{hline 10}{hline 9}{hline 9}{hline 10}
+{space 8}DOLE {c |}{col 14}{res}{space 1}  -0.4355{col 25}{space 2} -2.117{col 34}{space 2}  0.034{col 43}{space 2}   0.647
+{txt}{space 8}KEMP {c |}{col 14}{res}{space 1}  -0.6825{col 25}{space 2} -1.770{col 34}{space 2}  0.077{col 43}{space 2}   0.505
+{txt}{space 3}ROBERTSON {c |}{col 14}{res}{space 1}  -0.9806{col 25}{space 2} -2.496{col 34}{space 2}  0.013{col 43}{space 2}   0.375
+{txt}NORMALIZED~T {c |}{col 14}{res}{space 1}   3.9055{col 25}{space 2}  7.658{col 34}{space 2}  0.000{col 43}{space 2}  49.674
+{txt}NOR~IABILITY {c |}{col 14}{res}{space 1}   1.1542{col 25}{space 2}  0.751{col 34}{space 2}  0.453{col 43}{space 2}   3.172
+{txt}NOR~TABILITY {c |}{col 14}{res}{space 1}   3.0083{col 25}{space 2}  1.774{col 34}{space 2}  0.076{col 43}{space 2}  20.253
+{txt}NORMALIZE~GY {c |}{col 14}{res}{space 1}  -0.7137{col 25}{space 2} -2.440{col 34}{space 2}  0.015{col 43}{space 2}   0.490
+{txt}{space 6}TRAITS {c |}{col 14}{res}{space 1}   5.4512{col 25}{space 2}  3.632{col 34}{space 2}  0.000{col 43}{space 2} 233.038
+{txt}{hline 13}{c BT}{hline 10}{hline 9}{hline 9}{hline 10}
+       b = raw coefficient
+       z = z-score for test of b=0
+   P>|z| = p-value for z-test
+     e^b = exp(b) = factor change in odds for unit increase in X
+   SDofX = standard deviation of X
+
+{com}. margins, dydx(_all) post
+{res}
+{txt}Average marginal effects{col 49}Number of obs{col 67}= {res}     1,039
+{txt}{col 1}Model VCE{col 14}: {res}OIM
+
+{txt}{p2colset 1 14 16 2}{...}
+{p2col:Expression}:{space 1}{res:Pr(VoteCandidate|fixed effect is 0), predict(pu0)}{p_end}
+{p2colreset}{...}
+{txt}{p2colset 1 14 16 2}{...}
+{p2col:dy/dx w.r.t.}:{space 1}{res:DOLE KEMP ROBERTSON NORMALIZED_FT NORMALIZED_VIABILITY NORMALIZED_ELECTABILITY NORMALIZED_IDEOLOGY TRAITS}{p_end}
+{p2colreset}{...}
+
+{res}{txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 20}{c |}{col 32} Delta-method
+{col 20}{c |}      dy/dx{col 32}   Std. Err.{col 44}      z{col 52}   P>|z|{col 60}     [95% Con{col 73}f. Interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 14}DOLE {c |}{col 20}{res}{space 2}-.0081818{col 32}{space 2} .0062732{col 43}{space 1}   -1.30{col 52}{space 3}0.192{col 60}{space 4} -.020477{col 73}{space 3} .0041134
+{txt}{space 14}KEMP {c |}{col 20}{res}{space 2}-.0128207{col 32}{space 2} .0115554{col 43}{space 1}   -1.11{col 52}{space 3}0.267{col 60}{space 4}-.0354689{col 73}{space 3} .0098274
+{txt}{space 9}ROBERTSON {c |}{col 20}{res}{space 2}-.0184219{col 32}{space 2} .0140181{col 43}{space 1}   -1.31{col 52}{space 3}0.189{col 60}{space 4} -.045897{col 73}{space 3} .0090531
+{txt}{space 5}NORMALIZED_FT {c |}{col 20}{res}{space 2} .0733679{col 32}{space 2} .0493028{col 43}{space 1}    1.49{col 52}{space 3}0.137{col 60}{space 4}-.0232638{col 73}{space 3} .1699996
+{txt}NORMALIZED_VIABI~Y {c |}{col 20}{res}{space 2} .0216829{col 32}{space 2} .0301714{col 43}{space 1}    0.72{col 52}{space 3}0.472{col 60}{space 4}-.0374519{col 73}{space 3} .0808177
+{txt}NORMALIZED_ELECT~Y {c |}{col 20}{res}{space 2} .0565142{col 32}{space 2} .0444501{col 43}{space 1}    1.27{col 52}{space 3}0.204{col 60}{space 4}-.0306064{col 73}{space 3} .1436349
+{txt}NORMALIZED_IDEOL~Y {c |}{col 20}{res}{space 2}-.0134077{col 32}{space 2} .0109299{col 43}{space 1}   -1.23{col 52}{space 3}0.220{col 60}{space 4}  -.03483{col 73}{space 3} .0080146
+{txt}{space 12}TRAITS {c |}{col 20}{res}{space 2} .1024059{col 32}{space 2} .0420543{col 43}{space 1}    2.44{col 52}{space 3}0.015{col 60}{space 4} .0199811{col 73}{space 3} .1848308
+{txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. outreg2 using 1988_r.xls
 {txt}{browse `"1988_r.xls"'}
 {browse `"/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/1988"' :dir}{com} : {txt}{stata `"seeout using "1988_r.txt""':seeout}
 
@@ -150,18 +314,70 @@ Iteration 4:{space 3}log likelihood = {res:-153.30767}
 {txt}{col 49}Prob > chi2{col 67}= {res}    0.0000
 {txt}Log likelihood = {res}-153.30767{txt}{col 49}Pseudo R2{col 67}= {res}    0.5746
 
-{txt}{hline 24}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{col 1}          VoteCandidate{col 25}{c |}      Coef.{col 37}   Std. Err.{col 49}      z{col 57}   P>|z|{col 65}     [95% Con{col 78}f. Interval]
-{hline 24}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{space 19}DOLE {c |}{col 25}{res}{space 2}-.2477132{col 37}{space 2} .1930293{col 48}{space 1}   -1.28{col 57}{space 3}0.199{col 65}{space 4}-.6260436{col 78}{space 3} .1306172
-{txt}{space 19}KEMP {c |}{col 25}{res}{space 2} -.401362{col 37}{space 2}  .371889{col 48}{space 1}   -1.08{col 57}{space 3}0.280{col 65}{space 4}-1.130251{col 78}{space 3}  .327527
-{txt}{space 14}ROBERTSON {c |}{col 25}{res}{space 2}-.5204531{col 37}{space 2} .3608335{col 48}{space 1}   -1.44{col 57}{space 3}0.149{col 65}{space 4}-1.227674{col 78}{space 3} .1867676
-{txt}{space 10}NORMALIZED_FT {c |}{col 25}{res}{space 2} 4.596047{col 37}{space 2} .5011284{col 48}{space 1}    9.17{col 57}{space 3}0.000{col 65}{space 4} 3.613854{col 78}{space 3} 5.578241
-{txt}{space 3}NORMALIZED_VIABILITY {c |}{col 25}{res}{space 2} 1.377775{col 37}{space 2} 1.514362{col 48}{space 1}    0.91{col 57}{space 3}0.363{col 65}{space 4} -1.59032{col 78}{space 3}  4.34587
-{txt}NORMALIZED_ELECTABILITY {c |}{col 25}{res}{space 2} 3.554258{col 37}{space 2} 1.697393{col 48}{space 1}    2.09{col 57}{space 3}0.036{col 65}{space 4} .2274283{col 78}{space 3} 6.881088
-{txt}{space 4}NORMALIZED_IDEOLOGY {c |}{col 25}{res}{space 2}-.6938024{col 37}{space 2} .2886418{col 48}{space 1}   -2.40{col 57}{space 3}0.016{col 65}{space 4} -1.25953{col 78}{space 3}-.1280749
-{txt}{hline 24}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}     VoteCandidate{col 20}{c |}      Coef.{col 32}   Std. Err.{col 44}      z{col 52}   P>|z|{col 60}     [95% Con{col 73}f. Interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 14}DOLE {c |}{col 20}{res}{space 2}-.2477132{col 32}{space 2} .1930293{col 43}{space 1}   -1.28{col 52}{space 3}0.199{col 60}{space 4}-.6260436{col 73}{space 3} .1306172
+{txt}{space 14}KEMP {c |}{col 20}{res}{space 2} -.401362{col 32}{space 2}  .371889{col 43}{space 1}   -1.08{col 52}{space 3}0.280{col 60}{space 4}-1.130251{col 73}{space 3}  .327527
+{txt}{space 9}ROBERTSON {c |}{col 20}{res}{space 2}-.5204531{col 32}{space 2} .3608335{col 43}{space 1}   -1.44{col 52}{space 3}0.149{col 60}{space 4}-1.227674{col 73}{space 3} .1867676
+{txt}{space 5}NORMALIZED_FT {c |}{col 20}{res}{space 2} 4.596047{col 32}{space 2} .5011284{col 43}{space 1}    9.17{col 52}{space 3}0.000{col 60}{space 4} 3.613854{col 73}{space 3} 5.578241
+{txt}NORMALIZED_VIABI~Y {c |}{col 20}{res}{space 2} 1.377775{col 32}{space 2} 1.514362{col 43}{space 1}    0.91{col 52}{space 3}0.363{col 60}{space 4} -1.59032{col 73}{space 3}  4.34587
+{txt}NORMALIZED_ELECT~Y {c |}{col 20}{res}{space 2} 3.554258{col 32}{space 2} 1.697393{col 43}{space 1}    2.09{col 52}{space 3}0.036{col 60}{space 4} .2274283{col 73}{space 3} 6.881088
+{txt}NORMALIZED_IDEOL~Y {c |}{col 20}{res}{space 2}-.6938024{col 32}{space 2} .2886418{col 43}{space 1}   -2.40{col 52}{space 3}0.016{col 60}{space 4} -1.25953{col 73}{space 3}-.1280749
+{txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
 
+{com}. outreg2 using 1988_r.xls
+{txt}{browse `"1988_r.xls"'}
+{browse `"/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/1988"' :dir}{com} : {txt}{stata `"seeout using "1988_r.txt""':seeout}
+
+{com}. listcoef, help
+{res}
+clogit (N=1039): Factor change in odds 
+
+{txt}  Odds of:  vs 
+
+{res}{txt}{hline 13}{c TT}{hline 10}{hline 9}{hline 9}{hline 10}
+{col 14}{c |}         b{col 25}        z{col 34}    P>|z|{col 43}       e^b
+{hline 13}{c +}{hline 10}{hline 9}{hline 9}{hline 10}
+{space 8}DOLE {c |}{col 14}{res}{space 1}  -0.2477{col 25}{space 2} -1.283{col 34}{space 2}  0.199{col 43}{space 2}   0.781
+{txt}{space 8}KEMP {c |}{col 14}{res}{space 1}  -0.4014{col 25}{space 2} -1.079{col 34}{space 2}  0.280{col 43}{space 2}   0.669
+{txt}{space 3}ROBERTSON {c |}{col 14}{res}{space 1}  -0.5205{col 25}{space 2} -1.442{col 34}{space 2}  0.149{col 43}{space 2}   0.594
+{txt}NORMALIZED~T {c |}{col 14}{res}{space 1}   4.5960{col 25}{space 2}  9.171{col 34}{space 2}  0.000{col 43}{space 2}  99.092
+{txt}NOR~IABILITY {c |}{col 14}{res}{space 1}   1.3778{col 25}{space 2}  0.910{col 34}{space 2}  0.363{col 43}{space 2}   3.966
+{txt}NOR~TABILITY {c |}{col 14}{res}{space 1}   3.5543{col 25}{space 2}  2.094{col 34}{space 2}  0.036{col 43}{space 2}  34.962
+{txt}NORMALIZE~GY {c |}{col 14}{res}{space 1}  -0.6938{col 25}{space 2} -2.404{col 34}{space 2}  0.016{col 43}{space 2}   0.500
+{txt}{hline 13}{c BT}{hline 10}{hline 9}{hline 9}{hline 10}
+       b = raw coefficient
+       z = z-score for test of b=0
+   P>|z| = p-value for z-test
+     e^b = exp(b) = factor change in odds for unit increase in X
+   SDofX = standard deviation of X
+
+{com}. margins, dydx(_all) post
+{res}
+{txt}Average marginal effects{col 49}Number of obs{col 67}= {res}     1,039
+{txt}{col 1}Model VCE{col 14}: {res}OIM
+
+{txt}{p2colset 1 14 16 2}{...}
+{p2col:Expression}:{space 1}{res:Pr(VoteCandidate|fixed effect is 0), predict(pu0)}{p_end}
+{p2colreset}{...}
+{txt}{p2colset 1 14 16 2}{...}
+{p2col:dy/dx w.r.t.}:{space 1}{res:DOLE KEMP ROBERTSON NORMALIZED_FT NORMALIZED_VIABILITY NORMALIZED_ELECTABILITY NORMALIZED_IDEOLOGY}{p_end}
+{p2colreset}{...}
+
+{res}{txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 20}{c |}{col 32} Delta-method
+{col 20}{c |}      dy/dx{col 32}   Std. Err.{col 44}      z{col 52}   P>|z|{col 60}     [95% Con{col 73}f. Interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 14}DOLE {c |}{col 20}{res}{space 2}-.0223764{col 32}{space 2} .0182861{col 43}{space 1}   -1.22{col 52}{space 3}0.221{col 60}{space 4}-.0582164{col 73}{space 3} .0134636
+{txt}{space 14}KEMP {c |}{col 20}{res}{space 2}-.0362558{col 32}{space 2} .0361243{col 43}{space 1}   -1.00{col 52}{space 3}0.316{col 60}{space 4}-.1070583{col 73}{space 3} .0345466
+{txt}{space 9}ROBERTSON {c |}{col 20}{res}{space 2}-.0470136{col 32}{space 2}  .033853{col 43}{space 1}   -1.39{col 52}{space 3}0.165{col 60}{space 4}-.1133642{col 73}{space 3}  .019337
+{txt}{space 5}NORMALIZED_FT {c |}{col 20}{res}{space 2} .4151703{col 32}{space 2} .0501872{col 43}{space 1}    8.27{col 52}{space 3}0.000{col 60}{space 4} .3168052{col 73}{space 3} .5135353
+{txt}NORMALIZED_VIABI~Y {c |}{col 20}{res}{space 2} .1244572{col 32}{space 2} .1333698{col 43}{space 1}    0.93{col 52}{space 3}0.351{col 60}{space 4}-.1369428{col 73}{space 3} .3858572
+{txt}NORMALIZED_ELECT~Y {c |}{col 20}{res}{space 2} .3210634{col 32}{space 2} .1413914{col 43}{space 1}    2.27{col 52}{space 3}0.023{col 60}{space 4} .0439413{col 73}{space 3} .5981855
+{txt}NORMALIZED_IDEOL~Y {c |}{col 20}{res}{space 2}-.0626726{col 32}{space 2} .0270688{col 43}{space 1}   -2.32{col 52}{space 3}0.021{col 60}{space 4}-.1157264{col 73}{space 3}-.0096188
+{txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
 {com}. outreg2 using 1988_r.xls
 {txt}{browse `"1988_r.xls"'}
 {browse `"/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/1988"' :dir}{com} : {txt}{stata `"seeout using "1988_r.txt""':seeout}
@@ -169,7 +385,13 @@ Iteration 4:{space 3}log likelihood = {res:-153.30767}
 {com}. 
 {txt}end of do-file
 
-{com}. use "/Users/ryan/Google Drive/2020_2021/Thesis/Data/thesis/clean_data/df04_nh_d.dta"
-{txt}(Written by R.              )
-
-{com}. exit
+{com}. do "/var/folders/wp/cwmrq5v9115gygh6bzyqpqmw0000gn/T//SD05723.000000"
+{txt}
+{com}. * Ryan Zhang
+. * 1984
+. 
+. clear all
+{res}{txt}
+{com}. capture log close
+{smcl}
+{com}{sf}{ul off}

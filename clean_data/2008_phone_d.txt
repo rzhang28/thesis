@@ -1,0 +1,21 @@
+	(1)
+VARIABLES	VoteCandidate
+	
+CLINTON	-0.0229
+	(0.0666)
+EDWARDS	-0.163**
+	(0.0830)
+NORMALIZED_FT	2.202***
+	(0.0981)
+NORMALIZED_VIABILITY	2.609***
+	(0.377)
+NORMALIZED_ELECTABILITY	2.753***
+	(0.379)
+NORMALIZED_IDEOLOGY	-0.343***
+	(0.0787)
+TRAITS	8.943***
+	(0.489)
+	
+Observations	10,775
+Standard errors in parentheses	
+*** p<0.01, ** p<0.05, * p<0.1	

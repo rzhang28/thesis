@@ -13,6 +13,7 @@ library(Hmisc)
 library(rqPen)
 library(vctrs)
 library(foreign)
+library(ggthemes)
 
 ```
 
@@ -371,11 +372,6 @@ df_final %>%
   drop_na() %>%
   write.dta("clean_data/df88st_d.dta")
 
-df_final %>%
-  ggplot(aes(x = NORMALIZED_ELECTABILITY)) +
-    geom_density() +
-    facet_wrap(~ Candidate)
-
 ```
 
 
@@ -401,17 +397,52 @@ df_final_2 <- df_final %>%
 
 ```{r}
 
-df_final_2 <- df_final_2 %>%
+df_final_2 %>%
   group_by(Candidate, SINCERE_MAX2, STRATEGIC_MAX2) %>%
   count() %>%
   group_by(Candidate) %>%
-  mutate(percent = n / sum(n))
+  mutate(percent = n / sum(n)) %>%
+  write.csv("clean_data/df88st_d_counts.csv")
 
 df_final_2 %>%
-  write.csv("clean_data/df88st_d_counts.csv")
+  group_by(SINCERE_MAX2, STRATEGIC_MAX2) %>%
+  count() %>%
+  group_by() %>%
+  mutate(percent = n / sum(n)) %>%
+  write.csv("clean_data/df88st_d_counts_aggregate.csv")
 
 ```
 
+
+## Make Graphs
+
+```{r}
+
+df_final %>%
+  ggplot(aes(x = NORMALIZED_ELECTABILITY)) +
+    geom_density() +
+    facet_wrap(~ Candidate) +
+    theme_bw() + 
+    labs(
+      title = "Candidate Electability",
+      x = "Normalized Electability",
+      y = "Density"
+    ) +
+  ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure2/anes88_st_d_electability.bmp", width = 7.5, height = 4.5)
+
+df_final %>%
+  ggplot(aes(x = NORMALIZED_VIABILITY)) +
+    geom_density() +
+    facet_wrap(~ Candidate) +
+    theme_bw() + 
+    labs(
+      title = "Candidate Viability",
+      x = "Normalized Viability",
+      y = "Density"
+    ) +
+  ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure2/anes88_st_d_viability.bmp", width = 7.5, height = 4.5)
+
+```
 
 ```{r include=FALSE}
 

@@ -3,7 +3,7 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/thesis/clean_data/1984.smcl
   {txt}log type:  {res}smcl
- {txt}opened on:  {res}22 Oct 2020, 02:07:59
+ {txt}opened on:  {res}24 Oct 2020, 12:26:59
 {txt}
 {com}. 
 . * 1984 Democratic primaries
@@ -31,17 +31,17 @@ Iteration 4:{space 3}log likelihood = {res:-413.82245}
 {txt}{col 49}Prob > chi2{col 67}= {res}    0.0000
 {txt}Log likelihood = {res}-413.82245{txt}{col 49}Pseudo R2{col 67}= {res}    0.5806
 
-{txt}{hline 24}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{col 1}          VoteCandidate{col 25}{c |}      Coef.{col 37}   Std. Err.{col 49}      z{col 57}   P>|z|{col 65}     [95% Con{col 78}f. Interval]
-{hline 24}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{space 19}HART {c |}{col 25}{res}{space 2}-.0124551{col 37}{space 2} .1182315{col 48}{space 1}   -0.11{col 57}{space 3}0.916{col 65}{space 4}-.2441845{col 78}{space 3} .2192743
-{txt}{space 16}JACKSON {c |}{col 25}{res}{space 2}-.9390126{col 37}{space 2} .2268269{col 48}{space 1}   -4.14{col 57}{space 3}0.000{col 65}{space 4}-1.383585{col 78}{space 3}-.4944399
-{txt}{space 10}NORMALIZED_FT {c |}{col 25}{res}{space 2} 2.120606{col 37}{space 2} .1638946{col 48}{space 1}   12.94{col 57}{space 3}0.000{col 65}{space 4} 1.799378{col 78}{space 3} 2.441833
-{txt}{space 3}NORMALIZED_VIABILITY {c |}{col 25}{res}{space 2} 2.081902{col 37}{space 2} .4023131{col 48}{space 1}    5.17{col 57}{space 3}0.000{col 65}{space 4} 1.293383{col 78}{space 3} 2.870421
-{txt}NORMALIZED_ELECTABILITY {c |}{col 25}{res}{space 2} 2.058977{col 37}{space 2} .4555486{col 48}{space 1}    4.52{col 57}{space 3}0.000{col 65}{space 4} 1.166118{col 78}{space 3} 2.951836
-{txt}{space 4}NORMALIZED_IDEOLOGY {c |}{col 25}{res}{space 2}-.4302036{col 37}{space 2} .1332672{col 48}{space 1}   -3.23{col 57}{space 3}0.001{col 65}{space 4}-.6914025{col 78}{space 3}-.1690048
-{txt}{space 17}TRAITS {c |}{col 25}{res}{space 2} 4.882015{col 37}{space 2} .7396826{col 48}{space 1}    6.60{col 57}{space 3}0.000{col 65}{space 4} 3.432264{col 78}{space 3} 6.331766
-{txt}{hline 24}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}     VoteCandidate{col 20}{c |}      Coef.{col 32}   Std. Err.{col 44}      z{col 52}   P>|z|{col 60}     [95% Con{col 73}f. Interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 14}HART {c |}{col 20}{res}{space 2}-.0124551{col 32}{space 2} .1182315{col 43}{space 1}   -0.11{col 52}{space 3}0.916{col 60}{space 4}-.2441845{col 73}{space 3} .2192743
+{txt}{space 11}JACKSON {c |}{col 20}{res}{space 2}-.9390126{col 32}{space 2} .2268269{col 43}{space 1}   -4.14{col 52}{space 3}0.000{col 60}{space 4}-1.383585{col 73}{space 3}-.4944399
+{txt}{space 5}NORMALIZED_FT {c |}{col 20}{res}{space 2} 2.120606{col 32}{space 2} .1638946{col 43}{space 1}   12.94{col 52}{space 3}0.000{col 60}{space 4} 1.799378{col 73}{space 3} 2.441833
+{txt}NORMALIZED_VIABI~Y {c |}{col 20}{res}{space 2} 2.081902{col 32}{space 2} .4023131{col 43}{space 1}    5.17{col 52}{space 3}0.000{col 60}{space 4} 1.293383{col 73}{space 3} 2.870421
+{txt}NORMALIZED_ELECT~Y {c |}{col 20}{res}{space 2} 2.058977{col 32}{space 2} .4555486{col 43}{space 1}    4.52{col 52}{space 3}0.000{col 60}{space 4} 1.166118{col 73}{space 3} 2.951836
+{txt}NORMALIZED_IDEOL~Y {c |}{col 20}{res}{space 2}-.4302036{col 32}{space 2} .1332672{col 43}{space 1}   -3.23{col 52}{space 3}0.001{col 60}{space 4}-.6914025{col 73}{space 3}-.1690048
+{txt}{space 12}TRAITS {c |}{col 20}{res}{space 2} 4.882015{col 32}{space 2} .7396826{col 43}{space 1}    6.60{col 52}{space 3}0.000{col 60}{space 4} 3.432264{col 73}{space 3} 6.331766
+{txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
 
 {com}. cd "/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/1984"
 {res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/1984
@@ -49,6 +49,1278 @@ Iteration 4:{space 3}log likelihood = {res:-413.82245}
 {com}. outreg2 using 1984_d.xls, replace 
 {txt}{browse `"1984_d.xls"'}
 {browse `"/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/1984"' :dir}{com} : {txt}{stata `"seeout using "1984_d.txt""':seeout}
+
+{com}. listcoef, help
+{res}
+clogit (N=2696): Factor change in odds 
+
+{txt}  Odds of:  vs 
+
+{res}{txt}{hline 13}{c TT}{hline 10}{hline 9}{hline 9}{hline 10}
+{col 14}{c |}         b{col 25}        z{col 34}    P>|z|{col 43}       e^b
+{hline 13}{c +}{hline 10}{hline 9}{hline 9}{hline 10}
+{space 8}HART {c |}{col 14}{res}{space 1}  -0.0125{col 25}{space 2} -0.105{col 34}{space 2}  0.916{col 43}{space 2}   0.988
+{txt}{space 5}JACKSON {c |}{col 14}{res}{space 1}  -0.9390{col 25}{space 2} -4.140{col 34}{space 2}  0.000{col 43}{space 2}   0.391
+{txt}NORMALIZED~T {c |}{col 14}{res}{space 1}   2.1206{col 25}{space 2} 12.939{col 34}{space 2}  0.000{col 43}{space 2}   8.336
+{txt}NOR~IABILITY {c |}{col 14}{res}{space 1}   2.0819{col 25}{space 2}  5.175{col 34}{space 2}  0.000{col 43}{space 2}   8.020
+{txt}NOR~TABILITY {c |}{col 14}{res}{space 1}   2.0590{col 25}{space 2}  4.520{col 34}{space 2}  0.000{col 43}{space 2}   7.838
+{txt}NORMALIZE~GY {c |}{col 14}{res}{space 1}  -0.4302{col 25}{space 2} -3.228{col 34}{space 2}  0.001{col 43}{space 2}   0.650
+{txt}{space 6}TRAITS {c |}{col 14}{res}{space 1}   4.8820{col 25}{space 2}  6.600{col 34}{space 2}  0.000{col 43}{space 2} 131.896
+{txt}{hline 13}{c BT}{hline 10}{hline 9}{hline 9}{hline 10}
+       b = raw coefficient
+       z = z-score for test of b=0
+   P>|z| = p-value for z-test
+     e^b = exp(b) = factor change in odds for unit increase in X
+   SDofX = standard deviation of X
+
+{com}. margins, dydx(_all) post
+{res}
+{txt}Average marginal effects{col 49}Number of obs{col 67}= {res}     2,696
+{txt}{col 1}Model VCE{col 14}: {res}OIM
+
+{txt}{p2colset 1 14 16 2}{...}
+{p2col:Expression}:{space 1}{res:Pr(VoteCandidate|fixed effect is 0), predict(pu0)}{p_end}
+{p2colreset}{...}
+{txt}{p2colset 1 14 16 2}{...}
+{p2col:dy/dx w.r.t.}:{space 1}{res:HART JACKSON NORMALIZED_FT NORMALIZED_VIABILITY NORMALIZED_ELECTABILITY NORMALIZED_IDEOLOGY TRAITS}{p_end}
+{p2colreset}{...}
+
+{res}{txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 20}{c |}{col 32} Delta-method
+{col 20}{c |}      dy/dx{col 32}   Std. Err.{col 44}      z{col 52}   P>|z|{col 60}     [95% Con{col 73}f. Interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 14}HART {c |}{col 20}{res}{space 2}-.0002613{col 32}{space 2} .0024894{col 43}{space 1}   -0.10{col 52}{space 3}0.916{col 60}{space 4}-.0051405{col 73}{space 3} .0046179
+{txt}{space 11}JACKSON {c |}{col 20}{res}{space 2}-.0196999{col 32}{space 2} .0086281{col 43}{space 1}   -2.28{col 52}{space 3}0.022{col 60}{space 4}-.0366107{col 73}{space 3}-.0027891
+{txt}{space 5}NORMALIZED_FT {c |}{col 20}{res}{space 2}  .044489{col 32}{space 2} .0152448{col 43}{space 1}    2.92{col 52}{space 3}0.004{col 60}{space 4} .0146097{col 73}{space 3} .0743683
+{txt}NORMALIZED_VIABI~Y {c |}{col 20}{res}{space 2}  .043677{col 32}{space 2} .0143772{col 43}{space 1}    3.04{col 52}{space 3}0.002{col 60}{space 4} .0154983{col 73}{space 3} .0718558
+{txt}NORMALIZED_ELECT~Y {c |}{col 20}{res}{space 2} .0431961{col 32}{space 2} .0155974{col 43}{space 1}    2.77{col 52}{space 3}0.006{col 60}{space 4} .0126258{col 73}{space 3} .0737664
+{txt}NORMALIZED_IDEOL~Y {c |}{col 20}{res}{space 2}-.0090254{col 32}{space 2} .0043137{col 43}{space 1}   -2.09{col 52}{space 3}0.036{col 60}{space 4}-.0174801{col 73}{space 3}-.0005707
+{txt}{space 12}TRAITS {c |}{col 20}{res}{space 2} .1024216{col 32}{space 2} .0207367{col 43}{space 1}    4.94{col 52}{space 3}0.000{col 60}{space 4} .0617784{col 73}{space 3} .1430649
+{txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. outreg2 using 1984_d.xls
+{txt}{browse `"1984_d.xls"'}
+{browse `"/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/1984"' :dir}{com} : {txt}{stata `"seeout using "1984_d.txt""':seeout}
+
+{com}. 
+. clogit VoteCandidate HART JACKSON NORMALIZED_FT NORMALIZED_VIABILITY NORMALIZED_ELECTABILITY NORMALIZED_IDEOLOGY, group(ID)
+{txt}note: 2 groups (2 obs) dropped because of all positive or
+      all negative outcomes.
+{res}
+{txt}Iteration 0:{space 3}log likelihood = {res:-457.70439}  
+Iteration 1:{space 3}log likelihood = {res:-444.39845}  
+Iteration 2:{space 3}log likelihood = {res:-439.53653}  
+Iteration 3:{space 3}log likelihood = {res:-439.51972}  
+Iteration 4:{space 3}log likelihood = {res:-439.51972}  
+{res}
+{txt}Conditional (fixed-effects) logistic regression
+
+{col 49}Number of obs{col 67}= {res}     2,696
+{txt}{col 49}LR chi2({res}6{txt}){col 67}= {res}   1094.51
+{txt}{col 49}Prob > chi2{col 67}= {res}    0.0000
+{txt}Log likelihood = {res}-439.51972{txt}{col 49}Pseudo R2{col 67}= {res}    0.5546
+
+{txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}     VoteCandidate{col 20}{c |}      Coef.{col 32}   Std. Err.{col 44}      z{col 52}   P>|z|{col 60}     [95% Con{col 73}f. Interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 14}HART {c |}{col 20}{res}{space 2} .1344446{col 32}{space 2} .1141886{col 43}{space 1}    1.18{col 52}{space 3}0.239{col 60}{space 4}-.0893609{col 73}{space 3} .3582501
+{txt}{space 11}JACKSON {c |}{col 20}{res}{space 2} -.524698{col 32}{space 2} .2121402{col 43}{space 1}   -2.47{col 52}{space 3}0.013{col 60}{space 4}-.9404852{col 73}{space 3}-.1089108
+{txt}{space 5}NORMALIZED_FT {c |}{col 20}{res}{space 2} 2.484645{col 32}{space 2} .1577234{col 43}{space 1}   15.75{col 52}{space 3}0.000{col 60}{space 4} 2.175513{col 73}{space 3} 2.793777
+{txt}NORMALIZED_VIABI~Y {c |}{col 20}{res}{space 2} 2.173479{col 32}{space 2} .3781232{col 43}{space 1}    5.75{col 52}{space 3}0.000{col 60}{space 4} 1.432371{col 73}{space 3} 2.914587
+{txt}NORMALIZED_ELECT~Y {c |}{col 20}{res}{space 2} 2.525263{col 32}{space 2}  .437389{col 43}{space 1}    5.77{col 52}{space 3}0.000{col 60}{space 4} 1.667996{col 73}{space 3}  3.38253
+{txt}NORMALIZED_IDEOL~Y {c |}{col 20}{res}{space 2}-.4622118{col 32}{space 2} .1288611{col 43}{space 1}   -3.59{col 52}{space 3}0.000{col 60}{space 4}-.7147748{col 73}{space 3}-.2096487
+{txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{com}. cd "/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/1984"
+{res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/1984
+{txt}
+{com}. outreg2 using 1984_d.xls 
+{txt}{browse `"1984_d.xls"'}
+{browse `"/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/1984"' :dir}{com} : {txt}{stata `"seeout using "1984_d.txt""':seeout}
+
+{com}. listcoef, help
+{res}
+clogit (N=2696): Factor change in odds 
+
+{txt}  Odds of:  vs 
+
+{res}{txt}{hline 13}{c TT}{hline 10}{hline 9}{hline 9}{hline 10}
+{col 14}{c |}         b{col 25}        z{col 34}    P>|z|{col 43}       e^b
+{hline 13}{c +}{hline 10}{hline 9}{hline 9}{hline 10}
+{space 8}HART {c |}{col 14}{res}{space 1}   0.1344{col 25}{space 2}  1.177{col 34}{space 2}  0.239{col 43}{space 2}   1.144
+{txt}{space 5}JACKSON {c |}{col 14}{res}{space 1}  -0.5247{col 25}{space 2} -2.473{col 34}{space 2}  0.013{col 43}{space 2}   0.592
+{txt}NORMALIZED~T {c |}{col 14}{res}{space 1}   2.4846{col 25}{space 2} 15.753{col 34}{space 2}  0.000{col 43}{space 2}  11.997
+{txt}NOR~IABILITY {c |}{col 14}{res}{space 1}   2.1735{col 25}{space 2}  5.748{col 34}{space 2}  0.000{col 43}{space 2}   8.789
+{txt}NOR~TABILITY {c |}{col 14}{res}{space 1}   2.5253{col 25}{space 2}  5.773{col 34}{space 2}  0.000{col 43}{space 2}  12.494
+{txt}NORMALIZE~GY {c |}{col 14}{res}{space 1}  -0.4622{col 25}{space 2} -3.587{col 34}{space 2}  0.000{col 43}{space 2}   0.630
+{txt}{hline 13}{c BT}{hline 10}{hline 9}{hline 9}{hline 10}
+       b = raw coefficient
+       z = z-score for test of b=0
+   P>|z| = p-value for z-test
+     e^b = exp(b) = factor change in odds for unit increase in X
+   SDofX = standard deviation of X
+
+{com}. margins, dydx(_all) post
+{res}
+{txt}Average marginal effects{col 49}Number of obs{col 67}= {res}     2,696
+{txt}{col 1}Model VCE{col 14}: {res}OIM
+
+{txt}{p2colset 1 14 16 2}{...}
+{p2col:Expression}:{space 1}{res:Pr(VoteCandidate|fixed effect is 0), predict(pu0)}{p_end}
+{p2colreset}{...}
+{txt}{p2colset 1 14 16 2}{...}
+{p2col:dy/dx w.r.t.}:{space 1}{res:HART JACKSON NORMALIZED_FT NORMALIZED_VIABILITY NORMALIZED_ELECTABILITY NORMALIZED_IDEOLOGY}{p_end}
+{p2colreset}{...}
+
+{res}{txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 20}{c |}{col 32} Delta-method
+{col 20}{c |}      dy/dx{col 32}   Std. Err.{col 44}      z{col 52}   P>|z|{col 60}     [95% Con{col 73}f. Interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 14}HART {c |}{col 20}{res}{space 2} .0137382{col 32}{space 2}  .011311{col 43}{space 1}    1.21{col 52}{space 3}0.225{col 60}{space 4}-.0084309{col 73}{space 3} .0359073
+{txt}{space 11}JACKSON {c |}{col 20}{res}{space 2}-.0536161{col 32}{space 2} .0237882{col 43}{space 1}   -2.25{col 52}{space 3}0.024{col 60}{space 4}-.1002401{col 73}{space 3} -.006992
+{txt}{space 5}NORMALIZED_FT {c |}{col 20}{res}{space 2} .2538925{col 32}{space 2} .0204581{col 43}{space 1}   12.41{col 52}{space 3}0.000{col 60}{space 4} .2137955{col 73}{space 3} .2939896
+{txt}NORMALIZED_VIABI~Y {c |}{col 20}{res}{space 2} .2220961{col 32}{space 2} .0319196{col 43}{space 1}    6.96{col 52}{space 3}0.000{col 60}{space 4} .1595349{col 73}{space 3} .2846573
+{txt}NORMALIZED_ELECT~Y {c |}{col 20}{res}{space 2}  .258043{col 32}{space 2} .0369405{col 43}{space 1}    6.99{col 52}{space 3}0.000{col 60}{space 4}  .185641{col 73}{space 3}  .330445
+{txt}NORMALIZED_IDEOL~Y {c |}{col 20}{res}{space 2}-.0472309{col 32}{space 2} .0140642{col 43}{space 1}   -3.36{col 52}{space 3}0.001{col 60}{space 4}-.0747963{col 73}{space 3}-.0196656
+{txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. outreg2 using 1984_d.xls
+{txt}{browse `"1984_d.xls"'}
+{browse `"/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/1984"' :dir}{com} : {txt}{stata `"seeout using "1984_d.txt""':seeout}
+
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/wp/cwmrq5v9115gygh6bzyqpqmw0000gn/T//SD05723.000000"
+{txt}
+{com}. 
+. * 2000 Republican primaries (nh)
+. 
+. * Load in a STATA data set
+. cd "/Users/ryan/Google Drive/2020_2021/Thesis/Data/thesis/clean_data"
+{res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/thesis/clean_data
+{txt}
+{com}. use df00_nh_r
+{txt}(Written by R.              )
+
+{com}. 
+. * Test
+. clogit VoteCandidate MCCAIN NORMALIZED_FT NORMALIZED_VIABILITY NORMALIZED_ELECTABILITY NORMALIZED_IDEOLOGY, group(Candidate)
+{txt}note: multiple positive outcomes within groups encountered.
+note: MCCAIN omitted because of no within-group variance.
+{res}
+{txt}Iteration 0:{space 3}log likelihood = {res:-90.427019}  
+Iteration 1:{space 3}log likelihood = {res:-90.213603}  
+Iteration 2:{space 3}log likelihood = {res:-89.713581}  
+Iteration 3:{space 3}log likelihood = {res:-89.713581}  (backed up)
+Iteration 4:{space 3}log likelihood = {res:-89.713581}  (backed up)
+Iteration 5:{space 3}log likelihood = {res:-89.713581}  (backed up)
+Iteration 6:{space 3}log likelihood = {res:-89.713581}  (backed up)
+Iteration 7:{space 3}log likelihood = {res:-89.713581}  (backed up)
+Iteration 8:{space 3}log likelihood = {res:-89.713581}  (backed up)
+Iteration 9:{space 3}log likelihood = {res:-89.713581}  (backed up)
+Iteration 10:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 11:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 12:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 13:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 14:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 15:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 16:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 17:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 18:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 19:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 20:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 21:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 22:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 23:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 24:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 25:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 26:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 27:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 28:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 29:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 30:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 31:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 32:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 33:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 34:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 35:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 36:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 37:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 38:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 39:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 40:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 41:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 42:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 43:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 44:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 45:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 46:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 47:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 48:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 49:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 50:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 51:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 52:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 53:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 54:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 55:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 56:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 57:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 58:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 59:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 60:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 61:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 62:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 63:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 64:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 65:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 66:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 67:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 68:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 69:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 70:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 71:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 72:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 73:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 74:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 75:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 76:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 77:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 78:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 79:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 80:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 81:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 82:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 83:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 84:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 85:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 86:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 87:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 88:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 89:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 90:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 91:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 92:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 93:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 94:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 95:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 96:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 97:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 98:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 99:{space 2}log likelihood = {res:-89.713581}  (backed up)
+Iteration 100:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 101:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 102:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 103:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 104:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 105:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 106:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 107:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 108:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 109:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 110:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 111:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 112:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 113:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 114:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 115:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 116:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 117:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 118:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 119:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 120:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 121:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 122:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 123:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 124:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 125:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 126:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 127:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 128:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 129:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 130:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 131:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 132:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 133:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 134:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 135:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 136:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 137:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 138:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 139:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 140:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 141:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 142:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 143:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 144:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 145:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 146:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 147:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 148:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 149:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 150:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 151:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 152:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 153:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 154:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 155:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 156:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 157:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 158:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 159:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 160:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 161:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 162:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 163:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 164:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 165:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 166:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 167:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 168:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 169:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 170:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 171:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 172:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 173:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 174:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 175:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 176:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 177:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 178:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 179:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 180:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 181:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 182:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 183:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 184:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 185:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 186:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 187:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 188:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 189:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 190:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 191:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 192:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 193:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 194:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 195:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 196:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 197:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 198:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 199:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 200:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 201:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 202:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 203:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 204:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 205:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 206:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 207:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 208:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 209:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 210:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 211:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 212:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 213:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 214:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 215:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 216:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 217:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 218:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 219:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 220:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 221:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 222:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 223:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 224:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 225:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 226:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 227:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 228:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 229:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 230:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 231:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 232:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 233:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 234:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 235:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 236:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 237:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 238:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 239:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 240:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 241:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 242:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 243:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 244:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 245:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 246:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 247:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 248:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 249:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 250:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 251:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 252:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 253:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 254:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 255:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 256:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 257:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 258:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 259:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 260:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 261:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 262:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 263:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 264:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 265:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 266:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 267:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 268:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 269:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 270:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 271:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 272:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 273:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 274:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 275:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 276:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 277:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 278:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 279:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 280:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 281:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 282:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 283:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 284:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 285:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 286:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 287:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 288:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 289:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 290:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 291:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 292:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 293:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 294:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 295:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 296:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 297:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 298:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 299:{space 1}log likelihood = {res:-89.713581}  (backed up)
+Iteration 300:{space 1}log likelihood = {res:-89.713581}  (backed up)
+{err}convergence not achieved
+{res}
+{txt}Conditional (fixed-effects) logistic regression
+
+{col 49}Number of obs{col 67}= {res}       568
+{txt}{col 49}LR chi2({res}4{txt}){col 67}= {res}    572.01
+{txt}{col 49}Prob > chi2{col 67}= {res}    0.0000
+{txt}Log likelihood = {res}-89.713581{txt}{col 49}Pseudo R2{col 67}= {res}    0.7612
+
+{txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}     VoteCandidate{col 20}{c |}      Coef.{col 32}   Std. Err.{col 44}      z{col 52}   P>|z|{col 60}     [95% Con{col 73}f. Interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 12}MCCAIN {c |}{col 20}{res}{space 2}        0{col 32}{txt}  (omitted)
+{space 5}NORMALIZED_FT {c |}{col 20}{res}{space 2} 7.308225{col 32}{space 2} .2228538{col 43}{space 1}   32.79{col 52}{space 3}0.000{col 60}{space 4}  6.87144{col 73}{space 3} 7.745011
+{txt}NORMALIZED_VIABI~Y {c |}{col 20}{res}{space 2} 5.936849{col 32}{space 2} 1.074274{col 43}{space 1}    5.53{col 52}{space 3}0.000{col 60}{space 4}  3.83131{col 73}{space 3} 8.042387
+{txt}NORMALIZED_ELECT~Y {c |}{col 20}{res}{space 2}-1.706633{col 32}{space 2} .7738631{col 43}{space 1}   -2.21{col 52}{space 3}0.027{col 60}{space 4}-3.223377{col 73}{space 3}-.1898891
+{txt}NORMALIZED_IDEOL~Y {c |}{col 20}{res}{space 2}-.8353205{col 32}{space 2} .4378674{col 43}{space 1}   -1.91{col 52}{space 3}0.056{col 60}{space 4}-1.693525{col 73}{space 3} .0228839
+{txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{err}convergence not achieved
+{txt}{search r(430), local:r(430);}
+
+end of do-file
+
+{search r(430), local:r(430);}
+
+{com}. help ature
+
+. help capture
+
+. do "/var/folders/wp/cwmrq5v9115gygh6bzyqpqmw0000gn/T//SD05723.000000"
+{txt}
+{com}. 
+. * Load in a STATA data set
+. cd "/Users/ryan/Google Drive/2020_2021/Thesis/Data/thesis/clean_data"
+{res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/thesis/clean_data
+{txt}
+{com}. use df00_nh_r
+{txt}(Written by R.              )
+
+{com}. 
+. * Test
+. capture noisily clogit VoteCandidate MCCAIN NORMALIZED_FT NORMALIZED_VIABILITY NORMALIZED_ELECTABILITY NORMALIZED_IDEOLOGY, group(Candidate)
+{txt}note: multiple positive outcomes within groups encountered.
+note: MCCAIN omitted because of no within-group variance.
+{res}
+{txt}Iteration 0:{space 3}log likelihood = {res:-90.427019}  
+Iteration 1:{space 3}log likelihood = {res:-90.213603}  
+Iteration 2:{space 3}log likelihood = {res: -89.71357}  (not concave)
+Iteration 3:{space 3}log likelihood = {res: -89.71357}  (not concave)
+Iteration 4:{space 3}log likelihood = {res: -89.71357}  (not concave)
+Iteration 5:{space 3}log likelihood = {res: -89.71357}  (not concave)
+Iteration 6:{space 3}log likelihood = {res: -89.71357}  (not concave)
+Iteration 7:{space 3}log likelihood = {res: -89.71357}  (not concave)
+Iteration 8:{space 3}log likelihood = {res: -89.71357}  (not concave)
+Iteration 9:{space 3}log likelihood = {res: -89.71357}  (not concave)
+Iteration 10:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 11:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 12:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 13:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 14:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 15:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 16:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 17:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 18:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 19:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 20:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 21:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 22:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 23:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 24:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 25:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 26:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 27:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 28:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 29:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 30:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 31:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 32:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 33:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 34:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 35:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 36:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 37:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 38:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 39:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 40:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 41:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 42:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 43:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 44:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 45:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 46:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 47:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 48:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 49:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 50:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 51:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 52:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 53:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 54:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 55:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 56:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 57:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 58:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 59:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 60:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 61:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 62:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 63:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 64:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 65:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 66:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 67:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 68:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 69:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 70:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 71:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 72:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 73:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 74:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 75:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 76:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 77:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 78:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 79:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 80:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 81:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 82:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 83:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 84:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 85:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 86:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 87:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 88:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 89:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 90:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 91:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 92:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 93:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 94:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 95:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 96:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 97:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 98:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 99:{space 2}log likelihood = {res: -89.71357}  (not concave)
+Iteration 100:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 101:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 102:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 103:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 104:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 105:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 106:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 107:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 108:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 109:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 110:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 111:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 112:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 113:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 114:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 115:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 116:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 117:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 118:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 119:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 120:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 121:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 122:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 123:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 124:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 125:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 126:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 127:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 128:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 129:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 130:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 131:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 132:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 133:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 134:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 135:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 136:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 137:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 138:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 139:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 140:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 141:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 142:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 143:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 144:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 145:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 146:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 147:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 148:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 149:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 150:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 151:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 152:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 153:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 154:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 155:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 156:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 157:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 158:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 159:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 160:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 161:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 162:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 163:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 164:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 165:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 166:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 167:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 168:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 169:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 170:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 171:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 172:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 173:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 174:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 175:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 176:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 177:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 178:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 179:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 180:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 181:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 182:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 183:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 184:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 185:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 186:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 187:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 188:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 189:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 190:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 191:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 192:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 193:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 194:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 195:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 196:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 197:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 198:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 199:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 200:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 201:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 202:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 203:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 204:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 205:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 206:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 207:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 208:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 209:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 210:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 211:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 212:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 213:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 214:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 215:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 216:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 217:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 218:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 219:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 220:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 221:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 222:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 223:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 224:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 225:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 226:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 227:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 228:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 229:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 230:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 231:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 232:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 233:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 234:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 235:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 236:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 237:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 238:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 239:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 240:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 241:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 242:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 243:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 244:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 245:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 246:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 247:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 248:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 249:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 250:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 251:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 252:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 253:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 254:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 255:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 256:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 257:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 258:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 259:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 260:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 261:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 262:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 263:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 264:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 265:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 266:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 267:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 268:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 269:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 270:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 271:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 272:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 273:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 274:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 275:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 276:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 277:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 278:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 279:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 280:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 281:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 282:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 283:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 284:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 285:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 286:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 287:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 288:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 289:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 290:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 291:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 292:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 293:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 294:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 295:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 296:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 297:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 298:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 299:{space 1}log likelihood = {res: -89.71357}  (not concave)
+Iteration 300:{space 1}log likelihood = {res: -89.71357}  (not concave)
+{err}convergence not achieved
+{res}
+{txt}Conditional (fixed-effects) logistic regression
+
+{col 49}Number of obs{col 67}= {res}       568
+{txt}{col 49}LR chi2({res}3{txt}){col 67}= {res}    572.01
+{txt}{col 49}Prob > chi2{col 67}= {res}    0.0000
+{txt}Log likelihood = {res} -89.71357{txt}{col 49}Pseudo R2{col 67}= {res}    0.7612
+
+{txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}     VoteCandidate{col 20}{c |}      Coef.{col 32}   Std. Err.{col 44}      z{col 52}   P>|z|{col 60}     [95% Con{col 73}f. Interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 12}MCCAIN {c |}{col 20}{res}{space 2}        0{col 32}{txt}  (omitted)
+{space 5}NORMALIZED_FT {c |}{col 20}{res}{space 2} 7.308225{col 32}{space 2} .1953221{col 43}{space 1}   37.42{col 52}{space 3}0.000{col 60}{space 4} 6.925401{col 73}{space 3}  7.69105
+{txt}NORMALIZED_VIABI~Y {c |}{col 20}{res}{space 2} 5.936849{col 32}{space 2}        .{col 43}{space 1}       .{col 52}{space 3}    .{col 60}{space 4}        .{col 73}{space 3}        .
+{txt}NORMALIZED_ELECT~Y {c |}{col 20}{res}{space 2}-1.706633{col 32}{space 2} .7275077{col 43}{space 1}   -2.35{col 52}{space 3}0.019{col 60}{space 4}-3.132522{col 73}{space 3}-.2807439
+{txt}NORMALIZED_IDEOL~Y {c |}{col 20}{res}{space 2}-.8353205{col 32}{space 2}  .482314{col 43}{space 1}   -1.73{col 52}{space 3}0.083{col 60}{space 4}-1.780639{col 73}{space 3} .1099975
+{txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{err}convergence not achieved
+{txt}
+{com}. cd "/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2000"
+{res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2000
+{txt}
+{com}. outreg2 using 2000_nh_r.xls, replace 
+{txt}{browse `"2000_nh_r.xls"'}
+{browse `"/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2000"' :dir}{com} : {txt}{stata `"seeout using "2000_nh_r.txt""':seeout}
+
+{com}. listcoef, help
+{res}
+clogit (N=568): Factor change in odds 
+
+{txt}  Odds of:  vs 
+
+{res}{txt}{hline 13}{c TT}{hline 10}{hline 9}{hline 9}{hline 10}
+{col 14}{c |}         b{col 25}        z{col 34}    P>|z|{col 43}       e^b
+{hline 13}{c +}{hline 10}{hline 9}{hline 9}{hline 10}
+NORMALIZED~T {c |}{col 14}{res}{space 1}   7.3082{col 25}{space 2} 37.416{col 34}{space 2}  0.000{col 43}{space 2}1492.526
+{txt}NOR~TABILITY {c |}{col 14}{res}{space 1}  -1.7066{col 25}{space 2} -2.346{col 34}{space 2}  0.019{col 43}{space 2}   0.181
+{txt}NORMALIZE~GY {c |}{col 14}{res}{space 1}  -0.8353{col 25}{space 2} -1.732{col 34}{space 2}  0.083{col 43}{space 2}   0.434
+{txt}{hline 13}{c BT}{hline 10}{hline 9}{hline 9}{hline 10}
+       b = raw coefficient
+       z = z-score for test of b=0
+   P>|z| = p-value for z-test
+     e^b = exp(b) = factor change in odds for unit increase in X
+   SDofX = standard deviation of X
+
+{com}. margins, dydx(_all) post
+{res}
+{txt}Average marginal effects{col 49}Number of obs{col 67}= {res}       568
+{txt}{col 1}Model VCE{col 14}: {res}OIM
+
+{txt}{p2colset 1 14 16 2}{...}
+{p2col:Expression}:{space 1}{res:Pr(VoteCandidate|fixed effect is 0), predict(pu0)}{p_end}
+{p2colreset}{...}
+{txt}{p2colset 1 14 16 2}{...}
+{p2col:dy/dx w.r.t.}:{space 1}{res:MCCAIN NORMALIZED_FT NORMALIZED_VIABILITY NORMALIZED_ELECTABILITY NORMALIZED_IDEOLOGY}{p_end}
+{p2colreset}{...}
+
+{res}{txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 20}{c |}{col 32} Delta-method
+{col 20}{c |}      dy/dx{col 32}   Std. Err.{col 44}      z{col 52}   P>|z|{col 60}     [95% Con{col 73}f. Interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 12}MCCAIN {c |}{col 20}{res}{space 2}        0{col 32}{txt}  (omitted)
+{space 5}NORMALIZED_FT {c |}{col 20}{res}{space 2} .4821012{col 32}{space 2} .0772546{col 43}{space 1}    6.24{col 52}{space 3}0.000{col 60}{space 4}  .330685{col 73}{space 3} .6335173
+{txt}NORMALIZED_VIABI~Y {c |}{col 20}{res}{space 2} .3916357{col 32}{space 2} .0627738{col 43}{space 1}    6.24{col 52}{space 3}0.000{col 60}{space 4} .2686012{col 73}{space 3} .5146701
+{txt}NORMALIZED_ELECT~Y {c |}{col 20}{res}{space 2}-.1125813{col 32}{space 2} .0623895{col 43}{space 1}   -1.80{col 52}{space 3}0.071{col 60}{space 4}-.2348626{col 73}{space 3} .0096999
+{txt}NORMALIZED_IDEOL~Y {c |}{col 20}{res}{space 2}-.0551035{col 32}{space 2} .0370231{col 43}{space 1}   -1.49{col 52}{space 3}0.137{col 60}{space 4}-.1276675{col 73}{space 3} .0174604
+{txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. outreg2 using 2000_nh_r.xls
+{txt}{browse `"2000_nh_r.xls"'}
+{browse `"/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2000"' :dir}{com} : {txt}{stata `"seeout using "2000_nh_r.txt""':seeout}
+
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/wp/cwmrq5v9115gygh6bzyqpqmw0000gn/T//SD05723.000000"
+{txt}
+{com}. * 2004 Democratic primaries (nh)
+. 
+. * Load in a STATA data set
+. cd "/Users/ryan/Google Drive/2020_2021/Thesis/Data/thesis/clean_data"
+{res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/thesis/clean_data
+{txt}
+{com}. use df04_nh_d
+{txt}(Written by R.              )
+
+{com}. 
+. * Test
+. capture noisily clogit VoteCandidate EDWARDS NORMALIZED_FT NORMALIZED_VIABILITY NORMALIZED_ELECTABILITY NORMALIZED_IDEOLOGY, group(ID)
+{res}
+{txt}Iteration 0:{space 3}log likelihood = {res:-3.0853458}  (not concave)
+Iteration 1:{space 3}log likelihood = {res: -2.351773}  (not concave)
+Iteration 2:{space 3}log likelihood = {res: -2.291551}  (not concave)
+Iteration 3:{space 3}log likelihood = {res:-2.2781846}  (not concave)
+Iteration 4:{space 3}log likelihood = {res: -2.272517}  (not concave)
+Iteration 5:{space 3}log likelihood = {res:-2.2679549}  (not concave)
+Iteration 6:{space 3}log likelihood = {res:-2.2646768}  (not concave)
+Iteration 7:{space 3}log likelihood = {res:-2.2622027}  (not concave)
+Iteration 8:{space 3}log likelihood = {res:-2.2602261}  (not concave)
+Iteration 9:{space 3}log likelihood = {res:-2.2586054}  (not concave)
+Iteration 10:{space 2}log likelihood = {res:-2.2573554}  (not concave)
+Iteration 11:{space 2}log likelihood = {res:-2.2563516}  (not concave)
+Iteration 12:{space 2}log likelihood = {res:-2.2555509}  (not concave)
+Iteration 13:{space 2}log likelihood = {res:-2.2548911}  (not concave)
+Iteration 14:{space 2}log likelihood = {res:-2.2543645}  (not concave)
+Iteration 15:{space 2}log likelihood = {res: -2.253929}  (not concave)
+Iteration 16:{space 2}log likelihood = {res:-2.2535768}  (not concave)
+Iteration 17:{space 2}log likelihood = {res:-2.2532839}  (not concave)
+Iteration 18:{space 2}log likelihood = {res:-2.2530446}  (not concave)
+Iteration 19:{space 2}log likelihood = {res:-2.2528452}  (not concave)
+Iteration 20:{space 2}log likelihood = {res:-2.2526809}  (not concave)
+Iteration 21:{space 2}log likelihood = {res:-2.2525439}  (not concave)
+Iteration 22:{space 2}log likelihood = {res:-2.2524303}  (not concave)
+Iteration 23:{space 2}log likelihood = {res:-2.2523355}  (not concave)
+Iteration 24:{space 2}log likelihood = {res:-2.2522567}  (not concave)
+Iteration 25:{space 2}log likelihood = {res:-2.2521908}  (not concave)
+Iteration 26:{space 2}log likelihood = {res:-2.2521358}  (not concave)
+Iteration 27:{space 2}log likelihood = {res:-2.2520898}  (not concave)
+Iteration 28:{space 2}log likelihood = {res:-2.2520513}  (not concave)
+Iteration 29:{space 2}log likelihood = {res:-2.2520191}  (not concave)
+Iteration 30:{space 2}log likelihood = {res:-2.2519921}  (not concave)
+Iteration 31:{space 2}log likelihood = {res:-2.2519694}  (not concave)
+Iteration 32:{space 2}log likelihood = {res:-2.2519504}  (not concave)
+Iteration 33:{space 2}log likelihood = {res:-2.2519345}  (not concave)
+Iteration 34:{space 2}log likelihood = {res:-2.2519211}  (not concave)
+Iteration 35:{space 2}log likelihood = {res:-2.2519098}  (not concave)
+Iteration 36:{space 2}log likelihood = {res:-2.2519004}  (not concave)
+Iteration 37:{space 2}log likelihood = {res:-2.2518924}  (not concave)
+Iteration 38:{space 2}log likelihood = {res:-2.2518857}  (not concave)
+Iteration 39:{space 2}log likelihood = {res:-2.2518801}  (not concave)
+Iteration 40:{space 2}log likelihood = {res:-2.2518753}  (not concave)
+Iteration 41:{space 2}log likelihood = {res:-2.2518713}  (not concave)
+Iteration 42:{space 2}log likelihood = {res: -2.251868}  (not concave)
+Iteration 43:{space 2}log likelihood = {res:-2.2518651}  (not concave)
+Iteration 44:{space 2}log likelihood = {res:-2.2518627}  (not concave)
+Iteration 45:{space 2}log likelihood = {res:-2.2518607}  (not concave)
+Iteration 46:{space 2}log likelihood = {res: -2.251859}  (not concave)
+Iteration 47:{space 2}log likelihood = {res:-2.2518576}  (not concave)
+Iteration 48:{space 2}log likelihood = {res:-2.2518564}  (not concave)
+Iteration 49:{space 2}log likelihood = {res:-2.2518554}  (not concave)
+Iteration 50:{space 2}log likelihood = {res:-2.2518545}  (not concave)
+Iteration 51:{space 2}log likelihood = {res:-2.2518538}  (not concave)
+Iteration 52:{space 2}log likelihood = {res:-2.2518532}  (not concave)
+Iteration 53:{space 2}log likelihood = {res:-2.2518527}  (not concave)
+Iteration 54:{space 2}log likelihood = {res:-2.2518522}  (not concave)
+Iteration 55:{space 2}log likelihood = {res:-2.2518519}  (not concave)
+Iteration 56:{space 2}log likelihood = {res:-2.2518516}  (not concave)
+Iteration 57:{space 2}log likelihood = {res:-2.2518513}  (not concave)
+Iteration 58:{space 2}log likelihood = {res:-2.2518511}  (not concave)
+Iteration 59:{space 2}log likelihood = {res:-2.2518509}  (not concave)
+Iteration 60:{space 2}log likelihood = {res:-2.2518507}  (not concave)
+Iteration 61:{space 2}log likelihood = {res:-2.2518506}  (not concave)
+Iteration 62:{space 2}log likelihood = {res:-2.2518505}  (not concave)
+Iteration 63:{space 2}log likelihood = {res:-2.2518502}  (not concave)
+Iteration 64:{space 2}log likelihood = {res:  -2.25185}  (not concave)
+Iteration 65:{space 2}log likelihood = {res:  -2.25185}  (not concave)
+Iteration 66:{space 2}log likelihood = {res:  -2.25185}  (not concave)
+Iteration 67:{space 2}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 68:{space 2}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 69:{space 2}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 70:{space 2}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 71:{space 2}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 72:{space 2}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 73:{space 2}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 74:{space 2}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 75:{space 2}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 76:{space 2}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 77:{space 2}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 78:{space 2}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 79:{space 2}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 80:{space 2}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 81:{space 2}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 82:{space 2}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 83:{space 2}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 84:{space 2}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 85:{space 2}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 86:{space 2}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 87:{space 2}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 88:{space 2}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 89:{space 2}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 90:{space 2}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 91:{space 2}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 92:{space 2}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 93:{space 2}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 94:{space 2}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 95:{space 2}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 96:{space 2}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 97:{space 2}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 98:{space 2}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 99:{space 2}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 100:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 101:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 102:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 103:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 104:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 105:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 106:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 107:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 108:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 109:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 110:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 111:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 112:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 113:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 114:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 115:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 116:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 117:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 118:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 119:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 120:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 121:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 122:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 123:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 124:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 125:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 126:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 127:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 128:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 129:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 130:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 131:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 132:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 133:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 134:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 135:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 136:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 137:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 138:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 139:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 140:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 141:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 142:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 143:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 144:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 145:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 146:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 147:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 148:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 149:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 150:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 151:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 152:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 153:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 154:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 155:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 156:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 157:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 158:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 159:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 160:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 161:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 162:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 163:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 164:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 165:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 166:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 167:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 168:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 169:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 170:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 171:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 172:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 173:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 174:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 175:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 176:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 177:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 178:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 179:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 180:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 181:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 182:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 183:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 184:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 185:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 186:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 187:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 188:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 189:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 190:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 191:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 192:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 193:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 194:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 195:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 196:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 197:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 198:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 199:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 200:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 201:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 202:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 203:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 204:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 205:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 206:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 207:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 208:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 209:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 210:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 211:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 212:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 213:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 214:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 215:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 216:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 217:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 218:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 219:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 220:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 221:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 222:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 223:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 224:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 225:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 226:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 227:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 228:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 229:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 230:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 231:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 232:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 233:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 234:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 235:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 236:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 237:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 238:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 239:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 240:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 241:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 242:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 243:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 244:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 245:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 246:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 247:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 248:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 249:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 250:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 251:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 252:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 253:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 254:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 255:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 256:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 257:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 258:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 259:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 260:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 261:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 262:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 263:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 264:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 265:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 266:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 267:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 268:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 269:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 270:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 271:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 272:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 273:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 274:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 275:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 276:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 277:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 278:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 279:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 280:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 281:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 282:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 283:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 284:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 285:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 286:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 287:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 288:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 289:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 290:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 291:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 292:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 293:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 294:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 295:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 296:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 297:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 298:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 299:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+Iteration 300:{space 1}log likelihood = {res:-2.2518499}  (not concave)
+{err}convergence not achieved
+{res}
+{txt}Conditional (fixed-effects) logistic regression
+
+{col 49}Number of obs{col 67}= {res}        16
+{txt}{col 49}LR chi2({res}4{txt}){col 67}= {res}      6.59
+{txt}{col 49}Prob > chi2{col 67}= {res}    0.1594
+{txt}Log likelihood = {res}-2.2518499{txt}{col 49}Pseudo R2{col 67}= {res}    0.5939
+
+{txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}     VoteCandidate{col 20}{c |}      Coef.{col 32}   Std. Err.{col 44}      z{col 52}   P>|z|{col 60}     [95% Con{col 73}f. Interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 11}EDWARDS {c |}{col 20}{res}{space 2} -35.4868{col 32}{space 2} 5.266074{col 43}{space 1}   -6.74{col 52}{space 3}0.000{col 60}{space 4}-45.80812{col 73}{space 3}-25.16548
+{txt}{space 5}NORMALIZED_FT {c |}{col 20}{res}{space 2} -37.8656{col 32}{space 2}        .{col 43}{space 1}       .{col 52}{space 3}    .{col 60}{space 4}        .{col 73}{space 3}        .
+{txt}NORMALIZED_VIABI~Y {c |}{col 20}{res}{space 2} 15.84111{col 32}{space 2} 27.77809{col 43}{space 1}    0.57{col 52}{space 3}0.568{col 60}{space 4}-38.60295{col 73}{space 3} 70.28517
+{txt}NORMALIZED_ELECT~Y {c |}{col 20}{res}{space 2} 10.26358{col 32}{space 2} 13.17723{col 43}{space 1}    0.78{col 52}{space 3}0.436{col 60}{space 4}-15.56332{col 73}{space 3} 36.09048
+{txt}NORMALIZED_IDEOL~Y {c |}{col 20}{res}{space 2} 4.089415{col 32}{space 2} 6.218583{col 43}{space 1}    0.66{col 52}{space 3}0.511{col 60}{space 4}-8.098785{col 73}{space 3} 16.27761
+{txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{err}convergence not achieved
+{txt}
+{com}. cd "/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2004"
+{res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2004
+{txt}
+{com}. outreg2 using 2004_nh_d.xls, replace
+{txt}{browse `"2004_nh_d.xls"'}
+{browse `"/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2004"' :dir}{com} : {txt}{stata `"seeout using "2004_nh_d.txt""':seeout}
+
+{com}. listcoef, help
+{res}
+clogit (N=16): Factor change in odds 
+
+{txt}  Odds of:  vs 
+
+{res}{txt}{hline 13}{c TT}{hline 10}{hline 9}{hline 9}{hline 10}
+{col 14}{c |}         b{col 25}        z{col 34}    P>|z|{col 43}       e^b
+{hline 13}{c +}{hline 10}{hline 9}{hline 9}{hline 10}
+{space 5}EDWARDS {c |}{col 14}{res}{space 1} -35.4868{col 25}{space 2} -6.739{col 34}{space 2}  0.000{col 43}{space 2}   0.000
+{txt}NOR~IABILITY {c |}{col 14}{res}{space 1}  15.8411{col 25}{space 2}  0.570{col 34}{space 2}  0.568{col 43}{space 2} 7.6e+06
+{txt}NOR~TABILITY {c |}{col 14}{res}{space 1}  10.2636{col 25}{space 2}  0.779{col 34}{space 2}  0.436{col 43}{space 2} 2.9e+04
+{txt}NORMALIZE~GY {c |}{col 14}{res}{space 1}   4.0894{col 25}{space 2}  0.658{col 34}{space 2}  0.511{col 43}{space 2}  59.705
+{txt}{hline 13}{c BT}{hline 10}{hline 9}{hline 9}{hline 10}
+       b = raw coefficient
+       z = z-score for test of b=0
+   P>|z| = p-value for z-test
+     e^b = exp(b) = factor change in odds for unit increase in X
+   SDofX = standard deviation of X
+
+{com}. margins, dydx(_all) post
+{res}
+{txt}Average marginal effects{col 49}Number of obs{col 67}= {res}        16
+{txt}{col 1}Model VCE{col 14}: {res}OIM
+
+{txt}{p2colset 1 14 16 2}{...}
+{p2col:Expression}:{space 1}{res:Pr(VoteCandidate|fixed effect is 0), predict(pu0)}{p_end}
+{p2colreset}{...}
+{txt}{p2colset 1 14 16 2}{...}
+{p2col:dy/dx w.r.t.}:{space 1}{res:EDWARDS NORMALIZED_FT NORMALIZED_VIABILITY NORMALIZED_ELECTABILITY NORMALIZED_IDEOLOGY}{p_end}
+{p2colreset}{...}
+
+{res}{txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 20}{c |}{col 32} Delta-method
+{col 20}{c |}      dy/dx{col 32}   Std. Err.{col 44}      z{col 52}   P>|z|{col 60}     [95% Con{col 73}f. Interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 11}EDWARDS {c |}{col 20}{res}{space 2}-.0178743{col 32}{space 2} .3639866{col 43}{space 1}   -0.05{col 52}{space 3}0.961{col 60}{space 4}-.7312749{col 73}{space 3} .6955262
+{txt}{space 5}NORMALIZED_FT {c |}{col 20}{res}{space 2}-.0190725{col 32}{space 2} .3911403{col 43}{space 1}   -0.05{col 52}{space 3}0.961{col 60}{space 4}-.7856934{col 73}{space 3} .7475484
+{txt}NORMALIZED_VIABI~Y {c |}{col 20}{res}{space 2}  .007979{col 32}{space 2} .1772742{col 43}{space 1}    0.05{col 52}{space 3}0.964{col 60}{space 4}-.3394721{col 73}{space 3} .3554301
+{txt}NORMALIZED_ELECT~Y {c |}{col 20}{res}{space 2} .0051697{col 32}{space 2} .1118799{col 43}{space 1}    0.05{col 52}{space 3}0.963{col 60}{space 4}-.2141109{col 73}{space 3} .2244502
+{txt}NORMALIZED_IDEOL~Y {c |}{col 20}{res}{space 2} .0020598{col 32}{space 2} .0447938{col 43}{space 1}    0.05{col 52}{space 3}0.963{col 60}{space 4}-.0857344{col 73}{space 3}  .089854
+{txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. outreg2 using 2004_nh_d.xls
+{txt}{browse `"2004_nh_d.xls"'}
+{browse `"/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2004"' :dir}{com} : {txt}{stata `"seeout using "2004_nh_d.txt""':seeout}
 
 {com}. 
 {txt}end of do-file

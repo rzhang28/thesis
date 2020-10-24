@@ -1,0 +1,50 @@
+---
+title: "anes"
+author: "Ryan Zhang"
+date: "10/12/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(Hmisc)
+library(rqPen)
+library(vctrs)
+library(foreign)
+library(dplyr)
+library(lubridate)
+
+```
+
+
+# Reading Data
+
+```{r warning=FALSE}
+
+naes08_phone <- read.spss("raw_data/naes/naes08-phone-nat-rcs-data-full.sav",
+                  to.data.frame = TRUE, use.value.labels = FALSE)
+naes08_phone[naes08_phone == 998] <- NA
+naes08_phone[naes08_phone == 999] <- NA
+
+```
+
+
+## Cleaning Data
+
+```{r}
+
+df08phone <- naes08_phone %>%
+  mutate(DATE_c = ymd(DATE_c)) %>%
+  mutate(WEEK_c = cut.Date(DATE_c, breaks = "1 week", labels = FALSE))
+
+```
+
+
+```{r include=FALSE}
+
+rm(list = ls())
+
+```
+

@@ -3,7 +3,7 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/thesis/clean_data/2008.smcl
   {txt}log type:  {res}smcl
- {txt}opened on:  {res}22 Oct 2020, 02:24:22
+ {txt}opened on:  {res}24 Oct 2020, 12:17:09
 {txt}
 {com}. 
 . * 2008 Democratic primaries (phone)
@@ -31,22 +31,74 @@ Iteration 4:{space 3}log likelihood = {res:-1456.7866}
 {txt}{col 49}Prob > chi2{col 67}= {res}    0.0000
 {txt}Log likelihood = {res}-1456.7866{txt}{col 49}Pseudo R2{col 67}= {res}    0.6306
 
-{txt}{hline 24}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{col 1}          VoteCandidate{col 25}{c |}      Coef.{col 37}   Std. Err.{col 49}      z{col 57}   P>|z|{col 65}     [95% Con{col 78}f. Interval]
-{hline 24}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{space 16}CLINTON {c |}{col 25}{res}{space 2}-.0228999{col 37}{space 2} .0665636{col 48}{space 1}   -0.34{col 57}{space 3}0.731{col 65}{space 4}-.1533621{col 78}{space 3} .1075624
-{txt}{space 16}EDWARDS {c |}{col 25}{res}{space 2}-.1629517{col 37}{space 2}  .083004{col 48}{space 1}   -1.96{col 57}{space 3}0.050{col 65}{space 4}-.3256366{col 78}{space 3}-.0002668
-{txt}{space 10}NORMALIZED_FT {c |}{col 25}{res}{space 2}  2.20211{col 37}{space 2}  .098093{col 48}{space 1}   22.45{col 57}{space 3}0.000{col 65}{space 4} 2.009852{col 78}{space 3} 2.394369
-{txt}{space 3}NORMALIZED_VIABILITY {c |}{col 25}{res}{space 2} 2.609313{col 37}{space 2} .3771453{col 48}{space 1}    6.92{col 57}{space 3}0.000{col 65}{space 4} 1.870121{col 78}{space 3} 3.348504
-{txt}NORMALIZED_ELECTABILITY {c |}{col 25}{res}{space 2} 2.752842{col 37}{space 2} .3787244{col 48}{space 1}    7.27{col 57}{space 3}0.000{col 65}{space 4} 2.010556{col 78}{space 3} 3.495128
-{txt}{space 4}NORMALIZED_IDEOLOGY {c |}{col 25}{res}{space 2}-.3428502{col 37}{space 2} .0787167{col 48}{space 1}   -4.36{col 57}{space 3}0.000{col 65}{space 4}-.4971321{col 78}{space 3}-.1885684
-{txt}{space 17}TRAITS {c |}{col 25}{res}{space 2} 8.943046{col 37}{space 2} .4889372{col 48}{space 1}   18.29{col 57}{space 3}0.000{col 65}{space 4} 7.984747{col 78}{space 3} 9.901346
-{txt}{hline 24}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}     VoteCandidate{col 20}{c |}      Coef.{col 32}   Std. Err.{col 44}      z{col 52}   P>|z|{col 60}     [95% Con{col 73}f. Interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 11}CLINTON {c |}{col 20}{res}{space 2}-.0228999{col 32}{space 2} .0665636{col 43}{space 1}   -0.34{col 52}{space 3}0.731{col 60}{space 4}-.1533621{col 73}{space 3} .1075624
+{txt}{space 11}EDWARDS {c |}{col 20}{res}{space 2}-.1629517{col 32}{space 2}  .083004{col 43}{space 1}   -1.96{col 52}{space 3}0.050{col 60}{space 4}-.3256366{col 73}{space 3}-.0002668
+{txt}{space 5}NORMALIZED_FT {c |}{col 20}{res}{space 2}  2.20211{col 32}{space 2}  .098093{col 43}{space 1}   22.45{col 52}{space 3}0.000{col 60}{space 4} 2.009852{col 73}{space 3} 2.394369
+{txt}NORMALIZED_VIABI~Y {c |}{col 20}{res}{space 2} 2.609313{col 32}{space 2} .3771453{col 43}{space 1}    6.92{col 52}{space 3}0.000{col 60}{space 4} 1.870121{col 73}{space 3} 3.348504
+{txt}NORMALIZED_ELECT~Y {c |}{col 20}{res}{space 2} 2.752842{col 32}{space 2} .3787244{col 43}{space 1}    7.27{col 52}{space 3}0.000{col 60}{space 4} 2.010556{col 73}{space 3} 3.495128
+{txt}NORMALIZED_IDEOL~Y {c |}{col 20}{res}{space 2}-.3428502{col 32}{space 2} .0787167{col 43}{space 1}   -4.36{col 52}{space 3}0.000{col 60}{space 4}-.4971321{col 73}{space 3}-.1885684
+{txt}{space 12}TRAITS {c |}{col 20}{res}{space 2} 8.943046{col 32}{space 2} .4889372{col 43}{space 1}   18.29{col 52}{space 3}0.000{col 60}{space 4} 7.984747{col 73}{space 3} 9.901346
+{txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
 
 {com}. cd "/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2008"
 {res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2008
 {txt}
 {com}. outreg2 using 2008_phone_d.xls, replace
+{txt}{browse `"2008_phone_d.xls"'}
+{browse `"/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2008"' :dir}{com} : {txt}{stata `"seeout using "2008_phone_d.txt""':seeout}
+
+{com}. listcoef, help
+{res}
+clogit (N=10775): Factor change in odds 
+
+{txt}  Odds of:  vs 
+
+{res}{txt}{hline 13}{c TT}{hline 10}{hline 9}{hline 9}{hline 10}
+{col 14}{c |}         b{col 25}        z{col 34}    P>|z|{col 43}       e^b
+{hline 13}{c +}{hline 10}{hline 9}{hline 9}{hline 10}
+{space 5}CLINTON {c |}{col 14}{res}{space 1}  -0.0229{col 25}{space 2} -0.344{col 34}{space 2}  0.731{col 43}{space 2}   0.977
+{txt}{space 5}EDWARDS {c |}{col 14}{res}{space 1}  -0.1630{col 25}{space 2} -1.963{col 34}{space 2}  0.050{col 43}{space 2}   0.850
+{txt}NORMALIZED~T {c |}{col 14}{res}{space 1}   2.2021{col 25}{space 2} 22.449{col 34}{space 2}  0.000{col 43}{space 2}   9.044
+{txt}NOR~IABILITY {c |}{col 14}{res}{space 1}   2.6093{col 25}{space 2}  6.919{col 34}{space 2}  0.000{col 43}{space 2}  13.590
+{txt}NOR~TABILITY {c |}{col 14}{res}{space 1}   2.7528{col 25}{space 2}  7.269{col 34}{space 2}  0.000{col 43}{space 2}  15.687
+{txt}NORMALIZE~GY {c |}{col 14}{res}{space 1}  -0.3429{col 25}{space 2} -4.355{col 34}{space 2}  0.000{col 43}{space 2}   0.710
+{txt}{space 6}TRAITS {c |}{col 14}{res}{space 1}   8.9430{col 25}{space 2} 18.291{col 34}{space 2}  0.000{col 43}{space 2}7654.479
+{txt}{hline 13}{c BT}{hline 10}{hline 9}{hline 9}{hline 10}
+       b = raw coefficient
+       z = z-score for test of b=0
+   P>|z| = p-value for z-test
+     e^b = exp(b) = factor change in odds for unit increase in X
+   SDofX = standard deviation of X
+
+{com}. margins, dydx(_all) post
+{res}
+{txt}Average marginal effects{col 49}Number of obs{col 67}= {res}    10,775
+{txt}{col 1}Model VCE{col 14}: {res}OIM
+
+{txt}{p2colset 1 14 16 2}{...}
+{p2col:Expression}:{space 1}{res:Pr(VoteCandidate|fixed effect is 0), predict(pu0)}{p_end}
+{p2colreset}{...}
+{txt}{p2colset 1 14 16 2}{...}
+{p2col:dy/dx w.r.t.}:{space 1}{res:CLINTON EDWARDS NORMALIZED_FT NORMALIZED_VIABILITY NORMALIZED_ELECTABILITY NORMALIZED_IDEOLOGY TRAITS}{p_end}
+{p2colreset}{...}
+
+{res}{txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 20}{c |}{col 32} Delta-method
+{col 20}{c |}      dy/dx{col 32}   Std. Err.{col 44}      z{col 52}   P>|z|{col 60}     [95% Con{col 73}f. Interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 11}CLINTON {c |}{col 20}{res}{space 2}-.0002315{col 32}{space 2} .0006731{col 43}{space 1}   -0.34{col 52}{space 3}0.731{col 60}{space 4}-.0015508{col 73}{space 3} .0010877
+{txt}{space 11}EDWARDS {c |}{col 20}{res}{space 2}-.0016475{col 32}{space 2} .0009008{col 43}{space 1}   -1.83{col 52}{space 3}0.067{col 60}{space 4} -.003413{col 73}{space 3}  .000118
+{txt}{space 5}NORMALIZED_FT {c |}{col 20}{res}{space 2} .0222645{col 32}{space 2} .0019886{col 43}{space 1}   11.20{col 52}{space 3}0.000{col 60}{space 4} .0183669{col 73}{space 3} .0261622
+{txt}NORMALIZED_VIABI~Y {c |}{col 20}{res}{space 2} .0263816{col 32}{space 2} .0033732{col 43}{space 1}    7.82{col 52}{space 3}0.000{col 60}{space 4} .0197702{col 73}{space 3} .0329929
+{txt}NORMALIZED_ELECT~Y {c |}{col 20}{res}{space 2} .0278327{col 32}{space 2} .0036708{col 43}{space 1}    7.58{col 52}{space 3}0.000{col 60}{space 4} .0206381{col 73}{space 3} .0350274
+{txt}NORMALIZED_IDEOL~Y {c |}{col 20}{res}{space 2}-.0034664{col 32}{space 2} .0009149{col 43}{space 1}   -3.79{col 52}{space 3}0.000{col 60}{space 4}-.0052596{col 73}{space 3}-.0016732
+{txt}{space 12}TRAITS {c |}{col 20}{res}{space 2} .0904191{col 32}{space 2} .0059517{col 43}{space 1}   15.19{col 52}{space 3}0.000{col 60}{space 4} .0787538{col 73}{space 3} .1020843
+{txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. outreg2 using 2008_phone_d.xls
 {txt}{browse `"2008_phone_d.xls"'}
 {browse `"/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2008"' :dir}{com} : {txt}{stata `"seeout using "2008_phone_d.txt""':seeout}
 
@@ -68,23 +120,72 @@ Iteration 4:{space 3}log likelihood = {res:-1693.0609}
 {txt}{col 49}Prob > chi2{col 67}= {res}    0.0000
 {txt}Log likelihood = {res}-1693.0609{txt}{col 49}Pseudo R2{col 67}= {res}    0.5707
 
-{txt}{hline 24}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{col 1}          VoteCandidate{col 25}{c |}      Coef.{col 37}   Std. Err.{col 49}      z{col 57}   P>|z|{col 65}     [95% Con{col 78}f. Interval]
-{hline 24}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{space 16}CLINTON {c |}{col 25}{res}{space 2} .3491679{col 37}{space 2} .0589308{col 48}{space 1}    5.93{col 57}{space 3}0.000{col 65}{space 4} .2336656{col 78}{space 3} .4646703
-{txt}{space 16}EDWARDS {c |}{col 25}{res}{space 2} .1229043{col 37}{space 2} .0764035{col 48}{space 1}    1.61{col 57}{space 3}0.108{col 65}{space 4}-.0268438{col 78}{space 3} .2726523
-{txt}{space 10}NORMALIZED_FT {c |}{col 25}{res}{space 2} 3.174365{col 37}{space 2} .0912088{col 48}{space 1}   34.80{col 57}{space 3}0.000{col 65}{space 4} 2.995599{col 78}{space 3} 3.353131
-{txt}{space 3}NORMALIZED_VIABILITY {c |}{col 25}{res}{space 2} 3.335901{col 37}{space 2} .3481888{col 48}{space 1}    9.58{col 57}{space 3}0.000{col 65}{space 4} 2.653463{col 78}{space 3} 4.018338
-{txt}NORMALIZED_ELECTABILITY {c |}{col 25}{res}{space 2} 3.815621{col 37}{space 2} .3372203{col 48}{space 1}   11.31{col 57}{space 3}0.000{col 65}{space 4} 3.154681{col 78}{space 3}  4.47656
-{txt}{space 4}NORMALIZED_IDEOLOGY {c |}{col 25}{res}{space 2}-.4155561{col 37}{space 2} .0725393{col 48}{space 1}   -5.73{col 57}{space 3}0.000{col 65}{space 4}-.5577306{col 78}{space 3}-.2733816
-{txt}{hline 24}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}     VoteCandidate{col 20}{c |}      Coef.{col 32}   Std. Err.{col 44}      z{col 52}   P>|z|{col 60}     [95% Con{col 73}f. Interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 11}CLINTON {c |}{col 20}{res}{space 2} .3491679{col 32}{space 2} .0589308{col 43}{space 1}    5.93{col 52}{space 3}0.000{col 60}{space 4} .2336656{col 73}{space 3} .4646703
+{txt}{space 11}EDWARDS {c |}{col 20}{res}{space 2} .1229043{col 32}{space 2} .0764035{col 43}{space 1}    1.61{col 52}{space 3}0.108{col 60}{space 4}-.0268438{col 73}{space 3} .2726523
+{txt}{space 5}NORMALIZED_FT {c |}{col 20}{res}{space 2} 3.174365{col 32}{space 2} .0912088{col 43}{space 1}   34.80{col 52}{space 3}0.000{col 60}{space 4} 2.995599{col 73}{space 3} 3.353131
+{txt}NORMALIZED_VIABI~Y {c |}{col 20}{res}{space 2} 3.335901{col 32}{space 2} .3481888{col 43}{space 1}    9.58{col 52}{space 3}0.000{col 60}{space 4} 2.653463{col 73}{space 3} 4.018338
+{txt}NORMALIZED_ELECT~Y {c |}{col 20}{res}{space 2} 3.815621{col 32}{space 2} .3372203{col 43}{space 1}   11.31{col 52}{space 3}0.000{col 60}{space 4} 3.154681{col 73}{space 3}  4.47656
+{txt}NORMALIZED_IDEOL~Y {c |}{col 20}{res}{space 2}-.4155561{col 32}{space 2} .0725393{col 43}{space 1}   -5.73{col 52}{space 3}0.000{col 60}{space 4}-.5577306{col 73}{space 3}-.2733816
+{txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
 
 {com}. outreg2 using 2008_phone_d.xls
 {txt}{browse `"2008_phone_d.xls"'}
 {browse `"/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2008"' :dir}{com} : {txt}{stata `"seeout using "2008_phone_d.txt""':seeout}
 
+{com}. listcoef, help
+{res}
+clogit (N=10775): Factor change in odds 
+
+{txt}  Odds of:  vs 
+
+{res}{txt}{hline 13}{c TT}{hline 10}{hline 9}{hline 9}{hline 10}
+{col 14}{c |}         b{col 25}        z{col 34}    P>|z|{col 43}       e^b
+{hline 13}{c +}{hline 10}{hline 9}{hline 9}{hline 10}
+{space 5}CLINTON {c |}{col 14}{res}{space 1}   0.3492{col 25}{space 2}  5.925{col 34}{space 2}  0.000{col 43}{space 2}   1.418
+{txt}{space 5}EDWARDS {c |}{col 14}{res}{space 1}   0.1229{col 25}{space 2}  1.609{col 34}{space 2}  0.108{col 43}{space 2}   1.131
+{txt}NORMALIZED~T {c |}{col 14}{res}{space 1}   3.1744{col 25}{space 2} 34.803{col 34}{space 2}  0.000{col 43}{space 2}  23.912
+{txt}NOR~IABILITY {c |}{col 14}{res}{space 1}   3.3359{col 25}{space 2}  9.581{col 34}{space 2}  0.000{col 43}{space 2}  28.104
+{txt}NOR~TABILITY {c |}{col 14}{res}{space 1}   3.8156{col 25}{space 2} 11.315{col 34}{space 2}  0.000{col 43}{space 2}  45.405
+{txt}NORMALIZE~GY {c |}{col 14}{res}{space 1}  -0.4156{col 25}{space 2} -5.729{col 34}{space 2}  0.000{col 43}{space 2}   0.660
+{txt}{hline 13}{c BT}{hline 10}{hline 9}{hline 9}{hline 10}
+       b = raw coefficient
+       z = z-score for test of b=0
+   P>|z| = p-value for z-test
+     e^b = exp(b) = factor change in odds for unit increase in X
+   SDofX = standard deviation of X
+
+{com}. margins, dydx(_all) post
+{res}
+{txt}Average marginal effects{col 49}Number of obs{col 67}= {res}    10,775
+{txt}{col 1}Model VCE{col 14}: {res}OIM
+
+{txt}{p2colset 1 14 16 2}{...}
+{p2col:Expression}:{space 1}{res:Pr(VoteCandidate|fixed effect is 0), predict(pu0)}{p_end}
+{p2colreset}{...}
+{txt}{p2colset 1 14 16 2}{...}
+{p2col:dy/dx w.r.t.}:{space 1}{res:CLINTON EDWARDS NORMALIZED_FT NORMALIZED_VIABILITY NORMALIZED_ELECTABILITY NORMALIZED_IDEOLOGY}{p_end}
+{p2colreset}{...}
+
+{res}{txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 20}{c |}{col 32} Delta-method
+{col 20}{c |}      dy/dx{col 32}   Std. Err.{col 44}      z{col 52}   P>|z|{col 60}     [95% Con{col 73}f. Interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 11}CLINTON {c |}{col 20}{res}{space 2} .0187341{col 32}{space 2} .0033577{col 43}{space 1}    5.58{col 52}{space 3}0.000{col 60}{space 4} .0121532{col 73}{space 3} .0253151
+{txt}{space 11}EDWARDS {c |}{col 20}{res}{space 2} .0065943{col 32}{space 2} .0037768{col 43}{space 1}    1.75{col 52}{space 3}0.081{col 60}{space 4}-.0008082{col 73}{space 3} .0139967
+{txt}{space 5}NORMALIZED_FT {c |}{col 20}{res}{space 2} .1703162{col 32}{space 2} .0143282{col 43}{space 1}   11.89{col 52}{space 3}0.000{col 60}{space 4} .1422334{col 73}{space 3} .1983989
+{txt}NORMALIZED_VIABI~Y {c |}{col 20}{res}{space 2} .1789832{col 32}{space 2} .0155986{col 43}{space 1}   11.47{col 52}{space 3}0.000{col 60}{space 4} .1484104{col 73}{space 3} .2095559
+{txt}NORMALIZED_ELECT~Y {c |}{col 20}{res}{space 2} .2047219{col 32}{space 2} .0175902{col 43}{space 1}   11.64{col 52}{space 3}0.000{col 60}{space 4} .1702457{col 73}{space 3}  .239198
+{txt}NORMALIZED_IDEOL~Y {c |}{col 20}{res}{space 2}-.0222961{col 32}{space 2} .0047143{col 43}{space 1}   -4.73{col 52}{space 3}0.000{col 60}{space 4} -.031536{col 73}{space 3}-.0130562
+{txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. outreg2 using 2008_phone_d.xls
+{txt}{browse `"2008_phone_d.xls"'}
+{browse `"/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2008"' :dir}{com} : {txt}{stata `"seeout using "2008_phone_d.txt""':seeout}
+
 {com}. 
-. 
 . * 2008 Republican primaries (phone)
 . 
 . * Load in a STATA data set
@@ -114,22 +215,74 @@ Iteration 5:{space 3}log likelihood = {res:-1190.2613}
 {txt}{col 49}Prob > chi2{col 67}= {res}    0.0000
 {txt}Log likelihood = {res}-1190.2613{txt}{col 49}Pseudo R2{col 67}= {res}    0.6297
 
-{txt}{hline 24}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{col 1}          VoteCandidate{col 25}{c |}      Coef.{col 37}   Std. Err.{col 49}      z{col 57}   P>|z|{col 65}     [95% Con{col 78}f. Interval]
-{hline 24}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{space 17}ROMNEY {c |}{col 25}{res}{space 2} .1453236{col 37}{space 2} .0793106{col 48}{space 1}    1.83{col 57}{space 3}0.067{col 65}{space 4}-.0101222{col 78}{space 3} .3007694
-{txt}{space 15}HUCKABEE {c |}{col 25}{res}{space 2} .4855769{col 37}{space 2} .0827803{col 48}{space 1}    5.87{col 57}{space 3}0.000{col 65}{space 4} .3233305{col 78}{space 3} .6478233
-{txt}{space 10}NORMALIZED_FT {c |}{col 25}{res}{space 2} 1.853748{col 37}{space 2} .0962522{col 48}{space 1}   19.26{col 57}{space 3}0.000{col 65}{space 4} 1.665097{col 78}{space 3} 2.042398
-{txt}{space 3}NORMALIZED_VIABILITY {c |}{col 25}{res}{space 2} 1.589671{col 37}{space 2} .3332203{col 48}{space 1}    4.77{col 57}{space 3}0.000{col 65}{space 4} .9365711{col 78}{space 3} 2.242771
-{txt}NORMALIZED_ELECTABILITY {c |}{col 25}{res}{space 2} 3.054932{col 37}{space 2} .3652932{col 48}{space 1}    8.36{col 57}{space 3}0.000{col 65}{space 4}  2.33897{col 78}{space 3} 3.770894
-{txt}{space 4}NORMALIZED_IDEOLOGY {c |}{col 25}{res}{space 2}-.4330676{col 37}{space 2} .0812631{col 48}{space 1}   -5.33{col 57}{space 3}0.000{col 65}{space 4}-.5923403{col 78}{space 3}-.2737949
-{txt}{space 17}TRAITS {c |}{col 25}{res}{space 2} 7.817026{col 37}{space 2} .4983919{col 48}{space 1}   15.68{col 57}{space 3}0.000{col 65}{space 4} 6.840195{col 78}{space 3} 8.793856
-{txt}{hline 24}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}     VoteCandidate{col 20}{c |}      Coef.{col 32}   Std. Err.{col 44}      z{col 52}   P>|z|{col 60}     [95% Con{col 73}f. Interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 12}ROMNEY {c |}{col 20}{res}{space 2} .1453236{col 32}{space 2} .0793106{col 43}{space 1}    1.83{col 52}{space 3}0.067{col 60}{space 4}-.0101222{col 73}{space 3} .3007694
+{txt}{space 10}HUCKABEE {c |}{col 20}{res}{space 2} .4855769{col 32}{space 2} .0827803{col 43}{space 1}    5.87{col 52}{space 3}0.000{col 60}{space 4} .3233305{col 73}{space 3} .6478233
+{txt}{space 5}NORMALIZED_FT {c |}{col 20}{res}{space 2} 1.853748{col 32}{space 2} .0962522{col 43}{space 1}   19.26{col 52}{space 3}0.000{col 60}{space 4} 1.665097{col 73}{space 3} 2.042398
+{txt}NORMALIZED_VIABI~Y {c |}{col 20}{res}{space 2} 1.589671{col 32}{space 2} .3332203{col 43}{space 1}    4.77{col 52}{space 3}0.000{col 60}{space 4} .9365711{col 73}{space 3} 2.242771
+{txt}NORMALIZED_ELECT~Y {c |}{col 20}{res}{space 2} 3.054932{col 32}{space 2} .3652932{col 43}{space 1}    8.36{col 52}{space 3}0.000{col 60}{space 4}  2.33897{col 73}{space 3} 3.770894
+{txt}NORMALIZED_IDEOL~Y {c |}{col 20}{res}{space 2}-.4330676{col 32}{space 2} .0812631{col 43}{space 1}   -5.33{col 52}{space 3}0.000{col 60}{space 4}-.5923403{col 73}{space 3}-.2737949
+{txt}{space 12}TRAITS {c |}{col 20}{res}{space 2} 7.817026{col 32}{space 2} .4983919{col 43}{space 1}   15.68{col 52}{space 3}0.000{col 60}{space 4} 6.840195{col 73}{space 3} 8.793856
+{txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
 
 {com}. cd "/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2008"
 {res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2008
 {txt}
 {com}. outreg2 using 2008_phone_r.xls, replace
+{txt}{browse `"2008_phone_r.xls"'}
+{browse `"/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2008"' :dir}{com} : {txt}{stata `"seeout using "2008_phone_r.txt""':seeout}
+
+{com}. listcoef, help
+{res}
+clogit (N=8786): Factor change in odds 
+
+{txt}  Odds of:  vs 
+
+{res}{txt}{hline 13}{c TT}{hline 10}{hline 9}{hline 9}{hline 10}
+{col 14}{c |}         b{col 25}        z{col 34}    P>|z|{col 43}       e^b
+{hline 13}{c +}{hline 10}{hline 9}{hline 9}{hline 10}
+{space 6}ROMNEY {c |}{col 14}{res}{space 1}   0.1453{col 25}{space 2}  1.832{col 34}{space 2}  0.067{col 43}{space 2}   1.156
+{txt}{space 4}HUCKABEE {c |}{col 14}{res}{space 1}   0.4856{col 25}{space 2}  5.866{col 34}{space 2}  0.000{col 43}{space 2}   1.625
+{txt}NORMALIZED~T {c |}{col 14}{res}{space 1}   1.8537{col 25}{space 2} 19.259{col 34}{space 2}  0.000{col 43}{space 2}   6.384
+{txt}NOR~IABILITY {c |}{col 14}{res}{space 1}   1.5897{col 25}{space 2}  4.771{col 34}{space 2}  0.000{col 43}{space 2}   4.902
+{txt}NOR~TABILITY {c |}{col 14}{res}{space 1}   3.0549{col 25}{space 2}  8.363{col 34}{space 2}  0.000{col 43}{space 2}  21.220
+{txt}NORMALIZE~GY {c |}{col 14}{res}{space 1}  -0.4331{col 25}{space 2} -5.329{col 34}{space 2}  0.000{col 43}{space 2}   0.649
+{txt}{space 6}TRAITS {c |}{col 14}{res}{space 1}   7.8170{col 25}{space 2} 15.684{col 34}{space 2}  0.000{col 43}{space 2}2482.511
+{txt}{hline 13}{c BT}{hline 10}{hline 9}{hline 9}{hline 10}
+       b = raw coefficient
+       z = z-score for test of b=0
+   P>|z| = p-value for z-test
+     e^b = exp(b) = factor change in odds for unit increase in X
+   SDofX = standard deviation of X
+
+{com}. margins, dydx(_all) post
+{res}
+{txt}Average marginal effects{col 49}Number of obs{col 67}= {res}     8,786
+{txt}{col 1}Model VCE{col 14}: {res}OIM
+
+{txt}{p2colset 1 14 16 2}{...}
+{p2col:Expression}:{space 1}{res:Pr(VoteCandidate|fixed effect is 0), predict(pu0)}{p_end}
+{p2colreset}{...}
+{txt}{p2colset 1 14 16 2}{...}
+{p2col:dy/dx w.r.t.}:{space 1}{res:ROMNEY HUCKABEE NORMALIZED_FT NORMALIZED_VIABILITY NORMALIZED_ELECTABILITY NORMALIZED_IDEOLOGY TRAITS}{p_end}
+{p2colreset}{...}
+
+{res}{txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 20}{c |}{col 32} Delta-method
+{col 20}{c |}      dy/dx{col 32}   Std. Err.{col 44}      z{col 52}   P>|z|{col 60}     [95% Con{col 73}f. Interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 12}ROMNEY {c |}{col 20}{res}{space 2} .0013876{col 32}{space 2} .0006826{col 43}{space 1}    2.03{col 52}{space 3}0.042{col 60}{space 4} .0000497{col 73}{space 3} .0027255
+{txt}{space 10}HUCKABEE {c |}{col 20}{res}{space 2} .0046365{col 32}{space 2} .0006264{col 43}{space 1}    7.40{col 52}{space 3}0.000{col 60}{space 4} .0034087{col 73}{space 3} .0058643
+{txt}{space 5}NORMALIZED_FT {c |}{col 20}{res}{space 2} .0177004{col 32}{space 2} .0025578{col 43}{space 1}    6.92{col 52}{space 3}0.000{col 60}{space 4} .0126872{col 73}{space 3} .0227135
+{txt}NORMALIZED_VIABI~Y {c |}{col 20}{res}{space 2} .0151789{col 32}{space 2} .0034878{col 43}{space 1}    4.35{col 52}{space 3}0.000{col 60}{space 4} .0083429{col 73}{space 3} .0220148
+{txt}NORMALIZED_ELECT~Y {c |}{col 20}{res}{space 2} .0291698{col 32}{space 2} .0044086{col 43}{space 1}    6.62{col 52}{space 3}0.000{col 60}{space 4} .0205291{col 73}{space 3} .0378105
+{txt}NORMALIZED_IDEOL~Y {c |}{col 20}{res}{space 2}-.0041351{col 32}{space 2} .0010628{col 43}{space 1}   -3.89{col 52}{space 3}0.000{col 60}{space 4}-.0062181{col 73}{space 3}-.0020522
+{txt}{space 12}TRAITS {c |}{col 20}{res}{space 2} .0746403{col 32}{space 2} .0062642{col 43}{space 1}   11.92{col 52}{space 3}0.000{col 60}{space 4} .0623627{col 73}{space 3} .0869179
+{txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. outreg2 using 2008_phone_r.xls
 {txt}{browse `"2008_phone_r.xls"'}
 {browse `"/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2008"' :dir}{com} : {txt}{stata `"seeout using "2008_phone_r.txt""':seeout}
 
@@ -151,17 +304,67 @@ Iteration 4:{space 3}log likelihood = {res: -1352.212}
 {txt}{col 49}Prob > chi2{col 67}= {res}    0.0000
 {txt}Log likelihood = {res} -1352.212{txt}{col 49}Pseudo R2{col 67}= {res}    0.5793
 
-{txt}{hline 24}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{col 1}          VoteCandidate{col 25}{c |}      Coef.{col 37}   Std. Err.{col 49}      z{col 57}   P>|z|{col 65}     [95% Con{col 78}f. Interval]
-{hline 24}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{space 17}ROMNEY {c |}{col 25}{res}{space 2}-.2227275{col 37}{space 2} .0708656{col 48}{space 1}   -3.14{col 57}{space 3}0.002{col 65}{space 4}-.3616216{col 78}{space 3}-.0838334
-{txt}{space 15}HUCKABEE {c |}{col 25}{res}{space 2} .0561746{col 37}{space 2} .0739618{col 48}{space 1}    0.76{col 57}{space 3}0.448{col 65}{space 4}-.0887879{col 78}{space 3}  .201137
-{txt}{space 10}NORMALIZED_FT {c |}{col 25}{res}{space 2} 2.598575{col 37}{space 2} .0884841{col 48}{space 1}   29.37{col 57}{space 3}0.000{col 65}{space 4} 2.425149{col 78}{space 3} 2.772001
-{txt}{space 3}NORMALIZED_VIABILITY {c |}{col 25}{res}{space 2} 2.584404{col 37}{space 2} .3162063{col 48}{space 1}    8.17{col 57}{space 3}0.000{col 65}{space 4} 1.964651{col 78}{space 3} 3.204157
-{txt}NORMALIZED_ELECTABILITY {c |}{col 25}{res}{space 2} 3.802768{col 37}{space 2} .3493329{col 48}{space 1}   10.89{col 57}{space 3}0.000{col 65}{space 4} 3.118088{col 78}{space 3} 4.487448
-{txt}{space 4}NORMALIZED_IDEOLOGY {c |}{col 25}{res}{space 2}-.5466185{col 37}{space 2}   .07595{col 48}{space 1}   -7.20{col 57}{space 3}0.000{col 65}{space 4}-.6954776{col 78}{space 3}-.3977593
-{txt}{hline 24}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}     VoteCandidate{col 20}{c |}      Coef.{col 32}   Std. Err.{col 44}      z{col 52}   P>|z|{col 60}     [95% Con{col 73}f. Interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 12}ROMNEY {c |}{col 20}{res}{space 2}-.2227275{col 32}{space 2} .0708656{col 43}{space 1}   -3.14{col 52}{space 3}0.002{col 60}{space 4}-.3616216{col 73}{space 3}-.0838334
+{txt}{space 10}HUCKABEE {c |}{col 20}{res}{space 2} .0561746{col 32}{space 2} .0739618{col 43}{space 1}    0.76{col 52}{space 3}0.448{col 60}{space 4}-.0887879{col 73}{space 3}  .201137
+{txt}{space 5}NORMALIZED_FT {c |}{col 20}{res}{space 2} 2.598575{col 32}{space 2} .0884841{col 43}{space 1}   29.37{col 52}{space 3}0.000{col 60}{space 4} 2.425149{col 73}{space 3} 2.772001
+{txt}NORMALIZED_VIABI~Y {c |}{col 20}{res}{space 2} 2.584404{col 32}{space 2} .3162063{col 43}{space 1}    8.17{col 52}{space 3}0.000{col 60}{space 4} 1.964651{col 73}{space 3} 3.204157
+{txt}NORMALIZED_ELECT~Y {c |}{col 20}{res}{space 2} 3.802768{col 32}{space 2} .3493329{col 43}{space 1}   10.89{col 52}{space 3}0.000{col 60}{space 4} 3.118088{col 73}{space 3} 4.487448
+{txt}NORMALIZED_IDEOL~Y {c |}{col 20}{res}{space 2}-.5466185{col 32}{space 2}   .07595{col 43}{space 1}   -7.20{col 52}{space 3}0.000{col 60}{space 4}-.6954776{col 73}{space 3}-.3977593
+{txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
 
+{com}. outreg2 using 2008_phone_r.xls
+{txt}{browse `"2008_phone_r.xls"'}
+{browse `"/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2008"' :dir}{com} : {txt}{stata `"seeout using "2008_phone_r.txt""':seeout}
+
+{com}. listcoef, help
+{res}
+clogit (N=8786): Factor change in odds 
+
+{txt}  Odds of:  vs 
+
+{res}{txt}{hline 13}{c TT}{hline 10}{hline 9}{hline 9}{hline 10}
+{col 14}{c |}         b{col 25}        z{col 34}    P>|z|{col 43}       e^b
+{hline 13}{c +}{hline 10}{hline 9}{hline 9}{hline 10}
+{space 6}ROMNEY {c |}{col 14}{res}{space 1}  -0.2227{col 25}{space 2} -3.143{col 34}{space 2}  0.002{col 43}{space 2}   0.800
+{txt}{space 4}HUCKABEE {c |}{col 14}{res}{space 1}   0.0562{col 25}{space 2}  0.760{col 34}{space 2}  0.448{col 43}{space 2}   1.058
+{txt}NORMALIZED~T {c |}{col 14}{res}{space 1}   2.5986{col 25}{space 2} 29.368{col 34}{space 2}  0.000{col 43}{space 2}  13.445
+{txt}NOR~IABILITY {c |}{col 14}{res}{space 1}   2.5844{col 25}{space 2}  8.173{col 34}{space 2}  0.000{col 43}{space 2}  13.255
+{txt}NOR~TABILITY {c |}{col 14}{res}{space 1}   3.8028{col 25}{space 2} 10.886{col 34}{space 2}  0.000{col 43}{space 2}  44.825
+{txt}NORMALIZE~GY {c |}{col 14}{res}{space 1}  -0.5466{col 25}{space 2} -7.197{col 34}{space 2}  0.000{col 43}{space 2}   0.579
+{txt}{hline 13}{c BT}{hline 10}{hline 9}{hline 9}{hline 10}
+       b = raw coefficient
+       z = z-score for test of b=0
+   P>|z| = p-value for z-test
+     e^b = exp(b) = factor change in odds for unit increase in X
+   SDofX = standard deviation of X
+
+{com}. margins, dydx(_all) post
+{res}
+{txt}Average marginal effects{col 49}Number of obs{col 67}= {res}     8,786
+{txt}{col 1}Model VCE{col 14}: {res}OIM
+
+{txt}{p2colset 1 14 16 2}{...}
+{p2col:Expression}:{space 1}{res:Pr(VoteCandidate|fixed effect is 0), predict(pu0)}{p_end}
+{p2colreset}{...}
+{txt}{p2colset 1 14 16 2}{...}
+{p2col:dy/dx w.r.t.}:{space 1}{res:ROMNEY HUCKABEE NORMALIZED_FT NORMALIZED_VIABILITY NORMALIZED_ELECTABILITY NORMALIZED_IDEOLOGY}{p_end}
+{p2colreset}{...}
+
+{res}{txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 20}{c |}{col 32} Delta-method
+{col 20}{c |}      dy/dx{col 32}   Std. Err.{col 44}      z{col 52}   P>|z|{col 60}     [95% Con{col 73}f. Interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 12}ROMNEY {c |}{col 20}{res}{space 2}-.0184035{col 32}{space 2} .0064858{col 43}{space 1}   -2.84{col 52}{space 3}0.005{col 60}{space 4}-.0311154{col 73}{space 3}-.0056916
+{txt}{space 10}HUCKABEE {c |}{col 20}{res}{space 2} .0046416{col 32}{space 2} .0059443{col 43}{space 1}    0.78{col 52}{space 3}0.435{col 60}{space 4}-.0070091{col 73}{space 3} .0162923
+{txt}{space 5}NORMALIZED_FT {c |}{col 20}{res}{space 2} .2147147{col 32}{space 2} .0155263{col 43}{space 1}   13.83{col 52}{space 3}0.000{col 60}{space 4} .1842837{col 73}{space 3} .2451456
+{txt}NORMALIZED_VIABI~Y {c |}{col 20}{res}{space 2} .2135438{col 32}{space 2} .0239858{col 43}{space 1}    8.90{col 52}{space 3}0.000{col 60}{space 4} .1665325{col 73}{space 3}  .260555
+{txt}NORMALIZED_ELECT~Y {c |}{col 20}{res}{space 2} .3142146{col 32}{space 2} .0249339{col 43}{space 1}   12.60{col 52}{space 3}0.000{col 60}{space 4} .2653451{col 73}{space 3} .3630841
+{txt}NORMALIZED_IDEOL~Y {c |}{col 20}{res}{space 2}-.0451659{col 32}{space 2} .0077314{col 43}{space 1}   -5.84{col 52}{space 3}0.000{col 60}{space 4}-.0603193{col 73}{space 3}-.0300126
+{txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
 {com}. outreg2 using 2008_phone_r.xls
 {txt}{browse `"2008_phone_r.xls"'}
 {browse `"/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2008"' :dir}{com} : {txt}{stata `"seeout using "2008_phone_r.txt""':seeout}
@@ -169,4 +372,13 @@ Iteration 4:{space 3}log likelihood = {res: -1352.212}
 {com}. 
 {txt}end of do-file
 
-{com}. exit
+{com}. do "/var/folders/wp/cwmrq5v9115gygh6bzyqpqmw0000gn/T//SD05723.000000"
+{txt}
+{com}. * Ryan Zhang
+. * 2004
+. 
+. clear all
+{res}{txt}
+{com}. capture log close
+{smcl}
+{com}{sf}{ul off}
