@@ -22,7 +22,8 @@ library(foreign)
 ```{r warning = FALSE}
 
 naes08_phone <- read.spss("raw_data/naes/naes08-phone-nat-rcs-data-full.sav",
-                  to.data.frame = TRUE, use.value.labels = FALSE)
+                  to.data.frame = TRUE, use.value.labels = FALSE) %>%
+    filter(DATE_c <= 20080129)
 naes08_phone[naes08_phone == 998] <- NA
 naes08_phone[naes08_phone == 999] <- NA
 

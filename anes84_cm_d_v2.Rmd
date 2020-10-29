@@ -13,6 +13,7 @@ library(Hmisc)
 library(rqPen)
 library(vctrs)
 library(foreign)
+library(lubridate)
 
 ```
 
@@ -26,7 +27,9 @@ library(foreign)
 anes84_national <- spss.get("raw_data/anes/anes84-national.por", 
                             use.value.labels = TRUE)
 anes84_cm <- spss.get("raw_data/anes/anes84-continuous-monitoring.por", 
-                      use.value.labels = TRUE)
+                      use.value.labels = TRUE) %>%
+  mutate(date = as.Date(paste(VCM0105, VCM0106, 1984), format = "%m%d%Y")) %>%
+  filter(date <= "1984-03-13")
 
 ```
 

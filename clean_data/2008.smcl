@@ -3,7 +3,7 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/thesis/clean_data/2008.smcl
   {txt}log type:  {res}smcl
- {txt}opened on:  {res}24 Oct 2020, 12:17:09
+ {txt}opened on:  {res}27 Oct 2020, 02:02:15
 {txt}
 {com}. 
 . * 2008 Democratic primaries (phone)
@@ -198,33 +198,33 @@ clogit (N=10775): Factor change in odds
 {com}. 
 . * Test
 . clogit VoteCandidate ROMNEY HUCKABEE NORMALIZED_FT NORMALIZED_VIABILITY NORMALIZED_ELECTABILITY NORMALIZED_IDEOLOGY TRAITS, group(ID)
-{txt}note: 31 groups (40 obs) dropped because of all positive or
+{txt}note: 20 groups (24 obs) dropped because of all positive or
       all negative outcomes.
 {res}
-{txt}Iteration 0:{space 3}log likelihood = {res:-1345.1828}  
-Iteration 1:{space 3}log likelihood = {res:-1267.1898}  
-Iteration 2:{space 3}log likelihood = {res:-1191.0372}  
-Iteration 3:{space 3}log likelihood = {res:-1190.2623}  
-Iteration 4:{space 3}log likelihood = {res:-1190.2613}  
-Iteration 5:{space 3}log likelihood = {res:-1190.2613}  
+{txt}Iteration 0:{space 3}log likelihood = {res:-1065.1913}  
+Iteration 1:{space 3}log likelihood = {res:-1002.1938}  
+Iteration 2:{space 3}log likelihood = {res:-943.90564}  
+Iteration 3:{space 3}log likelihood = {res:-943.06081}  
+Iteration 4:{space 3}log likelihood = {res:-943.05973}  
+Iteration 5:{space 3}log likelihood = {res:-943.05973}  
 {res}
 {txt}Conditional (fixed-effects) logistic regression
 
-{col 49}Number of obs{col 67}= {res}     8,786
-{txt}{col 49}LR chi2({res}7{txt}){col 67}= {res}   4047.51
+{col 49}Number of obs{col 67}= {res}     6,708
+{txt}{col 49}LR chi2({res}7{txt}){col 67}= {res}   3021.22
 {txt}{col 49}Prob > chi2{col 67}= {res}    0.0000
-{txt}Log likelihood = {res}-1190.2613{txt}{col 49}Pseudo R2{col 67}= {res}    0.6297
+{txt}Log likelihood = {res}-943.05973{txt}{col 49}Pseudo R2{col 67}= {res}    0.6157
 
 {txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
 {col 1}     VoteCandidate{col 20}{c |}      Coef.{col 32}   Std. Err.{col 44}      z{col 52}   P>|z|{col 60}     [95% Con{col 73}f. Interval]
 {hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{space 12}ROMNEY {c |}{col 20}{res}{space 2} .1453236{col 32}{space 2} .0793106{col 43}{space 1}    1.83{col 52}{space 3}0.067{col 60}{space 4}-.0101222{col 73}{space 3} .3007694
-{txt}{space 10}HUCKABEE {c |}{col 20}{res}{space 2} .4855769{col 32}{space 2} .0827803{col 43}{space 1}    5.87{col 52}{space 3}0.000{col 60}{space 4} .3233305{col 73}{space 3} .6478233
-{txt}{space 5}NORMALIZED_FT {c |}{col 20}{res}{space 2} 1.853748{col 32}{space 2} .0962522{col 43}{space 1}   19.26{col 52}{space 3}0.000{col 60}{space 4} 1.665097{col 73}{space 3} 2.042398
-{txt}NORMALIZED_VIABI~Y {c |}{col 20}{res}{space 2} 1.589671{col 32}{space 2} .3332203{col 43}{space 1}    4.77{col 52}{space 3}0.000{col 60}{space 4} .9365711{col 73}{space 3} 2.242771
-{txt}NORMALIZED_ELECT~Y {c |}{col 20}{res}{space 2} 3.054932{col 32}{space 2} .3652932{col 43}{space 1}    8.36{col 52}{space 3}0.000{col 60}{space 4}  2.33897{col 73}{space 3} 3.770894
-{txt}NORMALIZED_IDEOL~Y {c |}{col 20}{res}{space 2}-.4330676{col 32}{space 2} .0812631{col 43}{space 1}   -5.33{col 52}{space 3}0.000{col 60}{space 4}-.5923403{col 73}{space 3}-.2737949
-{txt}{space 12}TRAITS {c |}{col 20}{res}{space 2} 7.817026{col 32}{space 2} .4983919{col 43}{space 1}   15.68{col 52}{space 3}0.000{col 60}{space 4} 6.840195{col 73}{space 3} 8.793856
+{space 12}ROMNEY {c |}{col 20}{res}{space 2} .1447146{col 32}{space 2} .0897623{col 43}{space 1}    1.61{col 52}{space 3}0.107{col 60}{space 4}-.0312163{col 73}{space 3} .3206455
+{txt}{space 10}HUCKABEE {c |}{col 20}{res}{space 2} .5255092{col 32}{space 2} .0908368{col 43}{space 1}    5.79{col 52}{space 3}0.000{col 60}{space 4} .3474724{col 73}{space 3} .7035461
+{txt}{space 5}NORMALIZED_FT {c |}{col 20}{res}{space 2} 1.751108{col 32}{space 2} .1080233{col 43}{space 1}   16.21{col 52}{space 3}0.000{col 60}{space 4} 1.539386{col 73}{space 3}  1.96283
+{txt}NORMALIZED_VIABI~Y {c |}{col 20}{res}{space 2}  2.11001{col 32}{space 2} .4113599{col 43}{space 1}    5.13{col 52}{space 3}0.000{col 60}{space 4} 1.303759{col 73}{space 3} 2.916261
+{txt}NORMALIZED_ELECT~Y {c |}{col 20}{res}{space 2} 2.805014{col 32}{space 2} .4179684{col 43}{space 1}    6.71{col 52}{space 3}0.000{col 60}{space 4} 1.985811{col 73}{space 3} 3.624217
+{txt}NORMALIZED_IDEOL~Y {c |}{col 20}{res}{space 2} -.494047{col 32}{space 2} .0930832{col 43}{space 1}   -5.31{col 52}{space 3}0.000{col 60}{space 4}-.6764866{col 73}{space 3}-.3116074
+{txt}{space 12}TRAITS {c |}{col 20}{res}{space 2} 7.795978{col 32}{space 2} .5483556{col 43}{space 1}   14.22{col 52}{space 3}0.000{col 60}{space 4} 6.721221{col 73}{space 3} 8.870735
 {txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
 
 {com}. cd "/Users/ryan/Google Drive/2020_2021/Thesis/Data/stata_regressions/2008"
@@ -236,20 +236,20 @@ Iteration 5:{space 3}log likelihood = {res:-1190.2613}
 
 {com}. listcoef, help
 {res}
-clogit (N=8786): Factor change in odds 
+clogit (N=6708): Factor change in odds 
 
 {txt}  Odds of:  vs 
 
 {res}{txt}{hline 13}{c TT}{hline 10}{hline 9}{hline 9}{hline 10}
 {col 14}{c |}         b{col 25}        z{col 34}    P>|z|{col 43}       e^b
 {hline 13}{c +}{hline 10}{hline 9}{hline 9}{hline 10}
-{space 6}ROMNEY {c |}{col 14}{res}{space 1}   0.1453{col 25}{space 2}  1.832{col 34}{space 2}  0.067{col 43}{space 2}   1.156
-{txt}{space 4}HUCKABEE {c |}{col 14}{res}{space 1}   0.4856{col 25}{space 2}  5.866{col 34}{space 2}  0.000{col 43}{space 2}   1.625
-{txt}NORMALIZED~T {c |}{col 14}{res}{space 1}   1.8537{col 25}{space 2} 19.259{col 34}{space 2}  0.000{col 43}{space 2}   6.384
-{txt}NOR~IABILITY {c |}{col 14}{res}{space 1}   1.5897{col 25}{space 2}  4.771{col 34}{space 2}  0.000{col 43}{space 2}   4.902
-{txt}NOR~TABILITY {c |}{col 14}{res}{space 1}   3.0549{col 25}{space 2}  8.363{col 34}{space 2}  0.000{col 43}{space 2}  21.220
-{txt}NORMALIZE~GY {c |}{col 14}{res}{space 1}  -0.4331{col 25}{space 2} -5.329{col 34}{space 2}  0.000{col 43}{space 2}   0.649
-{txt}{space 6}TRAITS {c |}{col 14}{res}{space 1}   7.8170{col 25}{space 2} 15.684{col 34}{space 2}  0.000{col 43}{space 2}2482.511
+{space 6}ROMNEY {c |}{col 14}{res}{space 1}   0.1447{col 25}{space 2}  1.612{col 34}{space 2}  0.107{col 43}{space 2}   1.156
+{txt}{space 4}HUCKABEE {c |}{col 14}{res}{space 1}   0.5255{col 25}{space 2}  5.785{col 34}{space 2}  0.000{col 43}{space 2}   1.691
+{txt}NORMALIZED~T {c |}{col 14}{res}{space 1}   1.7511{col 25}{space 2} 16.210{col 34}{space 2}  0.000{col 43}{space 2}   5.761
+{txt}NOR~IABILITY {c |}{col 14}{res}{space 1}   2.1100{col 25}{space 2}  5.129{col 34}{space 2}  0.000{col 43}{space 2}   8.248
+{txt}NOR~TABILITY {c |}{col 14}{res}{space 1}   2.8050{col 25}{space 2}  6.711{col 34}{space 2}  0.000{col 43}{space 2}  16.527
+{txt}NORMALIZE~GY {c |}{col 14}{res}{space 1}  -0.4940{col 25}{space 2} -5.308{col 34}{space 2}  0.000{col 43}{space 2}   0.610
+{txt}{space 6}TRAITS {c |}{col 14}{res}{space 1}   7.7960{col 25}{space 2} 14.217{col 34}{space 2}  0.000{col 43}{space 2}2430.805
 {txt}{hline 13}{c BT}{hline 10}{hline 9}{hline 9}{hline 10}
        b = raw coefficient
        z = z-score for test of b=0
@@ -259,7 +259,7 @@ clogit (N=8786): Factor change in odds
 
 {com}. margins, dydx(_all) post
 {res}
-{txt}Average marginal effects{col 49}Number of obs{col 67}= {res}     8,786
+{txt}Average marginal effects{col 49}Number of obs{col 67}= {res}     6,708
 {txt}{col 1}Model VCE{col 14}: {res}OIM
 
 {txt}{p2colset 1 14 16 2}{...}
@@ -273,13 +273,13 @@ clogit (N=8786): Factor change in odds
 {col 20}{c |}{col 32} Delta-method
 {col 20}{c |}      dy/dx{col 32}   Std. Err.{col 44}      z{col 52}   P>|z|{col 60}     [95% Con{col 73}f. Interval]
 {hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{space 12}ROMNEY {c |}{col 20}{res}{space 2} .0013876{col 32}{space 2} .0006826{col 43}{space 1}    2.03{col 52}{space 3}0.042{col 60}{space 4} .0000497{col 73}{space 3} .0027255
-{txt}{space 10}HUCKABEE {c |}{col 20}{res}{space 2} .0046365{col 32}{space 2} .0006264{col 43}{space 1}    7.40{col 52}{space 3}0.000{col 60}{space 4} .0034087{col 73}{space 3} .0058643
-{txt}{space 5}NORMALIZED_FT {c |}{col 20}{res}{space 2} .0177004{col 32}{space 2} .0025578{col 43}{space 1}    6.92{col 52}{space 3}0.000{col 60}{space 4} .0126872{col 73}{space 3} .0227135
-{txt}NORMALIZED_VIABI~Y {c |}{col 20}{res}{space 2} .0151789{col 32}{space 2} .0034878{col 43}{space 1}    4.35{col 52}{space 3}0.000{col 60}{space 4} .0083429{col 73}{space 3} .0220148
-{txt}NORMALIZED_ELECT~Y {c |}{col 20}{res}{space 2} .0291698{col 32}{space 2} .0044086{col 43}{space 1}    6.62{col 52}{space 3}0.000{col 60}{space 4} .0205291{col 73}{space 3} .0378105
-{txt}NORMALIZED_IDEOL~Y {c |}{col 20}{res}{space 2}-.0041351{col 32}{space 2} .0010628{col 43}{space 1}   -3.89{col 52}{space 3}0.000{col 60}{space 4}-.0062181{col 73}{space 3}-.0020522
-{txt}{space 12}TRAITS {c |}{col 20}{res}{space 2} .0746403{col 32}{space 2} .0062642{col 43}{space 1}   11.92{col 52}{space 3}0.000{col 60}{space 4} .0623627{col 73}{space 3} .0869179
+{space 12}ROMNEY {c |}{col 20}{res}{space 2} .0013605{col 32}{space 2} .0007676{col 43}{space 1}    1.77{col 52}{space 3}0.076{col 60}{space 4}-.0001439{col 73}{space 3} .0028649
+{txt}{space 10}HUCKABEE {c |}{col 20}{res}{space 2} .0049404{col 32}{space 2} .0006961{col 43}{space 1}    7.10{col 52}{space 3}0.000{col 60}{space 4} .0035761{col 73}{space 3} .0063046
+{txt}{space 5}NORMALIZED_FT {c |}{col 20}{res}{space 2} .0164623{col 32}{space 2} .0026032{col 43}{space 1}    6.32{col 52}{space 3}0.000{col 60}{space 4} .0113601{col 73}{space 3} .0215645
+{txt}NORMALIZED_VIABI~Y {c |}{col 20}{res}{space 2} .0198364{col 32}{space 2} .0043356{col 43}{space 1}    4.58{col 52}{space 3}0.000{col 60}{space 4} .0113388{col 73}{space 3} .0283339
+{txt}NORMALIZED_ELECT~Y {c |}{col 20}{res}{space 2} .0263701{col 32}{space 2} .0046282{col 43}{space 1}    5.70{col 52}{space 3}0.000{col 60}{space 4} .0172991{col 73}{space 3} .0354412
+{txt}NORMALIZED_IDEOL~Y {c |}{col 20}{res}{space 2}-.0046446{col 32}{space 2} .0012258{col 43}{space 1}   -3.79{col 52}{space 3}0.000{col 60}{space 4}-.0070471{col 73}{space 3} -.002242
+{txt}{space 12}TRAITS {c |}{col 20}{res}{space 2} .0732905{col 32}{space 2} .0066624{col 43}{space 1}   11.00{col 52}{space 3}0.000{col 60}{space 4} .0602325{col 73}{space 3} .0863486
 {txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
 {res}{txt}
 {com}. outreg2 using 2008_phone_r.xls
@@ -288,31 +288,31 @@ clogit (N=8786): Factor change in odds
 
 {com}. 
 . clogit VoteCandidate ROMNEY HUCKABEE NORMALIZED_FT NORMALIZED_VIABILITY NORMALIZED_ELECTABILITY NORMALIZED_IDEOLOGY, group(ID)
-{txt}note: 31 groups (40 obs) dropped because of all positive or
+{txt}note: 20 groups (24 obs) dropped because of all positive or
       all negative outcomes.
 {res}
-{txt}Iteration 0:{space 3}log likelihood = {res: -1427.413}  
-Iteration 1:{space 3}log likelihood = {res: -1396.167}  
-Iteration 2:{space 3}log likelihood = {res:-1352.2928}  
-Iteration 3:{space 3}log likelihood = {res: -1352.212}  
-Iteration 4:{space 3}log likelihood = {res: -1352.212}  
+{txt}Iteration 0:{space 3}log likelihood = {res:-1133.1028}  
+Iteration 1:{space 3}log likelihood = {res:-1105.7734}  
+Iteration 2:{space 3}log likelihood = {res:-1074.2304}  
+Iteration 3:{space 3}log likelihood = {res:-1074.1291}  
+Iteration 4:{space 3}log likelihood = {res:-1074.1291}  
 {res}
 {txt}Conditional (fixed-effects) logistic regression
 
-{col 49}Number of obs{col 67}= {res}     8,786
-{txt}{col 49}LR chi2({res}6{txt}){col 67}= {res}   3723.60
+{col 49}Number of obs{col 67}= {res}     6,708
+{txt}{col 49}LR chi2({res}6{txt}){col 67}= {res}   2759.08
 {txt}{col 49}Prob > chi2{col 67}= {res}    0.0000
-{txt}Log likelihood = {res} -1352.212{txt}{col 49}Pseudo R2{col 67}= {res}    0.5793
+{txt}Log likelihood = {res}-1074.1291{txt}{col 49}Pseudo R2{col 67}= {res}    0.5622
 
 {txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
 {col 1}     VoteCandidate{col 20}{c |}      Coef.{col 32}   Std. Err.{col 44}      z{col 52}   P>|z|{col 60}     [95% Con{col 73}f. Interval]
 {hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{space 12}ROMNEY {c |}{col 20}{res}{space 2}-.2227275{col 32}{space 2} .0708656{col 43}{space 1}   -3.14{col 52}{space 3}0.002{col 60}{space 4}-.3616216{col 73}{space 3}-.0838334
-{txt}{space 10}HUCKABEE {c |}{col 20}{res}{space 2} .0561746{col 32}{space 2} .0739618{col 43}{space 1}    0.76{col 52}{space 3}0.448{col 60}{space 4}-.0887879{col 73}{space 3}  .201137
-{txt}{space 5}NORMALIZED_FT {c |}{col 20}{res}{space 2} 2.598575{col 32}{space 2} .0884841{col 43}{space 1}   29.37{col 52}{space 3}0.000{col 60}{space 4} 2.425149{col 73}{space 3} 2.772001
-{txt}NORMALIZED_VIABI~Y {c |}{col 20}{res}{space 2} 2.584404{col 32}{space 2} .3162063{col 43}{space 1}    8.17{col 52}{space 3}0.000{col 60}{space 4} 1.964651{col 73}{space 3} 3.204157
-{txt}NORMALIZED_ELECT~Y {c |}{col 20}{res}{space 2} 3.802768{col 32}{space 2} .3493329{col 43}{space 1}   10.89{col 52}{space 3}0.000{col 60}{space 4} 3.118088{col 73}{space 3} 4.487448
-{txt}NORMALIZED_IDEOL~Y {c |}{col 20}{res}{space 2}-.5466185{col 32}{space 2}   .07595{col 43}{space 1}   -7.20{col 52}{space 3}0.000{col 60}{space 4}-.6954776{col 73}{space 3}-.3977593
+{space 12}ROMNEY {c |}{col 20}{res}{space 2}-.2544235{col 32}{space 2} .0801106{col 43}{space 1}   -3.18{col 52}{space 3}0.001{col 60}{space 4}-.4114374{col 73}{space 3}-.0974095
+{txt}{space 10}HUCKABEE {c |}{col 20}{res}{space 2} .0445806{col 32}{space 2} .0796136{col 43}{space 1}    0.56{col 52}{space 3}0.576{col 60}{space 4}-.1114591{col 73}{space 3} .2006203
+{txt}{space 5}NORMALIZED_FT {c |}{col 20}{res}{space 2} 2.444352{col 32}{space 2} .0995432{col 43}{space 1}   24.56{col 52}{space 3}0.000{col 60}{space 4} 2.249251{col 73}{space 3} 2.639454
+{txt}NORMALIZED_VIABI~Y {c |}{col 20}{res}{space 2} 3.228213{col 32}{space 2} .4022797{col 43}{space 1}    8.02{col 52}{space 3}0.000{col 60}{space 4} 2.439759{col 73}{space 3} 4.016666
+{txt}NORMALIZED_ELECT~Y {c |}{col 20}{res}{space 2} 3.649137{col 32}{space 2}   .40611{col 43}{space 1}    8.99{col 52}{space 3}0.000{col 60}{space 4} 2.853176{col 73}{space 3} 4.445097
+{txt}NORMALIZED_IDEOL~Y {c |}{col 20}{res}{space 2}-.5945499{col 32}{space 2} .0865696{col 43}{space 1}   -6.87{col 52}{space 3}0.000{col 60}{space 4}-.7642232{col 73}{space 3}-.4248767
 {txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
 
 {com}. outreg2 using 2008_phone_r.xls
@@ -321,19 +321,19 @@ Iteration 4:{space 3}log likelihood = {res: -1352.212}
 
 {com}. listcoef, help
 {res}
-clogit (N=8786): Factor change in odds 
+clogit (N=6708): Factor change in odds 
 
 {txt}  Odds of:  vs 
 
 {res}{txt}{hline 13}{c TT}{hline 10}{hline 9}{hline 9}{hline 10}
 {col 14}{c |}         b{col 25}        z{col 34}    P>|z|{col 43}       e^b
 {hline 13}{c +}{hline 10}{hline 9}{hline 9}{hline 10}
-{space 6}ROMNEY {c |}{col 14}{res}{space 1}  -0.2227{col 25}{space 2} -3.143{col 34}{space 2}  0.002{col 43}{space 2}   0.800
-{txt}{space 4}HUCKABEE {c |}{col 14}{res}{space 1}   0.0562{col 25}{space 2}  0.760{col 34}{space 2}  0.448{col 43}{space 2}   1.058
-{txt}NORMALIZED~T {c |}{col 14}{res}{space 1}   2.5986{col 25}{space 2} 29.368{col 34}{space 2}  0.000{col 43}{space 2}  13.445
-{txt}NOR~IABILITY {c |}{col 14}{res}{space 1}   2.5844{col 25}{space 2}  8.173{col 34}{space 2}  0.000{col 43}{space 2}  13.255
-{txt}NOR~TABILITY {c |}{col 14}{res}{space 1}   3.8028{col 25}{space 2} 10.886{col 34}{space 2}  0.000{col 43}{space 2}  44.825
-{txt}NORMALIZE~GY {c |}{col 14}{res}{space 1}  -0.5466{col 25}{space 2} -7.197{col 34}{space 2}  0.000{col 43}{space 2}   0.579
+{space 6}ROMNEY {c |}{col 14}{res}{space 1}  -0.2544{col 25}{space 2} -3.176{col 34}{space 2}  0.001{col 43}{space 2}   0.775
+{txt}{space 4}HUCKABEE {c |}{col 14}{res}{space 1}   0.0446{col 25}{space 2}  0.560{col 34}{space 2}  0.576{col 43}{space 2}   1.046
+{txt}NORMALIZED~T {c |}{col 14}{res}{space 1}   2.4444{col 25}{space 2} 24.556{col 34}{space 2}  0.000{col 43}{space 2}  11.523
+{txt}NOR~IABILITY {c |}{col 14}{res}{space 1}   3.2282{col 25}{space 2}  8.025{col 34}{space 2}  0.000{col 43}{space 2}  25.235
+{txt}NOR~TABILITY {c |}{col 14}{res}{space 1}   3.6491{col 25}{space 2}  8.986{col 34}{space 2}  0.000{col 43}{space 2}  38.441
+{txt}NORMALIZE~GY {c |}{col 14}{res}{space 1}  -0.5945{col 25}{space 2} -6.868{col 34}{space 2}  0.000{col 43}{space 2}   0.552
 {txt}{hline 13}{c BT}{hline 10}{hline 9}{hline 9}{hline 10}
        b = raw coefficient
        z = z-score for test of b=0
@@ -343,7 +343,7 @@ clogit (N=8786): Factor change in odds
 
 {com}. margins, dydx(_all) post
 {res}
-{txt}Average marginal effects{col 49}Number of obs{col 67}= {res}     8,786
+{txt}Average marginal effects{col 49}Number of obs{col 67}= {res}     6,708
 {txt}{col 1}Model VCE{col 14}: {res}OIM
 
 {txt}{p2colset 1 14 16 2}{...}
@@ -357,12 +357,12 @@ clogit (N=8786): Factor change in odds
 {col 20}{c |}{col 32} Delta-method
 {col 20}{c |}      dy/dx{col 32}   Std. Err.{col 44}      z{col 52}   P>|z|{col 60}     [95% Con{col 73}f. Interval]
 {hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{space 12}ROMNEY {c |}{col 20}{res}{space 2}-.0184035{col 32}{space 2} .0064858{col 43}{space 1}   -2.84{col 52}{space 3}0.005{col 60}{space 4}-.0311154{col 73}{space 3}-.0056916
-{txt}{space 10}HUCKABEE {c |}{col 20}{res}{space 2} .0046416{col 32}{space 2} .0059443{col 43}{space 1}    0.78{col 52}{space 3}0.435{col 60}{space 4}-.0070091{col 73}{space 3} .0162923
-{txt}{space 5}NORMALIZED_FT {c |}{col 20}{res}{space 2} .2147147{col 32}{space 2} .0155263{col 43}{space 1}   13.83{col 52}{space 3}0.000{col 60}{space 4} .1842837{col 73}{space 3} .2451456
-{txt}NORMALIZED_VIABI~Y {c |}{col 20}{res}{space 2} .2135438{col 32}{space 2} .0239858{col 43}{space 1}    8.90{col 52}{space 3}0.000{col 60}{space 4} .1665325{col 73}{space 3}  .260555
-{txt}NORMALIZED_ELECT~Y {c |}{col 20}{res}{space 2} .3142146{col 32}{space 2} .0249339{col 43}{space 1}   12.60{col 52}{space 3}0.000{col 60}{space 4} .2653451{col 73}{space 3} .3630841
-{txt}NORMALIZED_IDEOL~Y {c |}{col 20}{res}{space 2}-.0451659{col 32}{space 2} .0077314{col 43}{space 1}   -5.84{col 52}{space 3}0.000{col 60}{space 4}-.0603193{col 73}{space 3}-.0300126
+{space 12}ROMNEY {c |}{col 20}{res}{space 2}-.0198556{col 32}{space 2}  .007005{col 43}{space 1}   -2.83{col 52}{space 3}0.005{col 60}{space 4}-.0335852{col 73}{space 3}-.0061259
+{txt}{space 10}HUCKABEE {c |}{col 20}{res}{space 2} .0034791{col 32}{space 2} .0060867{col 43}{space 1}    0.57{col 52}{space 3}0.568{col 60}{space 4}-.0084506{col 73}{space 3} .0154089
+{txt}{space 5}NORMALIZED_FT {c |}{col 20}{res}{space 2} .1907606{col 32}{space 2} .0169237{col 43}{space 1}   11.27{col 52}{space 3}0.000{col 60}{space 4} .1575908{col 73}{space 3} .2239304
+{txt}NORMALIZED_VIABI~Y {c |}{col 20}{res}{space 2} .2519341{col 32}{space 2} .0286605{col 43}{space 1}    8.79{col 52}{space 3}0.000{col 60}{space 4} .1957606{col 73}{space 3} .3081076
+{txt}NORMALIZED_ELECT~Y {c |}{col 20}{res}{space 2} .2847836{col 32}{space 2} .0277221{col 43}{space 1}   10.27{col 52}{space 3}0.000{col 60}{space 4} .2304492{col 73}{space 3} .3391179
+{txt}NORMALIZED_IDEOL~Y {c |}{col 20}{res}{space 2}-.0463995{col 32}{space 2} .0085657{col 43}{space 1}   -5.42{col 52}{space 3}0.000{col 60}{space 4}-.0631879{col 73}{space 3}-.0296111
 {txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
 {res}{txt}
 {com}. outreg2 using 2008_phone_r.xls
@@ -372,13 +372,4 @@ clogit (N=8786): Factor change in odds
 {com}. 
 {txt}end of do-file
 
-{com}. do "/var/folders/wp/cwmrq5v9115gygh6bzyqpqmw0000gn/T//SD05723.000000"
-{txt}
-{com}. * Ryan Zhang
-. * 2004
-. 
-. clear all
-{res}{txt}
-{com}. capture log close
-{smcl}
-{com}{sf}{ul off}
+{com}. 
