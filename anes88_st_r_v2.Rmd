@@ -386,15 +386,17 @@ df_final_2 %>%
   group_by(Candidate, SINCERE_MAX2, STRATEGIC_MAX2) %>%
   count() %>%
   group_by(Candidate) %>%
-  mutate(percent = n / sum(n)) %>%
-  write.csv("clean_data/df88st_r_counts.csv")
+  mutate(percent = n / sum(n),
+         df = "df88st_r") %>%
+  write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure3/df88st_r_counts.csv")
 
 df_final_2 %>%
   group_by(SINCERE_MAX2, STRATEGIC_MAX2) %>%
   count() %>%
   group_by() %>%
-  mutate(percent = n / sum(n)) %>%
-  write.csv("clean_data/df88st_r_counts_aggregate.csv")
+  mutate(percent = n / sum(n),
+         df = "df88st_r") %>%
+  write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure3/df88st_r_counts_aggregate.csv")
 
 ```
 
@@ -426,6 +428,152 @@ df_final %>%
       y = "Density"
     ) +
   ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure2/anes88_st_r_viability.bmp", width = 7.5, height = 4.5)
+
+```
+
+
+
+## Demograhic Tables
+
+```{r}
+
+# Race
+
+df_final_2 %>%
+  inner_join(anes88_st, by = c("ID" = "VST0001")) %>%
+  group_by(SINCERE_MAX2, STRATEGIC_MAX2, VST0564) %>%
+  count() %>%
+  mutate(sincere_strategic = case_when(
+    (SINCERE_MAX2 == 0 & STRATEGIC_MAX2 == 0) ~ 1,
+    (SINCERE_MAX2 == 1 & STRATEGIC_MAX2 == 0) ~ 2,
+    (SINCERE_MAX2 == 0 & STRATEGIC_MAX2 == 1) ~ 3,
+    (SINCERE_MAX2 == 1 & STRATEGIC_MAX2 == 1) ~ 4,
+    )) %>%
+  group_by(VST0564) %>%
+  mutate(percent = n / sum(n),
+         df = "anes88_st_r",
+         race = case_when(
+           VST0564 == "1" ~ "WHITE",
+           VST0564 == "2" ~ "BLACK",
+           VST0564 == "3" ~ "NATIVE",
+           VST0564 == "4" ~ "ASIAN",
+           VST0564 == "7" ~ "OTHER")) %>%
+  write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure10/race/anes88_st_r_race.csv")
+
+# Education
+
+df_final_2 %>%
+  inner_join(anes88_st, by = c("ID" = "VST0001")) %>%
+  group_by(SINCERE_MAX2, STRATEGIC_MAX2, VST0541) %>%
+  count() %>%
+  mutate(sincere_strategic = case_when(
+    (SINCERE_MAX2 == 0 & STRATEGIC_MAX2 == 0) ~ 1,
+    (SINCERE_MAX2 == 1 & STRATEGIC_MAX2 == 0) ~ 2,
+    (SINCERE_MAX2 == 0 & STRATEGIC_MAX2 == 1) ~ 3,
+    (SINCERE_MAX2 == 1 & STRATEGIC_MAX2 == 1) ~ 4,
+    )) %>%
+  group_by(VST0541) %>%
+  mutate(percent = n / sum(n),
+         df = "anes88_st_r",
+         education = case_when(
+           VST0541 == "1" ~ "GRADE8-",
+           VST0541 == "2" ~ "SOMEHS",
+           VST0541 == "3" ~ "HS",
+           VST0541 == "4" ~ "SOMECOLLEGE",
+           VST0541 == "5" ~ "BACHELORS",
+           VST0541 == "6" ~ "PROFESSIONAL")) %>%
+  write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure10/education/anes88_st_r_education.csv")
+
+# Age
+
+df_final_2 %>%
+  inner_join(anes88_st, by = c("ID" = "VST0001")) %>%
+  group_by(SINCERE_MAX2, STRATEGIC_MAX2, VST0536) %>%
+  count() %>%
+  mutate(sincere_strategic = case_when(
+    (SINCERE_MAX2 == 0 & STRATEGIC_MAX2 == 0) ~ 1,
+    (SINCERE_MAX2 == 1 & STRATEGIC_MAX2 == 0) ~ 2,
+    (SINCERE_MAX2 == 0 & STRATEGIC_MAX2 == 1) ~ 3,
+    (SINCERE_MAX2 == 1 & STRATEGIC_MAX2 == 1) ~ 4,
+    )) %>%
+  group_by(VST0536) %>%
+  mutate(percent = n / sum(n),
+         df = "anes88_st_r",
+         age = VST0536) %>%
+  write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure10/age/anes88_st_r_age.csv")
+
+# Ideology
+
+df_final_2 %>%
+  inner_join(anes88_st, by = c("ID" = "VST0001")) %>%
+  group_by(SINCERE_MAX2, STRATEGIC_MAX2, VST0425) %>%
+  count() %>%
+  mutate(sincere_strategic = case_when(
+    (SINCERE_MAX2 == 0 & STRATEGIC_MAX2 == 0) ~ 1,
+    (SINCERE_MAX2 == 1 & STRATEGIC_MAX2 == 0) ~ 2,
+    (SINCERE_MAX2 == 0 & STRATEGIC_MAX2 == 1) ~ 3,
+    (SINCERE_MAX2 == 1 & STRATEGIC_MAX2 == 1) ~ 4,
+    )) %>%
+  group_by(VST0425) %>%
+  mutate(percent = n / sum(n),
+         df = "anes88_st_r",
+         ideology = case_when(
+           VST0425 == "1" ~ "VERYLIBERAL",
+           VST0425 == "2" ~ "SOMEWHATLIBERAL",
+           VST0425 == "3" ~ "SOMEWHATLIBERAL",
+           VST0425 == "4" ~ "MODERATE",
+           VST0425 == "5" ~ "SOMEWHATCONSERVATIVE",
+           VST0425 == "6" ~ "SOMEWHATCONSERVATIVE",
+           VST0425 == "7" ~ "VERYCONSERVATIVE")) %>%
+  write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure10/ideology/anes88_st_r_ideology.csv")
+
+# Party ID strength
+
+df_final_2 %>%
+  inner_join(anes88_st, by = c("ID" = "VST0001")) %>%
+  group_by(SINCERE_MAX2, STRATEGIC_MAX2, VST0264) %>%
+  count() %>%
+  mutate(sincere_strategic = case_when(
+    (SINCERE_MAX2 == 0 & STRATEGIC_MAX2 == 0) ~ 1,
+    (SINCERE_MAX2 == 1 & STRATEGIC_MAX2 == 0) ~ 2,
+    (SINCERE_MAX2 == 0 & STRATEGIC_MAX2 == 1) ~ 3,
+    (SINCERE_MAX2 == 1 & STRATEGIC_MAX2 == 1) ~ 4,
+    )) %>%
+  group_by(VST0264) %>%
+  mutate(percent = n / sum(n),
+         df = "anes88_st_r",
+         party_strength = case_when(
+           VST0264 == "0" ~ "STRONG",
+           VST0264 == "1" ~ "NOTVERYSTRONG",
+           VST0264 == "2" ~ "NOTVERYSTRONG",
+           # VST0264 == "3" ~ "NOTVERYSTRONG",
+           VST0264 == "4" ~ "NOTVERYSTRONG",
+           VST0264 == "5" ~ "NOTVERYSTRONG",
+           VST0264 == "6" ~ "STRONG",
+           VST0264 == "7" ~ "OTHER",
+           VST0264 == "8" ~ "OTHER")) %>%
+  write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure10/party_strength/anes88_st_r_party_strength.csv")
+
+# Political interest
+
+df_final_2 %>%
+  inner_join(anes88_st, by = c("ID" = "VST0001")) %>%
+  group_by(SINCERE_MAX2, STRATEGIC_MAX2, VST0108) %>%
+  count() %>%
+  mutate(sincere_strategic = case_when(
+    (SINCERE_MAX2 == 0 & STRATEGIC_MAX2 == 0) ~ 1,
+    (SINCERE_MAX2 == 1 & STRATEGIC_MAX2 == 0) ~ 2,
+    (SINCERE_MAX2 == 0 & STRATEGIC_MAX2 == 1) ~ 3,
+    (SINCERE_MAX2 == 1 & STRATEGIC_MAX2 == 1) ~ 4,
+    )) %>%
+  group_by(VST0108) %>%
+  mutate(percent = n / sum(n),
+         df = "anes88_st_r",
+         political_interest = case_when(
+           VST0108 == "1" ~ "VERYCLOSELY",
+           VST0108 == "2" ~ "SOMEWHATCLOSELY",
+           VST0108 == "3" ~ "NOTTOOCLOSELY")) %>%
+  write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure10/political_interest/anes88_st_r_political_interest.csv")
 
 ```
 

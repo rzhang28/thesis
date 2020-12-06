@@ -3,7 +3,7 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/ryan/Google Drive/2020_2021/Thesis/Data/thesis/clean_data/2008.smcl
   {txt}log type:  {res}smcl
- {txt}opened on:  {res}27 Oct 2020, 02:02:15
+ {txt}opened on:  {res}12 Nov 2020, 01:19:04
 {txt}
 {com}. 
 . * 2008 Democratic primaries (phone)
@@ -372,4 +372,4 @@ clogit (N=6708): Factor change in odds
 {com}. 
 {txt}end of do-file
 
-{com}. 
+{com}. exit

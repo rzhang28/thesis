@@ -326,15 +326,17 @@ df_final_2 %>%
   group_by(Candidate, SINCERE_MAX2, STRATEGIC_MAX2) %>%
   count() %>%
   group_by(Candidate) %>%
-  mutate(percent = n / sum(n)) %>%
-  write.csv("clean_data/df04_national_d_counts.csv")
+  mutate(percent = n / sum(n),
+         df = "df04_national_d") %>%
+  write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure3/df04_national_d_counts.csv")
 
 df_final_2 %>%
   group_by(SINCERE_MAX2, STRATEGIC_MAX2) %>%
   count() %>%
   group_by() %>%
-  mutate(percent = n / sum(n)) %>%
-  write.csv("clean_data/df04_national_d_counts_aggregate.csv")
+  mutate(percent = n / sum(n),
+         df = "df04_national_d") %>%
+  write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure3/df04_national_d_counts_aggregate.csv")
 
 ```
 
@@ -366,6 +368,169 @@ df_final %>%
       y = "Density"
     ) +
   ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure2/naes04_national_d_viability.bmp", width = 7.5, height = 4.5)
+
+```
+
+
+## Demograhic Tables
+
+```{r}
+
+# Race
+
+df_final_2 %>%
+  inner_join(naes04, by = c("ID" = "cKEY")) %>%
+  group_by(SINCERE_MAX2, STRATEGIC_MAX2, cWC03) %>%
+  count() %>%
+  mutate(sincere_strategic = case_when(
+    (SINCERE_MAX2 == 0 & STRATEGIC_MAX2 == 0) ~ 1,
+    (SINCERE_MAX2 == 1 & STRATEGIC_MAX2 == 0) ~ 2,
+    (SINCERE_MAX2 == 0 & STRATEGIC_MAX2 == 1) ~ 3,
+    (SINCERE_MAX2 == 1 & STRATEGIC_MAX2 == 1) ~ 4,
+    )) %>%
+  group_by(cWC03) %>%
+  mutate(percent = n / sum(n),
+         df = "naes04_national",
+         race = case_when(
+           cWC03 == "1" ~ "WHITE",
+           cWC03 == "2" ~ "BLACK",
+           cWC03 == "3" ~ "ASIAN",
+           cWC03 == "4" ~ "NATIVE",
+           cWC03 == "5" ~ "OTHER")) %>%
+  write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure10/race/naes04_national_race.csv")
+
+# Education
+
+df_final_2 %>%
+  inner_join(naes04, by = c("ID" = "cKEY")) %>%
+  group_by(SINCERE_MAX2, STRATEGIC_MAX2, cWA03) %>%
+  count() %>%
+  mutate(sincere_strategic = case_when(
+    (SINCERE_MAX2 == 0 & STRATEGIC_MAX2 == 0) ~ 1,
+    (SINCERE_MAX2 == 1 & STRATEGIC_MAX2 == 0) ~ 2,
+    (SINCERE_MAX2 == 0 & STRATEGIC_MAX2 == 1) ~ 3,
+    (SINCERE_MAX2 == 1 & STRATEGIC_MAX2 == 1) ~ 4,
+    )) %>%
+  group_by(cWA03) %>%
+  mutate(percent = n / sum(n),
+         df = "naes04_national",
+         education = case_when(
+           cWA03 == "1" ~ "GRADE8-",
+           cWA03 == "2" ~ "SOMEHS",
+           cWA03 == "3" ~ "HS",
+           cWA03 == "4" ~ "VOCATIONAL",
+           cWA03 == "5" ~ "SOMECOLLEGE",
+           cWA03 == "6" ~ "ASSOCIATES",
+           cWA03 == "7" ~ "BACHELORS",
+           cWA03 == "8" ~ "SOMEPROFESSIONAL",
+           cWA03 == "9" ~ "PROFESSIONAL")) %>%
+  write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure10/education/naes04_national_education.csv")
+
+# Age
+
+df_final_2 %>%
+  inner_join(naes04, by = c("ID" = "cKEY")) %>%
+  group_by(SINCERE_MAX2, STRATEGIC_MAX2, cWA02) %>%
+  count() %>%
+  mutate(sincere_strategic = case_when(
+    (SINCERE_MAX2 == 0 & STRATEGIC_MAX2 == 0) ~ 1,
+    (SINCERE_MAX2 == 1 & STRATEGIC_MAX2 == 0) ~ 2,
+    (SINCERE_MAX2 == 0 & STRATEGIC_MAX2 == 1) ~ 3,
+    (SINCERE_MAX2 == 1 & STRATEGIC_MAX2 == 1) ~ 4,
+    )) %>%
+  group_by(cWA02) %>%
+  mutate(percent = n / sum(n),
+         df = "naes04_national",
+         age = cWA02) %>%
+  write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure10/age/naes04_national_age.csv")
+
+# Ideology
+
+df_final_2 %>%
+  inner_join(naes04, by = c("ID" = "cKEY")) %>%
+  group_by(SINCERE_MAX2, STRATEGIC_MAX2, cMA06) %>%
+  count() %>%
+  mutate(sincere_strategic = case_when(
+    (SINCERE_MAX2 == 0 & STRATEGIC_MAX2 == 0) ~ 1,
+    (SINCERE_MAX2 == 1 & STRATEGIC_MAX2 == 0) ~ 2,
+    (SINCERE_MAX2 == 0 & STRATEGIC_MAX2 == 1) ~ 3,
+    (SINCERE_MAX2 == 1 & STRATEGIC_MAX2 == 1) ~ 4,
+    )) %>%
+  group_by(cMA06) %>%
+  mutate(percent = n / sum(n),
+         df = "naes04_national",
+         ideology = case_when(
+           cMA06 == "1" ~ "VERYCONSERVATIVE",
+           cMA06 == "2" ~ "SOMEWHATCONSERVATIVE",
+           cMA06 == "3" ~ "MODERATE",
+           cMA06 == "4" ~ "SOMEWHATLIBERAL",
+           cMA06 == "5" ~ "VERYLIBERAL")) %>%
+  write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure10/ideology/naes04_national_ideology.csv")
+
+# Party ID strength
+
+df_final_2 %>%
+  inner_join(naes04, by = c("ID" = "cKEY")) %>%
+  group_by(SINCERE_MAX2, STRATEGIC_MAX2, cMA02) %>%
+  count() %>%
+  mutate(sincere_strategic = case_when(
+    (SINCERE_MAX2 == 0 & STRATEGIC_MAX2 == 0) ~ 1,
+    (SINCERE_MAX2 == 1 & STRATEGIC_MAX2 == 0) ~ 2,
+    (SINCERE_MAX2 == 0 & STRATEGIC_MAX2 == 1) ~ 3,
+    (SINCERE_MAX2 == 1 & STRATEGIC_MAX2 == 1) ~ 4,
+    )) %>%
+  group_by(cMA02) %>%
+  mutate(percent = n / sum(n),
+         df = "naes04_national",
+         party_strength = case_when(
+           cMA02 == "1" ~ "STRONG",
+           cMA02 == "2" ~ "NOTVERYSTRONG")) %>%
+  write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure10/party_strength/naes04_national_party_strength.csv")
+
+# Political interest
+
+df_final_2 %>%
+  inner_join(naes04, by = c("ID" = "cKEY")) %>%
+  group_by(SINCERE_MAX2, STRATEGIC_MAX2, cKA02) %>%
+  count() %>%
+  mutate(sincere_strategic = case_when(
+    (SINCERE_MAX2 == 0 & STRATEGIC_MAX2 == 0) ~ 1,
+    (SINCERE_MAX2 == 1 & STRATEGIC_MAX2 == 0) ~ 2,
+    (SINCERE_MAX2 == 0 & STRATEGIC_MAX2 == 1) ~ 3,
+    (SINCERE_MAX2 == 1 & STRATEGIC_MAX2 == 1) ~ 4,
+    )) %>%
+  group_by(cKA02) %>%
+  mutate(percent = n / sum(n),
+         df = "naes04_national",
+         political_interest = case_when(
+           cKA02 == "1" ~ "VERYCLOSELY",
+           cKA02 == "2" ~ "SOMEWHATCLOSELY",
+           cKA02 == "3" ~ "NOTTOOCLOSELY",
+           cKA02 == "4" ~ "NOTCLOSELYATALL")) %>%
+  write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure10/political_interest/naes04_national_political_interest.csv")
+
+# Political efficacy
+
+df_final_2 %>%
+  inner_join(naes04, by = c("ID" = "cKEY")) %>%
+  group_by(SINCERE_MAX2, STRATEGIC_MAX2, cMB11) %>%
+  count() %>%
+  mutate(sincere_strategic = case_when(
+    (SINCERE_MAX2 == 0 & STRATEGIC_MAX2 == 0) ~ 1,
+    (SINCERE_MAX2 == 1 & STRATEGIC_MAX2 == 0) ~ 2,
+    (SINCERE_MAX2 == 0 & STRATEGIC_MAX2 == 1) ~ 3,
+    (SINCERE_MAX2 == 1 & STRATEGIC_MAX2 == 1) ~ 4,
+    )) %>%
+  group_by(cMB11) %>%
+  mutate(percent = n / sum(n),
+         df = "naes04_national",
+         efficacy = case_when(
+           cMB11 == "1" ~ "STRONGLYAGREE",
+           cMB11 == "2" ~ "SOMEWHATAGREE",
+           cMB11 == "3" ~ "SOMEWHATDISAGREE",
+           cMB11 == "4" ~ "STRONGLYDISAGREE",
+           cMB11 == "5" ~ "NEITHER")) %>%
+  write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure10/political_efficacy/naes04_national_political_efficacy.csv")
 
 ```
 

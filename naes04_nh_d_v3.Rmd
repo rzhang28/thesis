@@ -294,15 +294,17 @@ df_final_2 %>%
   group_by(Candidate, SINCERE_MAX2, STRATEGIC_MAX2) %>%
   count() %>%
   group_by(Candidate) %>%
-  mutate(percent = n / sum(n)) %>%
-  write.csv("clean_data/df04_nh_d_counts.csv")
+  mutate(percent = n / sum(n),
+         df = "df04_nh_d") %>%
+  write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure3/df04_nh_d_counts.csv")
 
 df_final_2 %>%
   group_by(SINCERE_MAX2, STRATEGIC_MAX2) %>%
   count() %>%
   group_by() %>%
-  mutate(percent = n / sum(n)) %>%
-  write.csv("clean_data/df04_nh_d_counts_aggregate.csv")
+  mutate(percent = n / sum(n),
+         df = "df04_nh_d") %>%
+  write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure3/df04_nh_d_counts_aggregate.csv")
 
 ```
 

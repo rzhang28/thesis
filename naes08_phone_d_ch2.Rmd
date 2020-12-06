@@ -19,14 +19,15 @@ library(lubridate)
 ```
 
 
-# Reading Data
+## Create Post-Super Tuesday Dataset
 
 ```{r warning=FALSE}
 
-naes08_phone <- read.spss("raw_data/naes/naes08-phone-nat-rcs-data-full.sav",
-                  to.data.frame = TRUE, use.value.labels = FALSE)
-naes08_phone[naes08_phone == 998] <- NA
-naes08_phone[naes08_phone == 999] <- NA
+naes08_phone_post <- read.spss("raw_data/naes/naes08-phone-nat-rcs-data-full.sav",
+                  to.data.frame = TRUE, use.value.labels = FALSE) %>%
+    filter(DATE_c > 20080129)
+naes08_phone_post[naes08_phone_post == 998] <- NA
+naes08_phone_post[naes08_phone_post == 999] <- NA
 
 ```
 
@@ -35,11 +36,422 @@ naes08_phone[naes08_phone == 999] <- NA
 
 ```{r}
 
-df08phone <- naes08_phone %>%
+df08phone <- naes08_phone_post %>%
+
+  select(RKEY, RBa02_c, 
+         ABc01_c, ABo01_c,
+         NAa06_c, NAa08_c,
+         NBa05_c, NBa07_c,
+         MA04_c, 
+         ABc03_c, ABo04_c,
+         ABc04_c, ABc05_c, ABc06_c, ABc07_c, 
+         ABo05_c, ABo06_c, ABo07_c, ABo08_c,
+         )
+
+# Rename columns
+
+my_candidate <- c("CLINTON", "OBAMA")
+my_candidate_id <- as.integer(c(2, 7))
+
+my_names <- c("ID", "voting", 
+              "Feeling1", "Feeling2",
+              "Viability1", "Viability2",
+              "Electability1", "Electability2",
+              "Ideology", 
+              "Ideology1", "Ideology2", 
+              "Lead1", "Trust1", "Experience1", "Judgement1",
+              "Lead2", "Trust2", "Experience2", "Judgement2"
+              )
+
+colnames(df08phone) <- my_names
+
+```
+
+
+```{r}
+
+df <- data.frame(my_candidate_id, my_candidate, stringsAsFactors = FALSE)
+df08phone <-merge(df08phone, df, by.x = "voting", 
+                  by.y = "my_candidate_id", all.x = TRUE)
+names(df08phone)[names(df08phone) == "my_candidate"] <- "VoteCandidate"
+
+```
+
+
+## Normalize Variables
+
+```{r warning=FALSE}
+
+# 1) Normalize feeling thermometers
+
+my_rescale1 <- function(X) { 
+  if (max(X, na.rm = TRUE) == min(X, na.rm = TRUE)) 
+    X / sum(X, na.rm = TRUE)
+  else
+    round((X - min(X, na.rm = TRUE)) /
+            (max(X, na.rm = TRUE) - min(X, na.rm = TRUE)), 6)
+}
+
+df08phone[, c("NORMALIZED_FT1", "NORMALIZED_FT2")] <- t(apply(
+  df08phone[, c("Feeling1", "Feeling2")],
+  MARGIN = 1,
+  FUN = my_rescale1))
+
+# 2) Normalize viability and electability
+
+my_rescale2 <- function(X) round(X / sum(X, na.rm = TRUE), 6)
+
+df08phone[, c("NORMALIZED_VIABILITY1", "NORMALIZED_VIABILITY2")] <- t(apply(
+                df08phone[, c("Viability1", "Viability2")],
+                MARGIN = 1, FUN = my_rescale2))
+
+df08phone[, c("NORMALIZED_ELECTABILITY1", "NORMALIZED_ELECTABILITY2")] <- t(apply(
+                df08phone[, c("Electability1", "Electability2")],
+                MARGIN = 1, FUN = my_rescale2))
+
+# 3) Rescale ideological distance
+
+df08phone[, c("temp_1", "temp_2")] <- square(
+  df08phone[, c("Ideology1", "Ideology2")] -
+    df08phone[, "Ideology"])
+
+df08phone <- df08phone %>%
+  rowwise() %>%
+  mutate(temp_min = min(temp_1, temp_2)) %>%
+  mutate(temp_max_min = max(temp_1, temp_2) -
+           min(temp_1, temp_2)) %>%
+  mutate(NORMALIZED_IDEOLOGY1 = ifelse(temp_max_min == 0,
+                                       ifelse(temp_min == 0, 0, 0.5),
+                                       round((temp_1 - temp_min) / 
+                                               temp_max_min, 6))) %>%
+  mutate(NORMALIZED_IDEOLOGY2 = ifelse(temp_max_min == 0,
+                                       ifelse(temp_min == 0, 0, 0.5),
+                                       round((temp_2 - temp_min) / 
+                                               temp_max_min, 6))) %>%
+  select(-starts_with("temp_") )
+
+# 4) Average candidate traits
+
+df08phone$TRAITS1 = rowMeans(
+  df08phone[, c("Lead1", "Trust1", "Experience1", "Judgement1")],
+  na.rm = TRUE) / 10
+df08phone$TRAITS2 = rowMeans(
+  df08phone[, c("Lead2", "Trust2", "Experience2", "Judgement2")],
+  na.rm = TRUE) / 10
+
+# 5) Convert NaN to NA
+
+df08phone[df08phone == "NaN"] <- NA
+
+```
+ 
+
+## Pivoting Data (Part Two)
+
+```{r}
+
+# 1) Subset: df08phone_normalized_ft
+
+my_cols <- c("ID", "VoteCandidate", "NORMALIZED_FT1", "NORMALIZED_FT2")
+df <- df08phone[, my_cols]
+colnames(df) <- c("ID", "VoteCandidate", my_candidate)
+
+df <- df %>%
+  pivot_longer(names_to = "Candidate", 
+               values_to = "NORMALIZED_FT", 
+               cols = -c(ID, VoteCandidate))
+df_final_post <- df
+
+# 2) Subset: df08phone_normalized_viability
+
+my_cols <- c("ID", "NORMALIZED_VIABILITY1", "NORMALIZED_VIABILITY2")
+df <- df08phone[, my_cols]
+colnames(df) <- c("ID", my_candidate)
+
+df <- df %>%
+  pivot_longer(names_to = "Candidate", 
+               values_to = "NORMALIZED_VIABILITY", 
+               cols = -ID)
+
+df_final_post = merge(df_final_post, df, by = c("ID", "Candidate"))
+
+# Convert Vote Candidate to 0, 1
+
+df_final_post$VoteCandidate <- 1 * (df_final_post$Candidate == df_final_post$VoteCandidate)
+
+# 3) Subset: df08phone_normalized_electability
+
+my_cols <- c("ID", "NORMALIZED_ELECTABILITY1", "NORMALIZED_ELECTABILITY2")
+df <- df08phone[, my_cols]
+colnames(df) <- c("ID", my_candidate)
+
+df <- df %>%
+  pivot_longer(names_to = "Candidate", 
+               values_to = "NORMALIZED_ELECTABILITY", 
+               cols = -ID)
+
+df_final_post = merge(df_final_post, df, by = c("ID", "Candidate"))
+
+# 4) Subset: df08phone_normalized_ideology
+
+my_cols <- c("ID", "NORMALIZED_IDEOLOGY1", "NORMALIZED_IDEOLOGY2")
+df <- df08phone[, my_cols]
+colnames(df) <- c("ID", my_candidate)
+
+df <- df %>%
+  pivot_longer(names_to = "Candidate", 
+               values_to = "NORMALIZED_IDEOLOGY", 
+               cols = -ID)
+
+df_final_post = merge(df_final_post, df, by = c("ID", "Candidate"))
+
+# 5) Subset: df08phone_traits
+
+my_cols <- c("ID", "TRAITS1", "TRAITS2")
+df <- df08phone[, my_cols]
+colnames(df) <- c("ID", my_candidate)
+
+df <- df %>%
+  pivot_longer(names_to = "Candidate", 
+               values_to = "TRAITS", 
+               cols = -ID)
+
+df_final_post = merge(df_final_post, df, by = c("ID", "Candidate"))
+
+```
+
+
+```{r}
+
+df_final_post[, sort(my_candidate)] <- 0
+
+my_index <- cbind(seq_len(nrow(df_final_post)), 
+                  match(df_final_post$Candidate, names(df_final_post)[-1]))
+
+df_final_post[-1][my_index] <- 1
+
+```
+
+
+## Clean Data
+
+```{r}
+
+df_final_pre <- read.dta("clean_data/df08phone_d.dta") %>%
+  drop_na()
+
+df_final_post <- df_final_post %>%
+  drop_na()
+
+df_final_full <- full_join(df_final_pre, df_final_post)
+
+naes08_phone_full <- read.spss("raw_data/naes/naes08-phone-nat-rcs-data-full.sav",
+                  to.data.frame = TRUE, use.value.labels = FALSE) 
+
+naes08_phone_full <- naes08_phone_full %>%
   mutate(DATE_c = ymd(DATE_c)) %>%
   mutate(WEEK_c = cut.Date(DATE_c, breaks = "1 week", labels = FALSE))
 
+df_final_full_2 <- df_final_full %>%
+  rowwise() %>%
+  mutate(SINCERE = (NORMALIZED_FT + TRAITS) / 2,
+         STRATEGIC = (NORMALIZED_VIABILITY + NORMALIZED_ELECTABILITY) / 2) %>%
+  select(ID, Candidate, VoteCandidate, SINCERE, STRATEGIC) %>%
+  group_by(ID) %>%
+  mutate(SINCERE_MAX1 = max(SINCERE),
+         STRATEGIC_MAX1 = max(STRATEGIC)) %>%
+  mutate(SINCERE_MAX2 = ifelse(SINCERE == SINCERE_MAX1, 1, 0),
+         STRATEGIC_MAX2 = ifelse(STRATEGIC == STRATEGIC_MAX1, 1, 0)) %>%
+  filter(VoteCandidate == 1) 
+
 ```
+
+
+## Normalized Graphs
+
+```{r}
+
+# By day (aggregate)
+
+df_final_full_3 <- df_final_full_2 %>%
+  full_join(naes08_phone_full, by = c("ID" = "RKEY")) %>%
+  group_by(SINCERE_MAX2, STRATEGIC_MAX2, DATE_c) %>%
+  count() %>%
+  mutate(sincere_strategic = case_when(
+    (SINCERE_MAX2 == 0 & STRATEGIC_MAX2 == 0) ~ "irrational",
+    (SINCERE_MAX2 == 1 & STRATEGIC_MAX2 == 0) ~ "expressive",
+    (SINCERE_MAX2 == 0 & STRATEGIC_MAX2 == 1) ~ "instrumental",
+    (SINCERE_MAX2 == 1 & STRATEGIC_MAX2 == 1) ~ "ideal",
+    )) %>%
+  group_by(DATE_c) %>%
+  drop_na() %>%
+  mutate(percent = n / sum(n),
+         df = "naes08_phone_d")
+
+df_final_full_3 %>%
+  ggplot(aes(x = DATE_c, y = percent, color = sincere_strategic)) + 
+    geom_point() +
+    geom_smooth(method = "loess")
+
+# By day (candidate)
+
+df_final_full_3 <- df_final_full_2 %>%
+  inner_join(naes08_phone_full, by = c("ID" = "RKEY")) %>%
+  group_by(Candidate, SINCERE_MAX2, STRATEGIC_MAX2, DATE_c) %>%
+  count() %>%
+  mutate(sincere_strategic = case_when(
+    (SINCERE_MAX2 == 0 & STRATEGIC_MAX2 == 0) ~ 1,
+    (SINCERE_MAX2 == 1 & STRATEGIC_MAX2 == 0) ~ 2,
+    (SINCERE_MAX2 == 0 & STRATEGIC_MAX2 == 1) ~ 3,
+    (SINCERE_MAX2 == 1 & STRATEGIC_MAX2 == 1) ~ 4,
+    )) %>%
+  group_by(Candidate, DATE_c) %>%
+  mutate(percent = n / sum(n),
+         df = "naes08_phone_d")
+
+df_final_full_3 %>%
+  filter(sincere_strategic == 2) %>%
+  ggplot(aes(x = DATE_c, y = percent, color = Candidate)) + 
+    geom_point(size = 0.5) + 
+    geom_smooth(method = "loess") +
+    labs(
+      title = "Expressive Voting Over Time",
+      x = "Date",
+      y = "Percent Expressive Voters"
+    )
+
+df_final_full_3 %>%
+  filter(sincere_strategic == 3) %>%
+  ggplot(aes(x = DATE_c, y = percent, color = Candidate)) + 
+    geom_point(size = 0.5) + 
+    geom_smooth(method = "loess") +
+    labs(
+      title = "Instrumental Voting Over Time",
+      x = "Date",
+      y = "Percent Instrumental Voters"
+    )
+
+# By week (aggregate)
+
+df_final_full_3 <- df_final_full_2 %>%
+  full_join(naes08_phone_full, by = c("ID" = "RKEY")) %>%
+  group_by(SINCERE_MAX2, STRATEGIC_MAX2, WEEK_c) %>%
+  count() %>%
+  mutate(sincere_strategic = case_when(
+    (SINCERE_MAX2 == 0 & STRATEGIC_MAX2 == 0) ~ "irrational",
+    (SINCERE_MAX2 == 1 & STRATEGIC_MAX2 == 0) ~ "expressive",
+    (SINCERE_MAX2 == 0 & STRATEGIC_MAX2 == 1) ~ "instrumental",
+    (SINCERE_MAX2 == 1 & STRATEGIC_MAX2 == 1) ~ "ideal",
+    )) %>%
+  group_by(WEEK_c) %>%
+  drop_na() %>%
+  mutate(percent = n / sum(n),
+         df = "naes08_phone_d")
+
+df_final_full_3 %>%
+  ggplot(aes(x = WEEK_c, y = percent, color = sincere_strategic)) + 
+    geom_point() +
+    geom_smooth(method = "loess")
+
+# By week (candidate)
+
+df_final_full_3 <- df_final_full_2 %>%
+  inner_join(naes08_phone_full, by = c("ID" = "RKEY")) %>%
+  group_by(Candidate, SINCERE_MAX2, STRATEGIC_MAX2, WEEK_c) %>%
+  count() %>%
+  mutate(sincere_strategic = case_when(
+    (SINCERE_MAX2 == 0 & STRATEGIC_MAX2 == 0) ~ 1,
+    (SINCERE_MAX2 == 1 & STRATEGIC_MAX2 == 0) ~ 2,
+    (SINCERE_MAX2 == 0 & STRATEGIC_MAX2 == 1) ~ 3,
+    (SINCERE_MAX2 == 1 & STRATEGIC_MAX2 == 1) ~ 4,
+    )) %>%
+  group_by(Candidate, WEEK_c) %>%
+  mutate(percent = n / sum(n),
+         df = "naes08_phone_d")
+
+df_final_full_3 %>%
+  filter(sincere_strategic == 2) %>%
+  ggplot(aes(x = WEEK_c, y = percent, color = Candidate)) + 
+    geom_point(size = 0.5) + 
+    geom_smooth(method = "loess") +
+    labs(
+      title = "Expressive Voting Over Time",
+      x = "Date",
+      y = "Percent Expressive Voters"
+    )
+
+df_final_full_3 %>%
+  filter(sincere_strategic == 3) %>%
+  ggplot(aes(x = WEEK_c, y = percent, color = Candidate)) + 
+    geom_point(size = 0.5) + 
+    geom_smooth(method = "loess") +
+    labs(
+      title = "Instrumental Voting Over Time",
+      x = "Date",
+      y = "Percent Instrumental Voters"
+    )
+
+```
+
+
+## Variable Graphs
+
+```{r}
+
+# Feeling thermometers
+
+naes08_phone_full %>%
+  group_by(DATE_c) %>%
+  ggplot(aes(x = DATE_c)) + 
+    geom_smooth(aes(y = ABc01_c), method = "loess", se = FALSE, color = "#F8766D") + 
+    geom_smooth(aes(y = ABe01_c), method = "loess", se = FALSE, color = "#7CAE00") + 
+    geom_smooth(aes(y = ABo01_c), method = "loess", se = FALSE, color = "#00BFC4") +
+    labs(
+      title = "Feeling Thermometer Ratings Over Time"
+    )
+
+# Viability
+
+naes08_phone_full %>%
+  group_by(DATE_c) %>%
+  ggplot(aes(x = DATE_c)) + 
+    geom_smooth(aes(y = NAa06_c), method = "loess", se = FALSE, color = "#F8766D") + 
+    geom_smooth(aes(y = NAa07_c), method = "loess", se = FALSE, color = "#7CAE00") + 
+    geom_smooth(aes(y = NAa08_c), method = "loess", se = FALSE, color = "#00BFC4") +
+    labs(
+      title = "Candidate Viability Over Time"
+    ) 
+
+# Electability
+
+naes08_phone_full %>%
+  group_by(DATE_c) %>%
+  ggplot(aes(x = DATE_c)) + 
+    geom_smooth(aes(y = NBa05_c), method = "loess", se = FALSE, color = "#F8766D") + 
+    geom_smooth(aes(y = NBa06_c), method = "loess", se = FALSE, color = "#7CAE00") + 
+    geom_smooth(aes(y = NBa07_c), method = "loess", se = FALSE, color = "#00BFC4") +
+    labs(
+      title = "Candidate Electability Over Time"
+    ) 
+
+# Ideology
+
+naes08_phone_full %>%
+  group_by(DATE_c) %>%
+  ggplot(aes(x = DATE_c)) + 
+    geom_smooth(aes(y = ABc03_c), method = "loess", se = FALSE, color = "#F8766D") + 
+    geom_smooth(aes(y = ABe02_c), method = "loess", se = FALSE, color = "#7CAE00") + 
+    geom_smooth(aes(y = ABo04_c), method = "loess", se = FALSE, color = "#00BFC4") +
+    labs(
+      title = "Candidate Ideology Over Time"
+    ) 
+
+# ABc04_c, ABc05_c, ABc06_c, ABc07_c 
+# ABe03_c, ABe04_c, ABe05_c, ABe06_c 
+# ABo05_c, ABo06_c, ABo07_c, ABo08_c
+
+```
+
 
 
 ```{r include=FALSE}
@@ -48,3 +460,9 @@ rm(list = ls())
 
 ```
 
+
+## Miscellaneous
+
+```{r}
+
+```

@@ -343,20 +343,22 @@ df_final_2 %>%
   group_by(Candidate, SINCERE_MAX2, STRATEGIC_MAX2) %>%
   count() %>%
   group_by(Candidate) %>%
-  mutate(percent = n / sum(n)) %>%
-  write.csv("clean_data/df08phone_r_counts.csv")
+  mutate(percent = n / sum(n),
+         df = "df08phone_r") %>%
+  write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure3/df08phone_r_counts.csv")
 
 df_final_2 %>%
   group_by(SINCERE_MAX2, STRATEGIC_MAX2) %>%
   count() %>%
   group_by() %>%
-  mutate(percent = n / sum(n)) %>%
-  write.csv("clean_data/df08phone_r_counts_aggregate.csv")
+  mutate(percent = n / sum(n),
+         df = "df08phone_r") %>%
+  write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure3/df08phone_r_counts_aggregate.csv")
 
 ```
 
 
-## Make Graphs
+## Viability and Electability Graphs
 
 ```{r}
 
@@ -383,6 +385,171 @@ df_final %>%
       y = "Density"
     ) +
   ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure2/naes08_phone_r_viability.bmp", width = 7.5, height = 4.5)
+
+```
+
+
+## Demograhic Tables
+
+```{r}
+
+# Race
+
+df_final_2 %>%
+  inner_join(naes08_phone, by = c("ID" = "RKEY")) %>%
+  group_by(SINCERE_MAX2, STRATEGIC_MAX2, WC03_c) %>%
+  count() %>%
+  mutate(sincere_strategic = case_when(
+    (SINCERE_MAX2 == 0 & STRATEGIC_MAX2 == 0) ~ 1,
+    (SINCERE_MAX2 == 1 & STRATEGIC_MAX2 == 0) ~ 2,
+    (SINCERE_MAX2 == 0 & STRATEGIC_MAX2 == 1) ~ 3,
+    (SINCERE_MAX2 == 1 & STRATEGIC_MAX2 == 1) ~ 4,
+    )) %>%
+  group_by(WC03_c) %>%
+  mutate(percent = n / sum(n),
+         df = "naes08_phone_r",
+         race = case_when(
+           WC03_c == "1" ~ "WHITE",
+           WC03_c == "2" ~ "BLACK",
+           WC03_c == "3" ~ "ASIAN",
+           WC03_c == "4" ~ "NATIVE",
+           WC03_c == "5" ~ "HISPANIC",
+           WC03_c == "6" ~ "MIXED",
+           WC03_c == "7" ~ "OTHER")) %>%
+  write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure10/race/naes08_phone_r_race.csv")
+
+# Education
+
+df_final_2 %>%
+  inner_join(naes08_phone, by = c("ID" = "RKEY")) %>%
+  group_by(SINCERE_MAX2, STRATEGIC_MAX2, WA03_c) %>%
+  count() %>%
+  mutate(sincere_strategic = case_when(
+    (SINCERE_MAX2 == 0 & STRATEGIC_MAX2 == 0) ~ 1,
+    (SINCERE_MAX2 == 1 & STRATEGIC_MAX2 == 0) ~ 2,
+    (SINCERE_MAX2 == 0 & STRATEGIC_MAX2 == 1) ~ 3,
+    (SINCERE_MAX2 == 1 & STRATEGIC_MAX2 == 1) ~ 4,
+    )) %>%
+  group_by(WA03_c) %>%
+  mutate(percent = n / sum(n),
+         df = "naes08_phone_r",
+         education = case_when(
+           WA03_c == "1" ~ "GRADE8-",
+           WA03_c == "2" ~ "SOMEHS",
+           WA03_c == "3" ~ "HS",
+           WA03_c == "4" ~ "VOCATIONAL",
+           WA03_c == "5" ~ "SOMECOLLEGE",
+           WA03_c == "6" ~ "ASSOCIATES",
+           WA03_c == "7" ~ "BACHELORS",
+           WA03_c == "8" ~ "SOMEPROFESSIONAL",
+           WA03_c == "9" ~ "PROFESSIONAL")) %>%
+  write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure10/education/naes08_phone_r_education.csv")
+
+# Age
+
+df_final_2 %>%
+  inner_join(naes08_phone, by = c("ID" = "RKEY")) %>%
+  group_by(SINCERE_MAX2, STRATEGIC_MAX2, WA02_c) %>%
+  count() %>%
+  mutate(sincere_strategic = case_when(
+    (SINCERE_MAX2 == 0 & STRATEGIC_MAX2 == 0) ~ 1,
+    (SINCERE_MAX2 == 1 & STRATEGIC_MAX2 == 0) ~ 2,
+    (SINCERE_MAX2 == 0 & STRATEGIC_MAX2 == 1) ~ 3,
+    (SINCERE_MAX2 == 1 & STRATEGIC_MAX2 == 1) ~ 4,
+    )) %>%
+  group_by(WA02_c) %>%
+  mutate(percent = n / sum(n),
+         df = "naes08_phone_r",
+         age = WA02_c) %>%
+  write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure10/age/naes08_phone_r_age.csv")
+
+# Ideology
+
+df_final_2 %>%
+  inner_join(naes08_phone, by = c("ID" = "RKEY")) %>%
+  group_by(SINCERE_MAX2, STRATEGIC_MAX2, MA04_c) %>%
+  count() %>%
+  mutate(sincere_strategic = case_when(
+    (SINCERE_MAX2 == 0 & STRATEGIC_MAX2 == 0) ~ 1,
+    (SINCERE_MAX2 == 1 & STRATEGIC_MAX2 == 0) ~ 2,
+    (SINCERE_MAX2 == 0 & STRATEGIC_MAX2 == 1) ~ 3,
+    (SINCERE_MAX2 == 1 & STRATEGIC_MAX2 == 1) ~ 4,
+    )) %>%
+  group_by(MA04_c) %>%
+  mutate(percent = n / sum(n),
+         df = "naes08_phone_r",
+         ideology = case_when(
+           MA04_c == "1" ~ "VERYCONSERVATIVE",
+           MA04_c == "2" ~ "SOMEWHATCONSERVATIVE",
+           MA04_c == "3" ~ "MODERATE",
+           MA04_c == "4" ~ "SOMEWHATLIBERAL",
+           MA04_c == "5" ~ "VERYLIBERAL")) %>%
+  write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure10/ideology/naes08_phone_r_ideology.csv")
+
+# Party ID strength
+
+df_final_2 %>%
+  inner_join(naes08_phone, by = c("ID" = "RKEY")) %>%
+  group_by(SINCERE_MAX2, STRATEGIC_MAX2, MA02_c) %>%
+  count() %>%
+  mutate(sincere_strategic = case_when(
+    (SINCERE_MAX2 == 0 & STRATEGIC_MAX2 == 0) ~ 1,
+    (SINCERE_MAX2 == 1 & STRATEGIC_MAX2 == 0) ~ 2,
+    (SINCERE_MAX2 == 0 & STRATEGIC_MAX2 == 1) ~ 3,
+    (SINCERE_MAX2 == 1 & STRATEGIC_MAX2 == 1) ~ 4,
+    )) %>%
+  group_by(MA02_c) %>%
+  mutate(percent = n / sum(n),
+         df = "naes08_phone_r",
+         party_strength = case_when(
+           MA02_c == "1" ~ "STRONG",
+           MA02_c == "2" ~ "NOTVERYSTRONG")) %>%
+  write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure10/party_strength/naes08_phone_r_party_strength.csv")
+
+# Political interest
+
+df_final_2 %>%
+  inner_join(naes08_phone, by = c("ID" = "RKEY")) %>%
+  group_by(SINCERE_MAX2, STRATEGIC_MAX2, KA01_c) %>%
+  count() %>%
+  mutate(sincere_strategic = case_when(
+    (SINCERE_MAX2 == 0 & STRATEGIC_MAX2 == 0) ~ 1,
+    (SINCERE_MAX2 == 1 & STRATEGIC_MAX2 == 0) ~ 2,
+    (SINCERE_MAX2 == 0 & STRATEGIC_MAX2 == 1) ~ 3,
+    (SINCERE_MAX2 == 1 & STRATEGIC_MAX2 == 1) ~ 4,
+    )) %>%
+  group_by(KA01_c) %>%
+  mutate(percent = n / sum(n),
+         df = "naes08_phone_r",
+         political_interest = case_when(
+           KA01_c == "1" ~ "VERYCLOSELY",
+           KA01_c == "2" ~ "SOMEWHATCLOSELY",
+           KA01_c == "3" ~ "NOTTOOCLOSELY",
+           KA01_c == "4" ~ "NOTCLOSELYATALL")) %>%
+  write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure10/political_interest/naes08_phone_r_political_interest.csv")
+
+# Political efficacy
+
+df_final_2 %>%
+  inner_join(naes08_phone, by = c("ID" = "RKEY")) %>%
+  group_by(SINCERE_MAX2, STRATEGIC_MAX2, MB03_c) %>%
+  count() %>%
+  mutate(sincere_strategic = case_when(
+    (SINCERE_MAX2 == 0 & STRATEGIC_MAX2 == 0) ~ 1,
+    (SINCERE_MAX2 == 1 & STRATEGIC_MAX2 == 0) ~ 2,
+    (SINCERE_MAX2 == 0 & STRATEGIC_MAX2 == 1) ~ 3,
+    (SINCERE_MAX2 == 1 & STRATEGIC_MAX2 == 1) ~ 4,
+    )) %>%
+  group_by(MB03_c) %>%
+  mutate(percent = n / sum(n),
+         df = "naes08_phone_r",
+         efficacy = case_when(
+           MB03_c == "1" ~ "STRONGLYAGREE",
+           MB03_c == "2" ~ "SOMEWHATAGREE",
+           MB03_c == "3" ~ "SOMEWHATDISAGREE",
+           MB03_c == "4" ~ "STRONGLYDISAGREE",
+           MB03_c == "5" ~ "NEITHER")) %>%
+  write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure10/political_efficacy/naes08_phone_r_political_efficacy.csv")
 
 ```
 
