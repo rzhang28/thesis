@@ -58,6 +58,9 @@ df08phone <- naes08_phone %>%
          ABo05_c, ABo06_c, ABo07_c, ABo08_c,
          )
 
+colMeans(is.na(df08phone)) %>%
+    write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure14.csv")
+
 # Rename columns
 
 my_candidate <- c("CLINTON","EDWARDS","OBAMA")
