@@ -36,8 +36,6 @@ library(dplyr)
 ```{r}
 
 df08phone_d <- read.dta("clean_data/df08phone_d.dta")
-df08phone_d_v2 <- read.dta("clean_data/df08phone_d_v2.dta")
-df08phone_d_v3 <- read.dta("clean_data/df08phone_d_v3.dta")
 df08phone_r <- read.dta("clean_data/df08phone_r.dta")
 
 df04_national_d <- read.dta("clean_data/df04_national_d.dta")
@@ -70,35 +68,30 @@ df08phone_d_reg <- clogit(data = df08phone_d, formula = VoteCandidate ~ CLINTON
                             strata(ID))
 df08phone_d_reg
 
-df08phone_d_reg_v2 <- clogit(data = df08phone_d_v2, formula = VoteCandidate ~ CLINTON 
-                          + EDWARDS + NORMALIZED_FT + NORMALIZED_STRATEGY + NORMALIZED_IDEOLOGY + 
-                            strata(ID))
-df08phone_d_reg_v2
-
-df08phone_d_reg_v3 <- clogit(data = df08phone_d_v3, formula = VoteCandidate ~ CLINTON 
-                          + EDWARDS + NORMALIZED_FT + NORMALIZED_VIABILITY + NORMALIZED_ELECTABILITY + 
-                            NORMALIZED_IDEOLOGY + WA02_c + WA04_c + SOMEHS + HS + VOCATIONAL + 
-                            SOMECOLLEGE + ASSOCIATES + BACHELORS + SOMEPROFESSIONAL + PROFESSIONAL + BLACK +
-                            ASIAN + NATIVE + HISPANIC + MIXED + OTHER + FEMALE + WEAK + 
-                            SOMEWHATCLOSELY + NOTTOOCLOSELY + NOTCLOSELYATALL + 
-                            strata(ID))
-df08phone_d_reg_v3
-
-df08phone_d_reg_v4 <- multinom(data = df08phone_d_v3, formula = VoteCandidate ~ CLINTON 
-                          + EDWARDS + NORMALIZED_FT + NORMALIZED_VIABILITY + NORMALIZED_ELECTABILITY + 
-                            NORMALIZED_IDEOLOGY + WA02_c + WA04_c + SOMEHS + HS + VOCATIONAL + 
-                            SOMECOLLEGE + ASSOCIATES + BACHELORS + SOMEPROFESSIONAL + PROFESSIONAL + BLACK +
-                            ASIAN + NATIVE + HISPANIC + MIXED + OTHER + FEMALE + WEAK + 
-                            SOMEWHATCLOSELY + NOTTOOCLOSELY + NOTCLOSELYATALL)
-df08phone_d_reg_v4
-
-df08phone_d_reg_v5 <- stan_glm(data = df08phone_d_v3, formula = VoteCandidate ~ CLINTON 
-                          + EDWARDS + NORMALIZED_FT + NORMALIZED_VIABILITY + NORMALIZED_ELECTABILITY + 
-                            NORMALIZED_IDEOLOGY + WA02_c + WA04_c + SOMEHS + HS + VOCATIONAL + 
-                            SOMECOLLEGE + ASSOCIATES + BACHELORS + SOMEPROFESSIONAL + PROFESSIONAL + BLACK +
-                            ASIAN + NATIVE + HISPANIC + MIXED + OTHER + FEMALE + WEAK + 
-                            SOMEWHATCLOSELY + NOTTOOCLOSELY + NOTCLOSELYATALL, refresh = 0)
-print(df08phone_d_reg_v5, digits = 4)
+# df08phone_d_reg_v3 <- clogit(data = df08phone_d_v3, formula = VoteCandidate ~ CLINTON 
+#                           + EDWARDS + NORMALIZED_FT + NORMALIZED_VIABILITY + NORMALIZED_ELECTABILITY + 
+#                             NORMALIZED_IDEOLOGY + WA02_c + WA04_c + SOMEHS + HS + VOCATIONAL + 
+#                             SOMECOLLEGE + ASSOCIATES + BACHELORS + SOMEPROFESSIONAL + PROFESSIONAL + BLACK +
+#                             ASIAN + NATIVE + HISPANIC + MIXED + OTHER + FEMALE + WEAK + 
+#                             SOMEWHATCLOSELY + NOTTOOCLOSELY + NOTCLOSELYATALL + 
+#                             strata(ID))
+# df08phone_d_reg_v3
+# 
+# df08phone_d_reg_v4 <- multinom(data = df08phone_d_v3, formula = VoteCandidate ~ CLINTON 
+#                           + EDWARDS + NORMALIZED_FT + NORMALIZED_VIABILITY + NORMALIZED_ELECTABILITY + 
+#                             NORMALIZED_IDEOLOGY + WA02_c + WA04_c + SOMEHS + HS + VOCATIONAL + 
+#                             SOMECOLLEGE + ASSOCIATES + BACHELORS + SOMEPROFESSIONAL + PROFESSIONAL + BLACK +
+#                             ASIAN + NATIVE + HISPANIC + MIXED + OTHER + FEMALE + WEAK + 
+#                             SOMEWHATCLOSELY + NOTTOOCLOSELY + NOTCLOSELYATALL)
+# df08phone_d_reg_v4
+# 
+# df08phone_d_reg_v5 <- stan_glm(data = df08phone_d_v3, formula = VoteCandidate ~ CLINTON 
+#                           + EDWARDS + NORMALIZED_FT + NORMALIZED_VIABILITY + NORMALIZED_ELECTABILITY + 
+#                             NORMALIZED_IDEOLOGY + WA02_c + WA04_c + SOMEHS + HS + VOCATIONAL + 
+#                             SOMECOLLEGE + ASSOCIATES + BACHELORS + SOMEPROFESSIONAL + PROFESSIONAL + BLACK +
+#                             ASIAN + NATIVE + HISPANIC + MIXED + OTHER + FEMALE + WEAK + 
+#                             SOMEWHATCLOSELY + NOTTOOCLOSELY + NOTCLOSELYATALL, refresh = 0)
+# print(df08phone_d_reg_v5, digits = 4)
 
 df08phone_r_reg <- clogit(data = df08phone_r, formula = VoteCandidate ~ ROMNEY +
                             HUCKABEE + NORMALIZED_FT + NORMALIZED_VIABILITY + 
