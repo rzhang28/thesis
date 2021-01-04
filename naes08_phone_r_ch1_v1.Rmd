@@ -6,20 +6,24 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-
 knitr::opts_chunk$set(echo = TRUE)
+
+# Read relevant libraries.
+
 library(tidyverse)
 library(Hmisc)
 library(rqPen)
 library(vctrs)
 library(foreign)
-
 ```
 
 
-# Reading Data
+## Read Data
 
 ```{r warning = FALSE}
+# Read in the raw data file, deleting NAs and only filtering for
+# results before January 29, 2008 (since that is the date before Super Tuesday
+# primaries).
 
 naes08_phone <- read.spss("raw_data/naes/naes08-phone-nat-rcs-data-full.sav",
                   to.data.frame = TRUE, use.value.labels = FALSE) %>%
@@ -30,19 +34,14 @@ naes08_phone[naes08_phone == 999] <- NA
 ```
 
 
-## Cleaning Data
+## Clean Data (Part One - Select Columns)
 
 ```{r}
-
 df08phone <- naes08_phone %>%
 
-  # Voting RBa01_c
-  # Feeling thermometers AAh01, AAm01, AAr01
-  # Viability NAa02, NAa03, NAa04
-  # Electability NBa02, NBa03, NBa04 
-  # Ideology AAh02, AAm04, AAr02
-  # Traits AAh03, AAh04, AAh05, AAh06, AAh07, AAh08, AAm05, AAm06, AAm07, AAm08,
-  # AAm09, AAm10, AAr03, AAr04, AAr05, AAr06, AAr07, AAr08
+  # Only select columns that correspond to the survey questions that I am
+  # interested in, which includes question about favorability, viability,
+  # electability, ideology, and candidate traits.
     
   select(RKEY, RBa01_c, 
          AAh01_c, AAm01_c, AAr01_c,
@@ -57,7 +56,7 @@ df08phone <- naes08_phone %>%
          AAr03_c, AAr04_c, AAr05_c, AAr06_c, AAr07_c, AAr08_c
          )
 
-# rename columns
+# Rename columns.
 
 my_candidate <- c("HUCKABEE","MCCAIN","ROMNEY")
 my_candidate_id <- as.integer(c(2, 4, 6))
@@ -75,35 +74,34 @@ my_names <- c("ID", "voting",
               "Lead3", "Trust3", "Experience3", "Judgement3", "Ready3", "Honest3"
               )
 
-colnames(df08phone) <- my_names
-
+colnames(df08phone) <- my_names=
 ```
 
 
 ```{r}
+# Create a new columns that includes a column named VoteCandidate, which
+# displays the respondent's ultimate primary pick. This column is needed, since
+# it will be the dependent variable in my conditional logistic regression later.
 
-df <- data.frame(my_candidate_id, my_candidate, stringsAsFactors=FALSE)
+df <- data.frame(my_candidate_id, my_candidate, stringsAsFactors = FALSE)
 df08phone <-merge(df08phone, df, by.x = "voting",
                   by.y = "my_candidate_id", all.x=TRUE)
-names(df08phone)[names(df08phone)=="my_candidate"] <- "VoteCandidate"
-
+names(df08phone)[names(df08phone) == "my_candidate"] <- "VoteCandidate"
 ```
 
 
 ```{r eval=FALSE, include=FALSE}
-
-# verify column renaming, candidates and their number 1-5 mapping must be correct.
+# Verify that the column renaming, candidates, and their number 1-5 mapping are
+# all correct.
 
 str(df08phone)
-
 ```
 
 
-## Normalize Ratings
+## Clean Data (Part Two - Normalize Variables)
 
 ```{r warning=FALSE}
-
-# 1) Normalize feeling thermometers
+# 1. Build a function that normalizes feeling thermometer ratings. 
 
 my_rescale1 <- function(X) { 
   if (max(X, na.rm = TRUE) == min(X, na.rm = TRUE)) 
@@ -113,15 +111,19 @@ my_rescale1 <- function(X) {
             (max(X, na.rm = TRUE) - min(X, na.rm = TRUE)), 6)
 }
 
-# NORMALIZED_FT
-df08phone[, c("NORMALIZED_FT1", "NORMALIZED_FT2", "NORMALIZED_FT3")] <- t(
-  apply(df08phone[, c("Feeling1", "Feeling2", "Feeling3")],
+# Run feeling thermometer columns (each representing the feeling thermometer
+# rating for a different candidate) through the function.
+
+df08phone[, c("NORMALIZED_FT1", "NORMALIZED_FT2", "NORMALIZED_FT3")] <- t(apply(
+  df08phone[, c("Feeling1", "Feeling2", "Feeling3")],
         MARGIN = 1, FUN = my_rescale1))
 
-
-# 2) Normalize viability
+# 2/3. Build a function that normalizes viability and electability ratings. 
 
 my_rescale2 <- function(X) round(X / sum(X, na.rm = TRUE), 6)
+
+# Run viability columns (each representing the viability rating for a different
+# candidate) through the function.
 
 df08phone[, c("NORMALIZED_VIABILITY1", "NORMALIZED_VIABILITY2", 
               "NORMALIZED_VIABILITY3")] <- t(apply(
@@ -129,13 +131,17 @@ df08phone[, c("NORMALIZED_VIABILITY1", "NORMALIZED_VIABILITY2",
                               "Viability3")],
                 MARGIN = 1, FUN = my_rescale2))
 
+# Run electability columns (each representing the electability rating for a
+# different candidate) through the function.
+
 df08phone[, c("NORMALIZED_ELECTABILITY1", "NORMALIZED_ELECTABILITY2",
               "NORMALIZED_ELECTABILITY3")] <- t(apply(
                 df08phone[, c("Electability1", "Electability2", 
                               "Electability3")],
                 MARGIN = 1, FUN = my_rescale2))
 
-# 3) Rescale ideological distance
+# 4. Calculate ideological distance. Each column represents the ideological rating
+# for a different candidate.
 
 df08phone[, c("temp_1", "temp_2", "temp_3")] <- square(
   df08phone[, c("Ideology1", "Ideology2", "Ideology3")] -
@@ -160,7 +166,7 @@ df08phone <- df08phone %>%
                                                temp_max_min, 6))) %>%
   select(-starts_with("temp_") )
 
-# 4) Average candidate traits
+# 5. Average of all the relevant candidate traits. 
 
 df08phone$TRAITS1 = rowMeans(df08phone[, c("Lead1", "Trust1", "Experience1",
                                            "Judgement1", "Ready1", "Honest1")],
@@ -172,16 +178,15 @@ df08phone$TRAITS3 = rowMeans(df08phone[, c("Lead3", "Trust3", "Experience3",
                                            "Judgement3", "Ready3", "Honest3")],
                              na.rm = TRUE) / 10
 
-# 5) Convert NaN to NA
+# Convert NANs to NAs, which will eventually be dropped. 
 
 df08phone[df08phone == "NaN"] <- NA
-
 ```
  
  
 ```{r}
-
-# Verify  calculations
+# Verify my calculations, ensuring that all variables have been normalized
+# correctly.
 
 df08phone[, c("NORMALIZED_FT1", "NORMALIZED_FT2", "NORMALIZED_FT3", 
               "Feeling1", "Feeling2", "Feeling3")]
@@ -199,15 +204,14 @@ df08phone[, c("TRAITS2", "Lead2", "Trust2", "Experience2",
               "Judgement2", "Ready2", "Honest2")]
 df08phone[, c("TRAITS3", "Lead3", "Trust3", "Experience3", 
               "Judgement3", "Ready3", "Honest3")]
-
 ```
  
  
-## Pivoting Data (Part Two)
+## Clean Data (Part Three - Pivot Tibble)
 
 ```{r}
-
-# 1) Subset: df08phone_normalized_ft
+# 1. Pivot feeling thermometer ratings longer, since conditional logistic
+# regressions require multiple rows per respondent (1 row per candidate).
 
 my_cols <- c("ID", "VoteCandidate", "NORMALIZED_FT1", "NORMALIZED_FT2", 
              "NORMALIZED_FT3")
@@ -220,7 +224,8 @@ df <- df %>%
                cols = -c(ID, VoteCandidate))
 df_final <- df
 
-# 2) Subset: df08phone_normalized_viability
+# 2. Pivot viability ratings longer, since conditional logistic regressions
+# require multiple rows per respondent (1 row per candidate).
 
 my_cols <- c("ID", "NORMALIZED_VIABILITY1", "NORMALIZED_VIABILITY2", 
              "NORMALIZED_VIABILITY3")
@@ -232,13 +237,16 @@ df <- df %>%
                values_to = "NORMALIZED_VIABILITY", 
                cols = -ID)
 
+# Merge the pivoted viability ratings with the already-pivoted tibble.
+
 df_final = merge(df_final, df, by = c("ID", "Candidate"))
 
 # Convert VoteCandidate to 0, 1
 
 df_final$VoteCandidate <-  1 * (df_final$Candidate == df_final$VoteCandidate)
 
-# 3) Subset: df08phone_normalized_electability
+# 3. Pivot electability ratings longer, since conditional logistic regressions
+# require multiple rows per respondent (1 row per candidate).
 
 my_cols <- c("ID", "NORMALIZED_ELECTABILITY1", "NORMALIZED_ELECTABILITY2", 
              "NORMALIZED_ELECTABILITY3")
@@ -250,9 +258,12 @@ df <- df %>%
                values_to = "NORMALIZED_ELECTABILITY", 
                cols = -ID)
 
-df_final = merge(df_final, df, by=c("ID", "Candidate"))
+# Merge the pivoted electability ratings with the already-pivoted tibble.
 
-# 4) Subset: df08phone_normalized_ideology
+df_final = merge(df_final, df, by = c("ID", "Candidate"))
+
+# 4. Pivot ideology ratings longer, since conditional logistic regressions
+# require multiple rows per respondent (1 row per candidate).
 
 my_cols <- c("ID", "NORMALIZED_IDEOLOGY1", "NORMALIZED_IDEOLOGY2", 
              "NORMALIZED_IDEOLOGY3")
@@ -264,9 +275,12 @@ df <- df %>%
                values_to = "NORMALIZED_IDEOLOGY", 
                cols = -ID)
 
+# Merge the pivoted ideology ratings with the already-pivoted tibble.
+
 df_final = merge(df_final, df, by=c("ID", "Candidate"))
 
-# 5) Subset: df08phone_traits
+# 5. Pivot candidate traits ratings longer, since conditional logistic
+# regressions require multiple rows per respondent (1 row per candidate).
 
 my_cols <- c("ID", "TRAITS1", "TRAITS2", "TRAITS3")
 df <- df08phone[, my_cols]
@@ -277,88 +291,42 @@ df <- df %>%
                values_to = "TRAITS", 
                cols = -ID)
 
-df_final = merge(df_final, df, by = c("ID", "Candidate"))
+# Merge the pivoted character traits ratings with the already-pivoted tibble.
 
+df_final = merge(df_final, df, by = c("ID", "Candidate"))
 ```
 
 
 ```{r}
+# Create new columns using candidate names, assign 0 to all.
 
-# Create new columns using candidate names, assign 0 to all
 df_final[, sort(my_candidate)] <- 0
 
-# Get index when intersection column name/value matches
+# Get index when the intersection column name and value match, in order to
+# identify the candidate that each respondent voted for.
+
 my_index <- cbind(seq_len(nrow(df_final)), 
                   match(df_final$Candidate, names(df_final)[-1]))
 
-# Assign 1 to my_index cells
+# Assign 1 to my_index cells.
 df_final[-1][my_index] <- 1
 
 ```
 
 
-## Writing Cleaned Dataset
+## Write Cleaned Dataset
 
 ```{r}
-
-df_final_1 <- df_final %>%
-  select(-TRAITS) %>%
-  drop_na() 
-
-```
-
-
-```{r}
-
 df_final %>%
   drop_na() %>%
   write.dta("clean_data/df08phone_r.dta")
-
 ```
 
 
-# Calculating Buckets
-
-```{r}
-
-df_final_2 <- df_final %>%
-  rowwise() %>%
-  mutate(SINCERE = (NORMALIZED_FT + TRAITS) / 2,
-         STRATEGIC = (NORMALIZED_VIABILITY + NORMALIZED_ELECTABILITY) / 2) %>%
-  select(ID, Candidate, VoteCandidate, SINCERE, STRATEGIC) %>%
-  group_by(ID) %>%
-  mutate(SINCERE_MAX1 = max(SINCERE),
-         STRATEGIC_MAX1 = max(STRATEGIC)) %>%
-  mutate(SINCERE_MAX2 = ifelse(SINCERE == SINCERE_MAX1, 1, 0),
-         STRATEGIC_MAX2 = ifelse(STRATEGIC == STRATEGIC_MAX1, 1, 0)) %>%
-  filter(VoteCandidate == 1) %>%
-  drop_na()
-
-```
+##########
 
 
-```{r}
-
-df_final_2 %>%
-  group_by(Candidate, SINCERE_MAX2, STRATEGIC_MAX2) %>%
-  count() %>%
-  group_by(Candidate) %>%
-  mutate(percent = n / sum(n),
-         df = "df08phone_r") %>%
-  write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure3/df08phone_r_counts.csv")
-
-df_final_2 %>%
-  group_by(SINCERE_MAX2, STRATEGIC_MAX2) %>%
-  count() %>%
-  group_by() %>%
-  mutate(percent = n / sum(n),
-         df = "df08phone_r") %>%
-  write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure3/df08phone_r_counts_aggregate.csv")
-
-```
-
-
-## Viability and Electability Graphs
+## Graphs of Candidate Viability and Electability 
 
 ```{r}
 
@@ -389,11 +357,51 @@ df_final %>%
 ```
 
 
-## Demograhic Tables
+##########
+
+## Create Voter Classification Table
 
 ```{r}
+# Write new tibble that determines whether a respondent voted for the candidate
+# that he or she viewed most strategically, or for the candidate that he or she
+# viewed most sincerely, or both.
 
-# Race
+df_final_2 <- df_final %>%
+  rowwise() %>%
+  mutate(SINCERE = (NORMALIZED_FT + TRAITS) / 2,
+         STRATEGIC = (NORMALIZED_VIABILITY + NORMALIZED_ELECTABILITY) / 2) %>%
+  select(ID, Candidate, VoteCandidate, SINCERE, STRATEGIC) %>%
+  group_by(ID) %>%
+  mutate(SINCERE_MAX1 = max(SINCERE),
+         STRATEGIC_MAX1 = max(STRATEGIC)) %>%
+  mutate(SINCERE_MAX2 = ifelse(SINCERE == SINCERE_MAX1, 1, 0),
+         STRATEGIC_MAX2 = ifelse(STRATEGIC == STRATEGIC_MAX1, 1, 0)) %>%
+  filter(VoteCandidate == 1) %>%
+  drop_na()
+
+df_final_2 %>%
+  group_by(Candidate, SINCERE_MAX2, STRATEGIC_MAX2) %>%
+  count() %>%
+  group_by(Candidate) %>%
+  mutate(percent = n / sum(n),
+         df = "df08phone_r") %>%
+  write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure3/df08phone_r_counts.csv")
+
+df_final_2 %>%
+  group_by(SINCERE_MAX2, STRATEGIC_MAX2) %>%
+  count() %>%
+  group_by() %>%
+  mutate(percent = n / sum(n),
+         df = "df08phone_r") %>%
+  write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure3/df08phone_r_counts_aggregate.csv")
+
+```
+
+
+## Disaggregate Voter Classification by Demographics
+
+```{r}
+# Segment voter classifications by race.
 
 df_final_2 %>%
   inner_join(naes08_phone, by = c("ID" = "RKEY")) %>%
@@ -418,7 +426,7 @@ df_final_2 %>%
            WC03_c == "7" ~ "OTHER")) %>%
   write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure10/race/naes08_phone_r_race.csv")
 
-# Education
+# Segment voter classifications by level of education.
 
 df_final_2 %>%
   inner_join(naes08_phone, by = c("ID" = "RKEY")) %>%
@@ -445,7 +453,7 @@ df_final_2 %>%
            WA03_c == "9" ~ "PROFESSIONAL")) %>%
   write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure10/education/naes08_phone_r_education.csv")
 
-# Age
+# Segment voter classifications by age.
 
 df_final_2 %>%
   inner_join(naes08_phone, by = c("ID" = "RKEY")) %>%
@@ -463,7 +471,7 @@ df_final_2 %>%
          age = WA02_c) %>%
   write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure10/age/naes08_phone_r_age.csv")
 
-# Ideology
+# Segment voter classifications by ideology.
 
 df_final_2 %>%
   inner_join(naes08_phone, by = c("ID" = "RKEY")) %>%
@@ -486,7 +494,7 @@ df_final_2 %>%
            MA04_c == "5" ~ "VERYLIBERAL")) %>%
   write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure10/ideology/naes08_phone_r_ideology.csv")
 
-# Party ID strength
+# Segment voter classifications by strength of party identification.
 
 df_final_2 %>%
   inner_join(naes08_phone, by = c("ID" = "RKEY")) %>%
@@ -506,7 +514,7 @@ df_final_2 %>%
            MA02_c == "2" ~ "NOTVERYSTRONG")) %>%
   write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure10/party_strength/naes08_phone_r_party_strength.csv")
 
-# Political interest
+# Segment voter classifications by level of political interest.
 
 df_final_2 %>%
   inner_join(naes08_phone, by = c("ID" = "RKEY")) %>%
@@ -528,7 +536,7 @@ df_final_2 %>%
            KA01_c == "4" ~ "NOTCLOSELYATALL")) %>%
   write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure10/political_interest/naes08_phone_r_political_interest.csv")
 
-# Political efficacy
+# Segment voter classifications by level of political efficacy.
 
 df_final_2 %>%
   inner_join(naes08_phone, by = c("ID" = "RKEY")) %>%
@@ -550,13 +558,10 @@ df_final_2 %>%
            MB03_c == "4" ~ "STRONGLYDISAGREE",
            MB03_c == "5" ~ "NEITHER")) %>%
   write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure10/political_efficacy/naes08_phone_r_political_efficacy.csv")
-
 ```
 
 
 ```{r include=FALSE}
-
 rm(list = ls())
-
 ```
 
