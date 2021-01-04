@@ -1795,11 +1795,12 @@ df_final_full_reg_all %>%
   mutate(variable = factor(variable, levels = c("NORMALIZED_FT"),
                            labels = c("Feeling Thermometer"))) %>%
   ggplot(aes(x = week, y = coef)) +
-    # geom_hline(yintercept = 0, colour = gray(1 / 2), lty = 2) +
+    geom_hline(yintercept = 0, colour = gray(1 / 2), lty = 2) +
     geom_pointrange(aes(ymin = coef - se * interval2,
                         ymax = coef + se * interval2),
                     lwd = 1 / 2, shape = 21, fill = "WHITE") +
     geom_smooth(method = "loess") +
+    ylim(1, 8) + 
     theme_bw() +
     theme(legend.position = "none") + 
     labs(

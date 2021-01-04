@@ -86,6 +86,16 @@ colnames(df08phone) <- my_names
 
 ```{r}
 
+df08phone$Strategy1 <- (df08phone$Viability1 + df08phone$Electability1) / 2
+df08phone$Strategy2 <- (df08phone$Viability2 + df08phone$Electability2) / 2
+df08phone$Strategy3 <- (df08phone$Viability3 + df08phone$Electability3) / 2
+
+```
+
+
+
+```{r}
+
 df <- data.frame(my_candidate_id, my_candidate, stringsAsFactors = FALSE)
 df08phone <-merge(df08phone, df, by.x = "voting", 
                   by.y = "my_candidate_id", all.x = TRUE)
@@ -123,19 +133,13 @@ df08phone[, c("NORMALIZED_FT1", "NORMALIZED_FT2", "NORMALIZED_FT3")] <- t(apply(
   MARGIN = 1,
   FUN = my_rescale1))
 
-# 2) Normalize viability and electability
+# 2) Normalize strategy
 
 my_rescale2 <- function(X) round(X / sum(X, na.rm = TRUE), 6)
 
-df08phone[, c("NORMALIZED_VIABILITY1", "NORMALIZED_VIABILITY2",
-              "NORMALIZED_VIABILITY3")] <- t(apply(
-                df08phone[, c("Viability1", "Viability2", "Viability3")],
-                MARGIN = 1, FUN = my_rescale2))
-
-df08phone[, c("NORMALIZED_ELECTABILITY1", "NORMALIZED_ELECTABILITY2",
-              "NORMALIZED_ELECTABILITY3")] <- t(apply(
-                df08phone[, c("Electability1", "Electability2",
-                              "Electability3")],
+df08phone[, c("NORMALIZED_STRATEGY1", "NORMALIZED_STRATEGY2",
+              "NORMALIZED_STRATEGY3")] <- t(apply(
+                df08phone[, c("Strategy1", "Strategy2", "Strategy3")],
                 MARGIN = 1, FUN = my_rescale2))
 
 # 3) Rescale ideological distance
@@ -188,12 +192,9 @@ df08phone[df08phone == "NaN"] <- NA
 
 df08phone[, c("NORMALIZED_FT1", "NORMALIZED_FT2", "NORMALIZED_FT3", 
               "Feeling1", "Feeling2", "Feeling3")]
-df08phone[, c("NORMALIZED_VIABILITY1", "NORMALIZED_VIABILITY2", 
-              "NORMALIZED_VIABILITY3", "Viability1", "Viability2", 
-              "Viability3")]
-df08phone[, c("NORMALIZED_ELECTABILITY1", "NORMALIZED_ELECTABILITY2", 
-              "NORMALIZED_ELECTABILITY3", "Electability1", "Electability2", 
-              "Electability3")]
+df08phone[, c("NORMALIZED_STRATEGY1", "NORMALIZED_STRATEGY2", 
+              "NORMALIZED_STRATEGY3", "Strategy1", "Strategy2", 
+              "Strategy3")]
 df08phone[, c("NORMALIZED_IDEOLOGY1", "NORMALIZED_IDEOLOGY2",
               "NORMALIZED_IDEOLOGY3", "Ideology",
               "Ideology1", "Ideology2", "Ideology3")]
@@ -221,16 +222,16 @@ df <- df %>%
                cols = -c(ID, VoteCandidate))
 df_final <- df
 
-# 2) Subset: df08phone_normalized_viability
+# 2) Subset: df08phone_normalized_strategy
 
-my_cols <- c("ID", "NORMALIZED_VIABILITY1", "NORMALIZED_VIABILITY2",
-             "NORMALIZED_VIABILITY3")
+my_cols <- c("ID", "NORMALIZED_STRATEGY1", "NORMALIZED_STRATEGY2",
+             "NORMALIZED_STRATEGY3")
 df <- df08phone[, my_cols]
 colnames(df) <- c("ID", my_candidate)
 
 df <- df %>%
   pivot_longer(names_to = "Candidate", 
-               values_to = "NORMALIZED_VIABILITY", 
+               values_to = "NORMALIZED_STRATEGY", 
                cols = -ID)
 
 df_final = merge(df_final, df, by = c("ID", "Candidate"))
@@ -238,20 +239,6 @@ df_final = merge(df_final, df, by = c("ID", "Candidate"))
 # Convert Vote Candidate to 0, 1
 
 df_final$VoteCandidate <- 1 * (df_final$Candidate == df_final$VoteCandidate)
-
-# 3) Subset: df08phone_normalized_electability
-
-my_cols <- c("ID", "NORMALIZED_ELECTABILITY1", "NORMALIZED_ELECTABILITY2",
-             "NORMALIZED_ELECTABILITY3")
-df <- df08phone[, my_cols]
-colnames(df) <- c("ID", my_candidate)
-
-df <- df %>%
-  pivot_longer(names_to = "Candidate", 
-               values_to = "NORMALIZED_ELECTABILITY", 
-               cols = -ID)
-
-df_final = merge(df_final, df, by = c("ID", "Candidate"))
 
 # 4) Subset: df08phone_normalized_ideology
 
@@ -312,7 +299,7 @@ df_final_1 <- df_final %>%
 
 df_final %>%
   drop_na() %>%
-  write.dta("clean_data/df08phone_d.dta")
+  write.dta("clean_data/df08phone_d_v2.dta")
 
 ```
 
@@ -324,7 +311,7 @@ df_final %>%
 df_final_2 <- df_final %>%
   rowwise() %>%
   mutate(SINCERE = (NORMALIZED_FT + TRAITS) / 2,
-         STRATEGIC = (NORMALIZED_VIABILITY + NORMALIZED_ELECTABILITY) / 2) %>%
+         STRATEGIC = NORMALIZED_STRATEGY) %>%
   select(ID, Candidate, VoteCandidate, SINCERE, STRATEGIC) %>%
   group_by(ID) %>%
   mutate(SINCERE_MAX1 = max(SINCERE),

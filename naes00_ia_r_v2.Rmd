@@ -21,10 +21,10 @@ library(foreign)
 
 ```{r warning=FALSE}
 
-naes04 <- read.spss("raw_data/naes/naes04-nh.sav", to.data.frame=TRUE,
-                    use.value.labels=FALSE)
-naes04[naes04 == 998] <- NA
-naes04[naes04 == 999] <- NA
+naes00 <- read.spss("raw_data/naes/NAES-2000-IA-CS-Data.sav", 
+                    to.data.frame = TRUE, use.value.labels = FALSE)
+naes00[naes00 == 998] <- NA
+naes00[naes00 == 999] <- NA
 
 ```
 
@@ -33,61 +33,63 @@ naes04[naes04 == 999] <- NA
 
 ```{r}
 
-df04 <- naes04 %>%
+df00 <- naes00 %>%
 
-  # Voting cRB06
-  # Feeling thermometers cAB01, cAC04, cAC17, cAC26, cAC35, cAC44
-  # Viability from cNA01 to cNA06
-  # Electability from cNA09 to cNA26
-  # Ideology cAB27, cAC14, cAC25, cAC34, cAC43, cAC52
+  # Voting cR11
+  # Feeling thermometers cA01, cA21
+  # Viability from cN01 to cN02
+  # Electability from cN06/cN10 to cN08/cN12 (*need to explain why choosing
+  # Gore*)
+  # Ideology cA09, cA28
+  # Traits (not included) cA02, cA03, cA04, cA05, cA12, cA13, cA14, cA15
   
-  select(cKEY, cRB06, 
-         cAB01, cAC04,
-         cNA05, cNA03,
-         cNA21, cNA15,
+  select(ckey, cr11, 
+         ca01, ca21, 
+         cn01, cn02, 
+         cn06, cn08,
          
-         cMA06, 
-         cAB27, cAC14
+         cv04, 
+         ca09, ca28
          )
 
-# Rename columns
+# rename columns
 
-my_candidate <- c("KERRY","EDWARDS")
-my_candidate_id <- as.integer(c(5, 3))
+my_candidate <- c("BUSH", "MCCAIN")
+my_candidate_id <- as.integer(c(2, 6))
 
 my_names <- c("ID", "voting", 
-              "Feeling1", "Feeling2", 
+              "Feeling1", "Feeling2",
               "Viability1", "Viability2", 
-              "Electability1", "Electability2",
+              "Electability1", "Electability2", 
               
               "Ideology", 
               "Ideology1", "Ideology2"
               )
 
-colnames(df04) <- my_names
+colnames(df00) <- my_names
 
 ```
 
 
 ```{r}
 
-df04$Viability1 <- ifelse(is.na(df04$Viability1), 100 - df04$Viability2,
-                          df04$Viability1)
-df04$Viability2 <- ifelse(is.na(df04$Viability2), 100 - df04$Viability1,
-                          df04$Viability2)
+df00$Viability1 <- ifelse(is.na(df00$Viability1), 
+                          100 - df00$Viability2, df00$Viability1)
+df00$Viability2 <- ifelse(is.na(df00$Viability2), 
+                          100 - df00$Viability1, df00$Viability2)
 
-df04$Electability1 <- ifelse(is.na(df04$Electability1), 100 -
-                               df04$Electability2, df04$Electability1)
-df04$Electability2 <- ifelse(is.na(df04$Electability2), 100 -
-                               df04$Electability1, df04$Electability2)
+df00$Electability1 <- ifelse(is.na(df00$Electability1), 
+                             100 - df00$Electability2, df00$Electability1)
+df00$Electability2 <- ifelse(is.na(df00$Electability2), 
+                             100 - df00$Electability1, df00$Electability2)
 
 ```
 
 
 ```{r}
 
-df04$Strategy1 <- (df04$Viability1 + df04$Electability1) / 2
-df04$Strategy2 <- (df04$Viability2 + df04$Electability2) / 2
+df00$Strategy1 <- (df00$Viability1 + df00$Electability1) / 2
+df00$Strategy2 <- (df00$Viability2 + df00$Electability2) / 2
 
 ```
 
@@ -95,18 +97,18 @@ df04$Strategy2 <- (df04$Viability2 + df04$Electability2) / 2
 ```{r}
 
 df <- data.frame(my_candidate_id, my_candidate, stringsAsFactors = FALSE)
-df04 <-merge(df04, df, by.x = "voting", by.y = "my_candidate_id", all.x = TRUE)
-names(df04)[names(df04) == "my_candidate"] <- "VoteCandidate"
+df00 <- merge(df00, df, by.x = "voting", by.y = "my_candidate_id", all.x = TRUE)
+names(df00)[names(df00) == "my_candidate"] <- "VoteCandidate"
 
 ```
 
 
 ```{r eval=FALSE, include=FALSE}
 
-# Verify that the column renaming, candidates, and their number 1-5 mapping are
+# Cerify column renaming, candidates and their number 1-5 mapping must be
 # correct.
 
-str(df04)
+str(df00)
 
 ```
 
@@ -121,27 +123,27 @@ my_rescale1 <- function(X) {
   if (max(X, na.rm = TRUE) == min(X, na.rm = TRUE)) 
     X / sum(X, na.rm = TRUE)
   else
-    round((X - min(X, na.rm = TRUE)) /
+    round((X - min(X, na.rm = TRUE)) / 
             (max(X, na.rm = TRUE) - min(X, na.rm = TRUE)), 6)
 }
 
-df04[, c("NORMALIZED_FT1", "NORMALIZED_FT2")] <- t(apply(
-  df04[, c("Feeling1", "Feeling2")], MARGIN = 1, FUN = my_rescale1))
+df00[, c("NORMALIZED_FT1", "NORMALIZED_FT2")] <- t(apply(
+  df00[, c("Feeling1", "Feeling2")], MARGIN = 1, FUN = my_rescale1))
 
 # 2) Normalize strategy
 
 my_rescale2 <- function(X) round(X / sum(X, na.rm = TRUE), 6)
 
-df04[, c("NORMALIZED_STRATEGY1", "NORMALIZED_STRATEGY2")] <- t(apply(
-                df04[, c("Strategy1", "Strategy2")],
+df00[, c("NORMALIZED_STRATEGY1", "NORMALIZED_STRATEGY2")] <- t(apply(
+                df00[, c("Strategy1", "Strategy2")],
                 MARGIN = 1, FUN = my_rescale2))
 
 # 3) Rescale ideological distance
 
-df04[, c("temp_1", "temp_2")] <- square(
-  df04[, c("Ideology1", "Ideology2")] - df04[, "Ideology"])
+df00[, c("temp_1", "temp_2")] <- square(
+  df00[, c("Ideology1", "Ideology2")] - df00[, "Ideology"])
 
-df04 <- df04 %>%
+df00 <- df00 %>%
   rowwise() %>%
   mutate(temp_min = min(temp_1, temp_2)) %>%
   mutate(temp_max_min = max(temp_1, temp_2) - min(temp_1, temp_2)) %>%
@@ -157,19 +159,19 @@ df04 <- df04 %>%
 
 # 5) Convert NaN to NA
 
-df04[df04 == "NaN"] <- NA
+df00[df00 == "NaN"] <- NA
 
 ```
  
  
 ```{r}
 
-# Verify  calculations
+# Verify calculations
 
-df04[, c("NORMALIZED_FT1", "NORMALIZED_FT2", "Feeling1", "Feeling2")]
-df04[, c("NORMALIZED_STRATEGY1", "NORMALIZED_STRATEGY2", 
+df00[, c("NORMALIZED_FT1", "NORMALIZED_FT2", "Feeling1", "Feeling2")]
+df00[, c("NORMALIZED_STRATEGY1", "NORMALIZED_STRATEGY2", 
          "Strategy1", "Strategy2")]
-df04[, c("NORMALIZED_IDEOLOGY1", "NORMALIZED_IDEOLOGY2", "Ideology", 
+df00[, c("NORMALIZED_IDEOLOGY1", "NORMALIZED_IDEOLOGY2", 
          "Ideology1", "Ideology2")]
 
 ```
@@ -179,10 +181,10 @@ df04[, c("NORMALIZED_IDEOLOGY1", "NORMALIZED_IDEOLOGY2", "Ideology",
 
 ```{r}
 
-# 1) Subset: df04_normalized_ft
+# 1) Subset: df00_normalized_ft
 
 my_cols <- c("ID", "VoteCandidate", "NORMALIZED_FT1", "NORMALIZED_FT2")
-df <- df04[, my_cols]
+df <- df00[, my_cols]
 colnames(df) <- c("ID", "VoteCandidate", my_candidate)
 
 df <- df %>%
@@ -194,7 +196,7 @@ df_final <- df
 # 2) Subset: df08phone_normalized_strategy
 
 my_cols <- c("ID", "NORMALIZED_STRATEGY1", "NORMALIZED_STRATEGY2")
-df <- df04[, my_cols]
+df <- df00[, my_cols]
 colnames(df) <- c("ID", my_candidate)
 
 df <- df %>%
@@ -204,14 +206,13 @@ df <- df %>%
 
 df_final = merge(df_final, df, by = c("ID", "Candidate"))
 
-# Convert VoteCandidate to 0, 1
-
+# convert VotingCandata to 1, 0
 df_final$VoteCandidate <-  1 * (df_final$Candidate == df_final$VoteCandidate)
 
-# 4) Subset: df04_normalized_ideology
+# 4) Subset: df00_normalized_ideology
 
 my_cols <- c("ID", "NORMALIZED_IDEOLOGY1", "NORMALIZED_IDEOLOGY2")
-df <- df04[, my_cols]
+df <- df00[, my_cols]
 colnames(df) <- c("ID", my_candidate)
 
 df <- df %>%
@@ -219,7 +220,7 @@ df <- df %>%
                values_to = "NORMALIZED_IDEOLOGY", 
                cols = -ID)
 
-df_final = merge(df_final, df, by=c("ID", "Candidate"))
+df_final = merge(df_final, df, by = c("ID", "Candidate"))
 
 ```
 
@@ -253,7 +254,7 @@ df_final_1 <- df_final %>%
 
 df_final %>%
   drop_na() %>%
-  write.dta("clean_data/df04_nh_d_v2.dta")
+  write.dta("clean_data/df00_ia_r_v2.dta")
 
 ```
 
@@ -285,16 +286,16 @@ df_final_2 %>%
   count() %>%
   group_by(Candidate) %>%
   mutate(percent = n / sum(n),
-         df = "df04_nh_d") %>%
-  write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure3/df04_nh_d_counts.csv")
+         df = "df00_ia_r") %>%
+  write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure3/df00_ia_r_counts.csv")
 
 df_final_2 %>%
   group_by(SINCERE_MAX2, STRATEGIC_MAX2) %>%
   count() %>%
   group_by() %>%
   mutate(percent = n / sum(n),
-         df = "df04_nh_d") %>%
-  write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure3/df04_nh_d_counts_aggregate.csv")
+         df = "df00_ia_r") %>%
+  write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure3/df00_ia_r_counts_aggregate.csv")
 
 ```
 
@@ -313,7 +314,7 @@ df_final %>%
       x = "Normalized Electability",
       y = "Density"
     ) +
-  ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure2/naes04_nh_d_electability.bmp", width = 7.5, height = 4.5)
+  ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure2/naes00_ia_r_electability.bmp", width = 7.5, height = 4.5)
 
 df_final %>%
   ggplot(aes(x = NORMALIZED_VIABILITY)) +
@@ -325,7 +326,7 @@ df_final %>%
       x = "Normalized Viability",
       y = "Density"
     ) +
-  ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure2/naes04_nh_d_viability.bmp", width = 7.5, height = 4.5)
+  ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure2/naes00_ia_r_viability.bmp", width = 7.5, height = 4.5)
 
 ```
 

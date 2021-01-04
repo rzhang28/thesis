@@ -1,0 +1,275 @@
+---
+title: "anes"
+author: "Ryan Zhang"
+date: "10/12/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(Hmisc)
+library(rqPen)
+library(vctrs)
+library(foreign)
+
+```
+
+
+# Reading Data
+
+```{r warning = FALSE}
+
+naes04 <- read.spss("raw_data/naes/naes04-nh.sav", to.data.frame=TRUE, use.value.labels=FALSE)
+naes04[naes04 == 998] <- NA
+naes04[naes04 == 999] <- NA
+
+```
+
+
+## Cleaning Data
+
+## Repositioning columns  
+
+```{r}
+
+df04 <- naes04 %>%
+
+  # Voting cRB06
+  # Feeling thermometers cAB01, cAC04, cAC17, cAC26, cAC35, cAC44
+  # Traits from cAC06 to cAC11, from cAC18 to cAC23, from cAC27 to cAC32, from cAC36 to cAC41, from cAC45 to cAC50
+  # Ideology cAB27, cAC14, cAC25, cAC34, cAC43, cAC52
+  # Viability from cNA01 to cNA06
+  # Electability from cNA09 to cNA26
+  
+  select(cKEY, cRB06, 
+         cAB01, cAC04, cAC17, cAC26,
+         cNA05, cNA03, cNA01, cNA02,
+         cNA21, cNA15, cNA09, cNA12,
+         
+         cMA06, 
+         cAB27, cAC14, cAC25, cAC34,
+         
+         cAB02, cAB03, cAB04, cAB05, cAB06, cAB07, 
+         cAC06, cAC07, cAC08, cAC09, cAC10, cAC11,
+         cAC18, cAC19, cAC20, cAC21, cAC22, cAC23,
+         cAC27, cAC28, cAC29, cAC30, cAC31, cAC32,
+         )
+
+# rename columns
+
+my_candidate <- c("KERRY","EDWARDS","CLARK", "DEAN")
+my_candidate_id <- as.integer(c(5, 3, 1, 2))
+
+my_names <- c("ID", "voting", 
+              "Feeling1", "Feeling2", "Feeling3", "Feeling4", 
+              "Viability1", "Viability2", "Viability3", "Viability4", 
+              "Electability1", "Electability2", "Electability3", "Electability4",
+              
+              "Ideology", 
+              "Ideology1", "Ideology2", "Ideology3", "Ideology4",
+              
+              "Cares1", "Inspire1", "Lead1", "Trust1", "Values1", "Know1",
+              "Cares2", "Inspire2", "Lead2", "Trust2", "Values2", "Know2",
+              "Cares3", "Inspire3", "Lead3", "Trust3", "Values3", "Know3",
+              "Cares4", "Inspire4", "Lead4", "Trust4", "Values4", "Know4"
+              )
+
+colnames(df04) <- my_names
+
+```
+
+
+```{r}
+
+df <- data.frame(my_candidate_id, my_candidate, stringsAsFactors=FALSE)
+df04 <-merge(df04, df, by.x = "voting", by.y = "my_candidate_id", all.x=TRUE)
+names(df04)[names(df04)=="my_candidate"] <- "VoteCandidate"
+
+```
+
+
+```{r eval=FALSE, include=FALSE}
+
+# verify column renaming, candidates and their number 1-5 mapping must be correct.
+
+str(df04)
+
+```
+
+
+## Normalize ratings
+
+```{r warning=FALSE}
+
+# 1) Normalize feeling thermometers
+
+my_rescale1 <- function(X) { 
+  if (max(X, na.rm = TRUE) == min(X, na.rm = TRUE)) 
+    X / sum(X, na.rm = TRUE)
+  else
+    round((X - min(X, na.rm = TRUE)) / (max(X, na.rm = TRUE) - min(X, na.rm = TRUE)), 6)
+}
+
+# NORMALIZED_FT
+df04[, c("NORMALIZED_FT1", "NORMALIZED_FT2", "NORMALIZED_FT3", "NORMALIZED_FT4")] <- t(apply(df04[, c("Feeling1", "Feeling2", "Feeling3", "Feeling4")], MARGIN = 1, FUN = my_rescale1))
+
+
+# 2) Normalize viability
+
+my_rescale2 <- function(X) round(X / sum(X, na.rm = TRUE), 6)
+
+# NORMALIZED_VIABILITY
+df04[, c("NORMALIZED_VIABILITY1", "NORMALIZED_VIABILITY2", "NORMALIZED_VIABILITY3", "NORMALIZED_VIABILITY4")] <- t(apply(df04[, c("Viability1", "Viability2", "Viability3", "Viability4")], MARGIN = 1, FUN = my_rescale2))
+
+# NORMALIZED_ELECTABILITY 
+df04[, c("NORMALIZED_ELECTABILITY1", "NORMALIZED_ELECTABILITY2", "NORMALIZED_ELECTABILITY3", "NORMALIZED_ELECTABILITY4")] <- t(apply(df04[, c("Electability1", "Electability2", "Electability3", "Electability4")], MARGIN = 1, FUN = my_rescale2))
+
+
+# 3) Manipulate ideological distance
+
+# IDEOLOGY
+df04[, c("NORMALIZED_IDEOLOGY1", "NORMALIZED_IDEOLOGY2", "NORMALIZED_IDEOLOGY3", "NORMALIZED_IDEOLOGY4")] <- square(df04[, c("Ideology1", "Ideology2", "Ideology3", "Ideology4")] - df04[, "Ideology"])
+
+# rescale ideological distance
+
+df04[, c("NORMALIZED_IDEOLOGY1", "NORMALIZED_IDEOLOGY2", "NORMALIZED_IDEOLOGY3", "NORMALIZED_IDEOLOGY4")] <- t(apply(df04[, c("NORMALIZED_IDEOLOGY1", "NORMALIZED_IDEOLOGY2", "NORMALIZED_IDEOLOGY3", "NORMALIZED_IDEOLOGY4")], MARGIN = 1, FUN = my_rescale1))
+
+
+# 4) Average candidate traits
+
+# TRAITS
+df04$TRAITS1 = rowMeans(df04[, c("Cares1", "Inspire1", "Lead1", "Trust1", "Values1", "Know1")], na.rm = TRUE) / 10
+df04$TRAITS2 = rowMeans(df04[, c("Cares2", "Inspire2", "Lead2", "Trust2", "Values2", "Know2")], na.rm = TRUE) / 10
+df04$TRAITS3 = rowMeans(df04[, c("Cares3", "Inspire3", "Lead3", "Trust3", "Values3", "Know3")], na.rm = TRUE) / 10
+df04$TRAITS4 = rowMeans(df04[, c("Cares4", "Inspire4", "Lead4", "Trust4", "Values4", "Know4")], na.rm = TRUE) / 10
+
+
+# 5) Convert NaN to NA
+
+df04[df04=="NaN"] <- NA
+
+```
+ 
+ 
+```{r}
+
+# verify  calculations
+
+df04[, c("NORMALIZED_FT1", "NORMALIZED_FT2", "NORMALIZED_FT3", "NORMALIZED_FT4", "Feeling1", "Feeling2", "Feeling3", "Feeling4")]
+df04[, c("NORMALIZED_VIABILITY1", "NORMALIZED_VIABILITY2", "NORMALIZED_VIABILITY3", "NORMALIZED_VIABILITY4", "Viability1", "Viability2", "Viability3", "Viability4")]
+df04[, c("NORMALIZED_ELECTABILITY1", "NORMALIZED_ELECTABILITY2", "NORMALIZED_ELECTABILITY3", "NORMALIZED_ELECTABILITY4", "Electability1", "Electability2", "Electability3", "Electability4")]
+df04[, c("NORMALIZED_IDEOLOGY1", "NORMALIZED_IDEOLOGY2", "NORMALIZED_IDEOLOGY3", "NORMALIZED_IDEOLOGY4", "Ideology1", "Ideology2", "Ideology3", "Ideology4")]
+df04[, c("TRAITS1", "Cares1", "Inspire1", "Lead1", "Trust1", "Values1", "Know1")]
+df04[, c("TRAITS2", "Cares2", "Inspire2", "Lead2", "Trust2", "Values2", "Know2")]
+df04[, c("TRAITS3", "Cares3", "Inspire3", "Lead3", "Trust3", "Values3", "Know3")]
+df04[, c("TRAITS4", "Cares4", "Inspire4", "Lead4", "Trust4", "Values4", "Know4")]
+
+```
+ 
+ 
+## Pivoting Data (Part Two)
+
+```{r}
+
+# 1) Subset: df04_normalized_ft
+
+my_cols <- c("ID", "VoteCandidate", "NORMALIZED_FT1", "NORMALIZED_FT2", "NORMALIZED_FT3", "NORMALIZED_FT4")
+df <- df04[, my_cols]
+colnames(df) <- c("ID", "VoteCandidate", my_candidate)
+
+df <- df %>%
+  pivot_longer(names_to = "Candidate", 
+               values_to = "NORMALIZED_FT", 
+               cols = -c(ID, VoteCandidate))
+df_final <- df
+
+
+# 2) Subset: df04_normalized_viability
+
+my_cols <- c("ID", "NORMALIZED_VIABILITY1", "NORMALIZED_VIABILITY2", "NORMALIZED_VIABILITY3", "NORMALIZED_VIABILITY4")
+df <- df04[, my_cols]
+colnames(df) <- c("ID", my_candidate)
+
+df <- df %>%
+  pivot_longer(names_to = "Candidate", 
+               values_to = "NORMALIZED_VIABILITY", 
+               cols = -ID)
+
+df_final = merge(df_final, df, by=c("ID", "Candidate"))
+
+# convert VotingCandata to 1, 0
+df_final$VoteCandidate <-  1 * (df_final$Candidate == df_final$VoteCandidate)
+
+# 3) Subset: df04_normalized_electability
+
+my_cols <- c("ID", "NORMALIZED_ELECTABILITY1", "NORMALIZED_ELECTABILITY2", "NORMALIZED_ELECTABILITY3", "NORMALIZED_ELECTABILITY4")
+df <- df04[, my_cols]
+colnames(df) <- c("ID", my_candidate)
+
+df <- df %>%
+  pivot_longer(names_to = "Candidate", 
+               values_to = "NORMALIZED_ELECTABILITY", 
+               cols = -ID)
+
+df_final = merge(df_final, df, by=c("ID", "Candidate"))
+
+
+# 4) Subset: df04_normalized_ideology
+
+my_cols <- c("ID", "NORMALIZED_IDEOLOGY1", "NORMALIZED_IDEOLOGY2", "NORMALIZED_IDEOLOGY3", "NORMALIZED_IDEOLOGY4")
+df <- df04[, my_cols]
+colnames(df) <- c("ID", my_candidate)
+
+df <- df %>%
+  pivot_longer(names_to = "Candidate", 
+               values_to = "NORMALIZED_IDEOLOGY", 
+               cols = -ID)
+
+df_final = merge(df_final, df, by=c("ID", "Candidate"))
+
+
+# 5) Subset: df04_traits
+
+my_cols <- c("ID", "TRAITS1", "TRAITS2", "TRAITS3", "TRAITS4")
+df <- df04[, my_cols]
+colnames(df) <- c("ID", my_candidate)
+
+df <- df %>%
+  pivot_longer(names_to = "Candidate", 
+               values_to = "TRAITS", 
+               cols = -ID)
+
+df_final = merge(df_final, df, by=c("ID", "Candidate"))
+
+```
+
+
+## Writing Cleaned Dataset
+
+```{r}
+
+df_final_1 <- df_final %>%
+  select(-TRAITS) %>%
+  drop_na() 
+
+```
+
+
+```{r}
+
+df_final %>%
+  select(-TRAITS) %>%
+  drop_na() %>%
+  write.dta("clean_data/df04_nh_d.dta")
+
+```
+
+
+```{r include=FALSE}
+
+rm(list=ls())
+
+```
+

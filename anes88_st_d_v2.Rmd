@@ -124,6 +124,17 @@ colnames(df88st) <- my_names
 
 ```{r}
 
+df88st$Strategy1 <- (df88st$Viability1 + df88st$Electability1) / 2
+df88st$Strategy2 <- (df88st$Viability2 + df88st$Electability2) / 2
+df88st$Strategy3 <- (df88st$Viability3 + df88st$Electability3) / 2
+df88st$Strategy4 <- (df88st$Viability4 + df88st$Electability4) / 2
+df88st$Strategy5 <- (df88st$Viability5 + df88st$Electability5) / 2
+
+```
+
+
+```{r}
+
 df <- data.frame(my_candidate_id, my_candidate, stringsAsFactors = FALSE)
 df88st <-merge(df88st, df, by.x = "voting", by.y = "my_candidate_id", 
                all.x = TRUE)
@@ -161,25 +172,14 @@ df88st[, c("NORMALIZED_FT1", "NORMALIZED_FT2", "NORMALIZED_FT3",
              df88st[, c("Feeling1", "Feeling2", "Feeling3", "Feeling4", 
                         "Feeling5")], MARGIN = 1, FUN = my_rescale1))
 
-# 2) Normalize viability
+# 2) Normalize strategy
 
 my_rescale2 <- function(X) round(X / sum(X, na.rm = TRUE), 6)
 
-df88st[, c("NORMALIZED_VIABILITY1", "NORMALIZED_VIABILITY2", 
-           "NORMALIZED_VIABILITY3", "NORMALIZED_VIABILITY4", 
-           "NORMALIZED_VIABILITY5")] <- t(apply(df88st[, c("Viability1", 
-                                                           "Viability2", 
-                                                           "Viability3", 
-                                                           "Viability4", 
-                                                           "Viability5")], 
-                                                MARGIN = 1, FUN = my_rescale2))
-
-df88st[, c("NORMALIZED_ELECTABILITY1", "NORMALIZED_ELECTABILITY2", 
-           "NORMALIZED_ELECTABILITY3", "NORMALIZED_ELECTABILITY4", 
-           "NORMALIZED_ELECTABILITY5")] <- t(apply(
-             df88st[, c("Electability1", "Electability2", "Electability3", 
-                        "Electability4", "Electability5")], 
-             MARGIN = 1, FUN = my_rescale2))
+df88st[, c("NORMALIZED_STRATEGY1", "NORMALIZED_STRATEGY2",
+         "NORMALIZED_STRATEGY3", "NORMALIZED_STRATEGY4", "NORMALIZED_STRATEGY5")] <- t(apply(
+                df88st[, c("Strategy1", "Strategy2", "Strategy3", "Strategy4", "Strategy5")],
+                MARGIN = 1, FUN = my_rescale2))
 
 # 3) Rescale ideological distance
 
@@ -241,14 +241,9 @@ df88st[df88st == "NaN"] <- NA
 df88st[, c("NORMALIZED_FT1", "NORMALIZED_FT2", "NORMALIZED_FT3", 
            "NORMALIZED_FT4", "NORMALIZED_FT5", "Feeling1", "Feeling2", 
            "Feeling3", "Feeling4", "Feeling5")]
-df88st[, c("NORMALIZED_VIABILITY1", "NORMALIZED_VIABILITY2", 
-           "NORMALIZED_VIABILITY3", "NORMALIZED_VIABILITY4", 
-           "NORMALIZED_VIABILITY5", "Viability1", "Viability2", "Viability3", 
-           "Viability4", "Viability5")]
-df88st[, c("NORMALIZED_ELECTABILITY1", "NORMALIZED_ELECTABILITY2", 
-           "NORMALIZED_ELECTABILITY3", "NORMALIZED_ELECTABILITY4", 
-           "NORMALIZED_ELECTABILITY5", "Electability1", "Electability2", 
-           "Electability3", "Electability4", "Electability5")]
+df88st[, c("NORMALIZED_STRATEGY1", "NORMALIZED_STRATEGY2", "NORMALIZED_STRATEGY3",
+         "NORMALIZED_STRATEGY4", "NORMALIZED_STRATEGY5",
+         "Strategy1", "Strategy2", "Strategy3", "Strategy4", "Strategy5")]
 df88st[, c("NORMALIZED_IDEOLOGY1", "NORMALIZED_IDEOLOGY2", 
            "NORMALIZED_IDEOLOGY3", "NORMALIZED_IDEOLOGY4", 
            "NORMALIZED_IDEOLOGY5", "Ideology", "Ideology1", "Ideology2", 
@@ -278,37 +273,23 @@ df <- df %>%
                cols = -c(ID, VoteCandidate))
 df_final <- df
 
-# 2) Subset: df88st_normalized_viability
+# 2) Subset: df08phone_normalized_strategy
 
-my_cols <- c("ID", "NORMALIZED_VIABILITY1", "NORMALIZED_VIABILITY2", "NORMALIZED_VIABILITY3", "NORMALIZED_VIABILITY4", "NORMALIZED_VIABILITY5")
+my_cols <- c("ID", "NORMALIZED_STRATEGY1", "NORMALIZED_STRATEGY2",
+             "NORMALIZED_STRATEGY3", "NORMALIZED_STRATEGY4". "NORMALIZED_STRATEGY5")
 df <- df88st[, my_cols]
 colnames(df) <- c("ID", my_candidate)
 
 df <- df %>%
   pivot_longer(names_to = "Candidate", 
-               values_to = "NORMALIZED_VIABILITY", 
+               values_to = "NORMALIZED_STRATEGY", 
                cols = -ID)
 
-df_final = merge(df_final, df, by=c("ID", "Candidate"))
+df_final = merge(df_final, df, by = c("ID", "Candidate"))
 
 # Convert VoteCandidate to 0, 1
 
 df_final$VoteCandidate <-  1 * (df_final$Candidate == df_final$VoteCandidate)
-
-# 3) Subset: df88st_normalized_electability
-
-my_cols <- c("ID", "NORMALIZED_ELECTABILITY1", "NORMALIZED_ELECTABILITY2", 
-             "NORMALIZED_ELECTABILITY3", "NORMALIZED_ELECTABILITY4", 
-             "NORMALIZED_ELECTABILITY5")
-df <- df88st[, my_cols]
-colnames(df) <- c("ID", my_candidate)
-
-df <- df %>%
-  pivot_longer(names_to = "Candidate", 
-               values_to = "NORMALIZED_ELECTABILITY", 
-               cols = -ID)
-
-df_final = merge(df_final, df, by = c("ID", "Candidate"))
 
 # 4) Subset: df88st_normalized_ideology
 
@@ -370,7 +351,7 @@ df_final_1 <- df_final %>%
 
 df_final %>%
   drop_na() %>%
-  write.dta("clean_data/df88st_d.dta")
+  write.dta("clean_data/df88st_d_v2.dta")
 
 ```
 

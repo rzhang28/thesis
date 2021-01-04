@@ -1,0 +1,333 @@
+---
+title: "anes"
+author: "Ryan Zhang"
+date: "10/12/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(Hmisc)
+library(rqPen)
+library(vctrs)
+library(foreign)
+
+```
+
+
+# Reading Data
+
+```{r warning=FALSE}
+
+# Reading in the three datasets.
+
+anes84_national <- spss.get("raw_data/anes/anes84-national.por", 
+                            use.value.labels = TRUE)
+anes84_cm <- spss.get("raw_data/anes/anes84-continuous-monitoring.por", 
+                      use.value.labels = TRUE)
+
+```
+
+
+## Cleaning Data
+
+## Repositioning columns  
+
+```{r}
+
+df84cm <- anes84_cm %>%
+  
+  # Select ID, voting, lib/con and feeling thermometer, viability, and 
+  # electability
+  
+  # Voting VCM0735
+  # Feeling thermometers from VCM0220 to VCM0232
+  # Traits from VCM0437 to VCM0573
+  # Ideology from VCM0610 to VCM0637
+  # Viability from VCM0311 to VCM0316
+  # Electability from VCM1001 to VCM1007 
+  
+  select(VCM0001, VCM0735, 
+         VCM0222, VCM0220, VCM0227, VCM0232,
+         VCM0311, VCM0312, VCM0314, VCM0316,
+         VCM1002, VCM1003, VCM1005, VCM1007,
+         
+         VCM0613, 
+         VCM0625, VCM0621, VCM0629, VCM0633,
+         
+         VCM0438, VCM0444, VCM0445, VCM0447, 
+         VCM0503, VCM0509, VCM0510, VCM0512, 
+         VCM0522, VCM0528, VCM0529, VCM0531,
+         VCM0540, VCM0546, VCM0547, VCM0549, 
+         )
+
+my_candidate <- c("MONDALE","GLENN","JACKSON","HART")
+my_candidate_id <- as.integer(c(1, 2, 3, 5))
+
+my_names <- c("ID", "voting", 
+              "Feeling1", "Feeling2", "Feeling3", "Feeling4",
+              "Viability1", "Viability2", "Viability3", "Viability4",
+              "Electability1", "Electability2", "Electability3", 
+              "Electability4",
+              
+              "Ideology", 
+              "Ideology1", "Ideology2", "Ideology3", "Ideology4",
+              
+              "Inspire1", "Decent1", "Cares1", "Know1",
+              "Inspire2", "Decent2", "Cares2", "Know2",
+              "Inspire3", "Decent3", "Cares3", "Know3",
+              "Inspire4", "Decent4", "Cares4", "Know4"
+              )
+
+colnames(df84cm) <- my_names
+
+```
+
+
+```{r}
+
+df <- data.frame(my_candidate_id, my_candidate, stringsAsFactors = FALSE)
+df84cm <-merge(df84cm, df, by.x = "voting", 
+               by.y = "my_candidate_id", all.x = TRUE)
+names(df84cm)[names(df84cm)=="my_candidate"] <- "VoteCandidate"
+
+```
+
+
+```{r eval=FALSE, include=FALSE}
+
+# Verify column renaming, candidates and their number 1-5 mapping must be 
+# correct.
+
+str(df84cm)
+
+```
+
+
+## Normalize ratings
+
+```{r warning=FALSE}
+
+# 1) Normalize feeling thermometers
+
+my_rescale1 <- function(X) { 
+  if (max(X, na.rm = TRUE) == min(X, na.rm = TRUE)) 
+    X / sum(X, na.rm = TRUE)
+  else
+    round((X - min(X, na.rm = TRUE)) /
+            (max(X, na.rm = TRUE) - min(X, na.rm = TRUE)), 6)
+}
+
+df84cm[, c("NORMALIZED_FT1", "NORMALIZED_FT2", "NORMALIZED_FT3", 
+           "NORMALIZED_FT4")] <- t(apply(df84cm[, c("Feeling1", "Feeling2", 
+                                                    "Feeling3", "Feeling4")], 
+                                         MARGIN = 1, FUN = my_rescale1))
+
+# 2) Normalize viability
+
+my_rescale2 <- function(X) round(X / sum(X, na.rm = TRUE), 6)
+
+df84cm[, c("NORMALIZED_VIABILITY1", "NORMALIZED_VIABILITY2", 
+           "NORMALIZED_VIABILITY3", "NORMALIZED_VIABILITY4")] <- t(apply(
+             df84cm[, c("Viability1", "Viability2", "Viability3", 
+                        "Viability4")], MARGIN = 1, FUN = my_rescale2))
+
+df84cm[, c("NORMALIZED_ELECTABILITY1", "NORMALIZED_ELECTABILITY2", 
+           "NORMALIZED_ELECTABILITY3", "NORMALIZED_ELECTABILITY4")] <- t(apply(
+             df84cm[, c("Electability1", "Electability2", "Electability3", 
+                        "Electability4")], MARGIN = 1, FUN = my_rescale2))
+
+# 3) Manipulate ideological distance
+
+df84cm[, c("temp_1", "temp_2", "temp_3", "temp_4")] <- square(
+  df84cm[, c("Ideology1", "Ideology2", "Ideology3", "Ideology4")] - 
+    df84cm[, "Ideology"])
+
+df84cm <- df84cm %>%
+  rowwise() %>%
+  mutate(temp_min = min(temp_1, temp_2, temp_3, temp_4)) %>%
+  mutate(temp_max_min = max(temp_1, temp_2, temp_3, temp_4) - 
+           min(temp_1, temp_2, temp_3, temp_4)) %>%
+  mutate(NORMALIZED_IDEOLOGY1 = ifelse(temp_max_min == 0,
+                                       ifelse(temp_min == 0, 0, 0.5),
+                                       round((temp_1 - temp_min) / 
+                                               temp_max_min, 6))) %>%
+  mutate(NORMALIZED_IDEOLOGY2 = ifelse(temp_max_min == 0,
+                                       ifelse(temp_min == 0, 0, 0.5),
+                                       round((temp_2 - temp_min) / 
+                                               temp_max_min, 6))) %>%
+  mutate(NORMALIZED_IDEOLOGY3 = ifelse(temp_max_min == 0,
+                                       ifelse(temp_min == 0, 0, 0.5),
+                                       round((temp_3 - temp_min) / 
+                                               temp_max_min, 6))) %>%
+  mutate(NORMALIZED_IDEOLOGY4 = ifelse(temp_max_min == 0,
+                                       ifelse(temp_min == 0, 0, 0.5),
+                                       round((temp_4 - temp_min) / 
+                                               temp_max_min, 6))) %>%
+  select(-starts_with("temp_") )
+
+# 4) Average candidate traits
+
+df84cm$TRAITS1 = abs(rowMeans(df84cm[, c("Inspire1", "Decent1", "Cares1", 
+                                         "Know1")], na.rm = TRUE) - 6) / 5
+df84cm$TRAITS2 = abs(rowMeans(df84cm[, c("Inspire2", "Decent2", "Cares2", 
+                                         "Know2")], na.rm = TRUE) - 6) / 5
+df84cm$TRAITS3 = abs(rowMeans(df84cm[, c("Inspire3", "Decent3", "Cares3", 
+                                         "Know3")], na.rm = TRUE) - 6) / 5
+df84cm$TRAITS4 = abs(rowMeans(df84cm[, c("Inspire4", "Decent4", "Cares4", 
+                                         "Know4")], na.rm = TRUE) - 6) / 5
+
+# 5) Convert NaN to NA
+
+df84cm[df84cm == "NaN"] <- NA
+
+```
+ 
+ 
+```{r}
+
+# Verify  calculations
+
+df84cm[, c("NORMALIZED_FT1", "NORMALIZED_FT2", "NORMALIZED_FT3", 
+           "NORMALIZED_FT4", "Feeling1", "Feeling2", "Feeling3", "Feeling4")]
+df84cm[, c("NORMALIZED_VIABILITY1", "NORMALIZED_VIABILITY2", 
+           "NORMALIZED_VIABILITY3", "NORMALIZED_VIABILITY4", "Viability1", 
+           "Viability2", "Viability3", "Viability4")]
+df84cm[, c("NORMALIZED_ELECTABILITY1", "NORMALIZED_ELECTABILITY2", 
+           "NORMALIZED_ELECTABILITY3", "NORMALIZED_ELECTABILITY4", 
+           "Electability1", "Electability2", "Electability3", "Electability4")]
+df84cm[, c("NORMALIZED_IDEOLOGY1", "NORMALIZED_IDEOLOGY2", 
+           "NORMALIZED_IDEOLOGY3", "NORMALIZED_IDEOLOGY4", "Ideology", 
+           "Ideology1", "Ideology2", "Ideology3", "Ideology4")]
+df84cm[, c("TRAITS1", "Inspire1", "Decent1", "Cares1", "Know1")]
+df84cm[, c("TRAITS2", "Inspire2", "Decent2", "Cares2", "Know2")]
+df84cm[, c("TRAITS3", "Inspire3", "Decent3", "Cares3", "Know3")]
+df84cm[, c("TRAITS4", "Inspire4", "Decent4", "Cares4", "Know4")]
+
+```
+ 
+ 
+## Pivoting Data (Part Two)
+
+```{r}
+
+# 1) Subset: df84cm_normalized_ft
+
+my_cols <- c("ID", "VoteCandidate", "NORMALIZED_FT1", "NORMALIZED_FT2", 
+             "NORMALIZED_FT3", "NORMALIZED_FT4")
+df <- df84cm[, my_cols]
+colnames(df) <- c("ID", "VoteCandidate", my_candidate)
+
+df <- df %>%
+  pivot_longer(names_to = "Candidate", 
+               values_to = "NORMALIZED_FT", 
+               cols = -c(ID, VoteCandidate))
+df_final <- df
+
+# 2) Subset: df84cm_normalized_viability
+
+my_cols <- c("ID", "NORMALIZED_VIABILITY1", "NORMALIZED_VIABILITY2", 
+             "NORMALIZED_VIABILITY3", "NORMALIZED_VIABILITY4")
+df <- df84cm[, my_cols]
+colnames(df) <- c("ID", my_candidate)
+
+df <- df %>%
+  pivot_longer(names_to = "Candidate", 
+               values_to = "NORMALIZED_VIABILITY", 
+               cols = -ID)
+
+df_final = merge(df_final, df, by=c("ID", "Candidate"))
+
+# Convert VoteCandidate to 0, 1
+
+df_final$VoteCandidate <-  1 * (df_final$Candidate == df_final$VoteCandidate)
+
+# 3) Subset: df84cm_normalized_electability
+
+my_cols <- c("ID", "NORMALIZED_ELECTABILITY1", "NORMALIZED_ELECTABILITY2", 
+             "NORMALIZED_ELECTABILITY3", "NORMALIZED_ELECTABILITY4")
+df <- df84cm[, my_cols]
+colnames(df) <- c("ID", my_candidate)
+
+df <- df %>%
+  pivot_longer(names_to = "Candidate", 
+               values_to = "NORMALIZED_ELECTABILITY", 
+               cols = -ID)
+
+df_final = merge(df_final, df, by = c("ID", "Candidate"))
+
+
+# 4) Subset: df84cm_normalized_ideology
+
+my_cols <- c("ID", "NORMALIZED_IDEOLOGY1", "NORMALIZED_IDEOLOGY2", 
+             "NORMALIZED_IDEOLOGY3", "NORMALIZED_IDEOLOGY4")
+df <- df84cm[, my_cols]
+colnames(df) <- c("ID", my_candidate)
+
+df <- df %>%
+  pivot_longer(names_to = "Candidate", 
+               values_to = "NORMALIZED_IDEOLOGY", 
+               cols = -ID)
+
+df_final = merge(df_final, df, by = c("ID", "Candidate"))
+
+
+# 5) Subset: df84cm_traits
+
+my_cols <- c("ID", "TRAITS1", "TRAITS2", "TRAITS3", "TRAITS4")
+df <- df84cm[, my_cols]
+colnames(df) <- c("ID", my_candidate)
+
+df <- df %>%
+  pivot_longer(names_to = "Candidate", 
+               values_to = "TRAITS", 
+               cols = -ID)
+
+df_final = merge(df_final, df, by = c("ID", "Candidate"))
+
+```
+
+
+```{r}
+
+# Create new columns using candidate names, assign 0 to all
+df_final[, sort(my_candidate)] <- 0
+
+# Get index when intersection column name/value matches
+my_index <- cbind(seq_len(nrow(df_final)), 
+                  match(df_final$Candidate, names(df_final)[-1]))
+
+# Assign 1 to my_index cells
+df_final[-1][my_index] <- 1
+
+```
+
+
+## Writing Cleaned Dataset
+
+```{r}
+
+df_final_1 <- df_final %>%
+  drop_na() 
+
+```
+
+
+```{r}
+
+df_final %>%
+  filter(Candidate %in% c("HART", "JACKSON", "MONDALE")) %>%
+  drop_na() %>%
+  write.dta("clean_data/df84cm_d.dta")
+
+```
+
+
+```{r include=FALSE}
+
+rm(list = ls())
+
+```
+

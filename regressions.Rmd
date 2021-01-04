@@ -15,17 +15,12 @@ library(vctrs)
 library(foreign)
 library(margins)
 library(mfx)
-library(VGAM)
-library(erer)
 library(nnet)
 library(RStata)
 library(mlogit)
 library(jtools)
 library(ggstance)
 library(clogitboost)
-library(sjPlot)
-library(sjlabelled)
-library(sjmisc)
 library(ggplot2)
 library(scales)
 library(survival)
@@ -41,6 +36,8 @@ library(dplyr)
 ```{r}
 
 df08phone_d <- read.dta("clean_data/df08phone_d.dta")
+df08phone_d_v2 <- read.dta("clean_data/df08phone_d_v2.dta")
+df08phone_d_v3 <- read.dta("clean_data/df08phone_d_v3.dta")
 df08phone_r <- read.dta("clean_data/df08phone_r.dta")
 
 df04_national_d <- read.dta("clean_data/df04_national_d.dta")
@@ -71,6 +68,38 @@ df08phone_d_reg <- clogit(data = df08phone_d, formula = VoteCandidate ~ CLINTON
                           + EDWARDS + NORMALIZED_FT + NORMALIZED_VIABILITY + 
                             NORMALIZED_ELECTABILITY + NORMALIZED_IDEOLOGY + 
                             strata(ID))
+df08phone_d_reg
+
+df08phone_d_reg_v2 <- clogit(data = df08phone_d_v2, formula = VoteCandidate ~ CLINTON 
+                          + EDWARDS + NORMALIZED_FT + NORMALIZED_STRATEGY + NORMALIZED_IDEOLOGY + 
+                            strata(ID))
+df08phone_d_reg_v2
+
+df08phone_d_reg_v3 <- clogit(data = df08phone_d_v3, formula = VoteCandidate ~ CLINTON 
+                          + EDWARDS + NORMALIZED_FT + NORMALIZED_VIABILITY + NORMALIZED_ELECTABILITY + 
+                            NORMALIZED_IDEOLOGY + WA02_c + WA04_c + SOMEHS + HS + VOCATIONAL + 
+                            SOMECOLLEGE + ASSOCIATES + BACHELORS + SOMEPROFESSIONAL + PROFESSIONAL + BLACK +
+                            ASIAN + NATIVE + HISPANIC + MIXED + OTHER + FEMALE + WEAK + 
+                            SOMEWHATCLOSELY + NOTTOOCLOSELY + NOTCLOSELYATALL + 
+                            strata(ID))
+df08phone_d_reg_v3
+
+df08phone_d_reg_v4 <- multinom(data = df08phone_d_v3, formula = VoteCandidate ~ CLINTON 
+                          + EDWARDS + NORMALIZED_FT + NORMALIZED_VIABILITY + NORMALIZED_ELECTABILITY + 
+                            NORMALIZED_IDEOLOGY + WA02_c + WA04_c + SOMEHS + HS + VOCATIONAL + 
+                            SOMECOLLEGE + ASSOCIATES + BACHELORS + SOMEPROFESSIONAL + PROFESSIONAL + BLACK +
+                            ASIAN + NATIVE + HISPANIC + MIXED + OTHER + FEMALE + WEAK + 
+                            SOMEWHATCLOSELY + NOTTOOCLOSELY + NOTCLOSELYATALL)
+df08phone_d_reg_v4
+
+df08phone_d_reg_v5 <- stan_glm(data = df08phone_d_v3, formula = VoteCandidate ~ CLINTON 
+                          + EDWARDS + NORMALIZED_FT + NORMALIZED_VIABILITY + NORMALIZED_ELECTABILITY + 
+                            NORMALIZED_IDEOLOGY + WA02_c + WA04_c + SOMEHS + HS + VOCATIONAL + 
+                            SOMECOLLEGE + ASSOCIATES + BACHELORS + SOMEPROFESSIONAL + PROFESSIONAL + BLACK +
+                            ASIAN + NATIVE + HISPANIC + MIXED + OTHER + FEMALE + WEAK + 
+                            SOMEWHATCLOSELY + NOTTOOCLOSELY + NOTCLOSELYATALL, refresh = 0)
+print(df08phone_d_reg_v5, digits = 4)
+
 df08phone_r_reg <- clogit(data = df08phone_r, formula = VoteCandidate ~ ROMNEY +
                             HUCKABEE + NORMALIZED_FT + NORMALIZED_VIABILITY + 
                             NORMALIZED_ELECTABILITY + NORMALIZED_IDEOLOGY + 
@@ -365,6 +394,190 @@ allModelFrame %>%
 ```
 
 
+## Factor Analysis
+
+```{r}
+
+df08phone_d_fa <- df08phone_d %>% 
+  select(NORMALIZED_FT, NORMALIZED_IDEOLOGY, NORMALIZED_VIABILITY, NORMALIZED_ELECTABILITY) %>%
+  factanal(factors = 1)
+df08phone_d_fa
+
+df08phone_d_fa_v2 <- df08phone_d_v2 %>% 
+  select(NORMALIZED_FT, NORMALIZED_STRATEGY, NORMALIZED_IDEOLOGY) %>%
+  factanal(factors = 1)
+df08phone_d_fa_v2
+
+```
+
+
+## VIF Test and Correlation Matricies
+
+```{r}
+
+car::vif(df08phone_d_reg)
+car::vif(df08phone_d_reg_v2)
+
+df08phone_d %>%
+  select(NORMALIZED_FT, NORMALIZED_IDEOLOGY, NORMALIZED_VIABILITY, NORMALIZED_ELECTABILITY) %>%
+  cor(.)
+
+df08phone_d_v2 %>%
+  select(NORMALIZED_FT, NORMALIZED_IDEOLOGY, NORMALIZED_STRATEGY) %>%
+  cor(.)
+```
+
+
+## 
+
+```{r}
+
+# Starting template
+
+newobs <- tibble(CLINTON = mean(df08phone_d_v3$CLINTON),
+                 EDWARDS = mean(df08phone_d_v3$EDWARDS),
+                 NORMALIZED_FT = mean(df08phone_d_v3$NORMALIZED_FT),
+                 NORMALIZED_VIABILITY = mean(df08phone_d_v3$NORMALIZED_VIABILITY),
+                 NORMALIZED_ELECTABILITY = mean(df08phone_d_v3$NORMALIZED_ELECTABILITY),
+                 NORMALIZED_IDEOLOGY = mean(df08phone_d_v3$NORMALIZED_IDEOLOGY),
+                 WA02_c = mean(df08phone_d_v3$WA02_c),
+                 WA04_c = mean(df08phone_d_v3$WA04_c),
+                 SOMEHS = mean(df08phone_d_v3$SOMEHS),
+                 HS = mean(df08phone_d_v3$HS),
+                 VOCATIONAL = mean(df08phone_d_v3$VOCATIONAL),
+                 SOMECOLLEGE = mean(df08phone_d_v3$SOMECOLLEGE),
+                 ASSOCIATES = mean(df08phone_d_v3$ASSOCIATES),
+                 BACHELORS = mean(df08phone_d_v3$BACHELORS),
+                 SOMEPROFESSIONAL = mean(df08phone_d_v3$SOMEPROFESSIONAL),
+                 PROFESSIONAL = mean(df08phone_d_v3$PROFESSIONAL),
+                 BLACK = mean(df08phone_d_v3$BLACK),
+                 ASIAN = mean(df08phone_d_v3$ASIAN),
+                 NATIVE = mean(df08phone_d_v3$NATIVE),
+                 HISPANIC = mean(df08phone_d_v3$HISPANIC),
+                 MIXED = mean(df08phone_d_v3$MIXED),
+                 OTHER = mean(df08phone_d_v3$OTHER),
+                 FEMALE = mean(df08phone_d_v3$FEMALE),
+                 WEAK = mean(df08phone_d_v3$WEAK),
+                 SOMEWHATCLOSELY = mean(df08phone_d_v3$SOMEWHATCLOSELY),
+                 NOTTOOCLOSELY = mean(df08phone_d_v3$NOTTOOCLOSELY),
+                 NOTCLOSELYATALL = mean(df08phone_d_v3$NOTCLOSELYATALL),
+                 )
+
+pe <- posterior_epred(object = df08phone_d_reg_v5,
+                newdata = newobs) %>% 
+        as_tibble()
+
+pe %>% 
+  ggplot(aes(x = `1`)) +
+    geom_histogram(aes(y = after_stat(count/sum(count))),
+                   bins = 100) +
+    scale_x_continuous(labels = scales::number_format()) +
+    scale_y_continuous(labels = scales::percent_format()) 
+
+
+##############
+
+# Varying viability, uneducated voters
+
+newobs <- tibble(CLINTON = mean(df08phone_d_v3$CLINTON),
+                 EDWARDS = mean(df08phone_d_v3$EDWARDS),
+                 NORMALIZED_FT = mean(df08phone_d_v3$NORMALIZED_FT),
+                 NORMALIZED_VIABILITY = c(0, 1),
+                 NORMALIZED_ELECTABILITY = mean(df08phone_d_v3$NORMALIZED_ELECTABILITY),
+                 NORMALIZED_IDEOLOGY = mean(df08phone_d_v3$NORMALIZED_IDEOLOGY),
+                 WA02_c = mean(df08phone_d_v3$WA02_c),
+                 WA04_c = mean(df08phone_d_v3$WA04_c),
+                 SOMEHS = 0,
+                 HS = 0,
+                 VOCATIONAL = 0,
+                 SOMECOLLEGE = 0,
+                 ASSOCIATES = 0,
+                 BACHELORS = 0,
+                 SOMEPROFESSIONAL = 0,
+                 PROFESSIONAL = 0,
+                 BLACK = mean(df08phone_d_v3$BLACK),
+                 ASIAN = mean(df08phone_d_v3$ASIAN),
+                 NATIVE = mean(df08phone_d_v3$NATIVE),
+                 HISPANIC = mean(df08phone_d_v3$HISPANIC),
+                 MIXED = mean(df08phone_d_v3$MIXED),
+                 OTHER = mean(df08phone_d_v3$OTHER),
+                 FEMALE = mean(df08phone_d_v3$FEMALE),
+                 WEAK = mean(df08phone_d_v3$WEAK),
+                 SOMEWHATCLOSELY = mean(df08phone_d_v3$SOMEWHATCLOSELY),
+                 NOTTOOCLOSELY = mean(df08phone_d_v3$NOTTOOCLOSELY),
+                 NOTCLOSELYATALL = mean(df08phone_d_v3$NOTCLOSELYATALL),
+                 )
+
+pe <- posterior_epred(object = df08phone_d_reg_v5,
+                newdata = newobs) %>% 
+  as_tibble() %>% 
+  rename("NotViable" = `1`,
+         "Viable" = `2`)
+
+pe %>% 
+ pivot_longer(cols = NotViable:Viable, 
+               names_to = "Viability",
+               values_to = "probability") %>% 
+  ggplot(aes(probability, fill = Viability)) +
+    geom_histogram(aes(y = after_stat(count/sum(count))),
+                   alpha = 0.5, 
+                   bins = 100, 
+                   position = "identity") +
+    scale_x_continuous(labels = scales::number_format())
+    scale_y_continuous(labels = scales::percent_format())
+    theme_classic()
+    
+# Varying viability, educated voters
+
+newobs <- tibble(CLINTON = mean(df08phone_d_v3$CLINTON),
+                 EDWARDS = mean(df08phone_d_v3$EDWARDS),
+                 NORMALIZED_FT = mean(df08phone_d_v3$NORMALIZED_FT),
+                 NORMALIZED_VIABILITY = c(0, 1),
+                 NORMALIZED_ELECTABILITY = mean(df08phone_d_v3$NORMALIZED_ELECTABILITY),
+                 NORMALIZED_IDEOLOGY = mean(df08phone_d_v3$NORMALIZED_IDEOLOGY),
+                 WA02_c = mean(df08phone_d_v3$WA02_c),
+                 WA04_c = mean(df08phone_d_v3$WA04_c),
+                 SOMEHS = 0,
+                 HS = 0,
+                 VOCATIONAL = 0,
+                 SOMECOLLEGE = 0,
+                 ASSOCIATES = 0,
+                 BACHELORS = 0,
+                 SOMEPROFESSIONAL = 0,
+                 PROFESSIONAL = 1,
+                 BLACK = mean(df08phone_d_v3$BLACK),
+                 ASIAN = mean(df08phone_d_v3$ASIAN),
+                 NATIVE = mean(df08phone_d_v3$NATIVE),
+                 HISPANIC = mean(df08phone_d_v3$HISPANIC),
+                 MIXED = mean(df08phone_d_v3$MIXED),
+                 OTHER = mean(df08phone_d_v3$OTHER),
+                 FEMALE = mean(df08phone_d_v3$FEMALE),
+                 WEAK = mean(df08phone_d_v3$WEAK),
+                 SOMEWHATCLOSELY = mean(df08phone_d_v3$SOMEWHATCLOSELY),
+                 NOTTOOCLOSELY = mean(df08phone_d_v3$NOTTOOCLOSELY),
+                 NOTCLOSELYATALL = mean(df08phone_d_v3$NOTCLOSELYATALL),
+                 )
+
+pe <- posterior_epred(object = df08phone_d_reg_v5,
+                newdata = newobs) %>% 
+  as_tibble() %>% 
+  rename("NotViable" = `1`,
+         "Viable" = `2`)
+
+pe %>% 
+ pivot_longer(cols = NotViable:Viable, 
+               names_to = "Viability",
+               values_to = "probability") %>% 
+  ggplot(aes(probability, fill = Viability)) +
+    geom_histogram(aes(y = after_stat(count/sum(count))),
+                   alpha = 0.5, 
+                   bins = 100, 
+                   position = "identity") +
+    scale_x_continuous(labels = scales::number_format())
+    scale_y_continuous(labels = scales::percent_format())
+    theme_classic()
+
+```
 
 ## Miscellaneous
 
@@ -392,15 +605,3 @@ plot_model(df08phone_d_reg)
 
 
 ```
-
-
-```{r}
-data(travel)
-train <- 1:504
-y <- travel$MODE[train]
-x <- travel[train, 3:6]
-strata <- travel$Group[train]
-fit <- clogitboost(y = y, x = x, strata = strata, iter = 10, rho = 0.05)
-marginal(fit, grid = seq(0, 10, by = 1), d = 1)
-```
-
