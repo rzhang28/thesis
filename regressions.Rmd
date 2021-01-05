@@ -1,0 +1,1030 @@
+---
+title: "regressions"
+author: "Ryan Zhang"
+date: "10/28/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(foreign)
+library(margins)
+library(ggstance)
+library(clogitboost)
+library(ggplot2)
+library(survival)
+library(ggeffects)
+library(effects)
+library(dplyr)
+library(stargazer)
+```
+
+
+## Read Data
+
+```{r}
+
+# Data sets with viability and electability.
+
+df08phone_d <- read.dta("clean_data/df08phone_d.dta")
+df08phone_d_controls <- read.dta("clean_data/df08phone_d_controls.dta")
+df08phone_r <- read.dta("clean_data/df08phone_r.dta")
+df04_national_d <- read.dta("clean_data/df04_national_d.dta")
+df00_national_d <- read.dta("clean_data/df00_national_d.dta")
+df00_national_r <- read.dta("clean_data/df00_national_r.dta")
+df88st_d <- read.dta("clean_data/df88st_d.dta")
+df88st_r <- read.dta("clean_data/df88st_r.dta")
+df84cm_d <- read.dta("clean_data/df84cm_d.dta")
+
+df04_nh_d <- read.dta("clean_data/df04_nh_d.dta")
+df00_nh_d <- read.dta("clean_data/df00_nh_d.dta")
+df00_nh_r <- read.dta("clean_data/df00_nh_r.dta")
+df00_super_d <- read.dta("clean_data/df00_super_d.dta")
+df00_super_r <- read.dta("clean_data/df00_super_r.dta")
+df00_ia_d <- read.dta("clean_data/df00_ia_d.dta")
+df00_ia_r <- read.dta("clean_data/df00_ia_r.dta")
+
+# Data sets with strategy.
+
+df08phone_d_v2 <- read.dta("clean_data/df08phone_d_v2.dta")
+df08phone_r_v2 <- read.dta("clean_data/df08phone_r_v2.dta")
+df04_national_d_v2 <- read.dta("clean_data/df04_national_d_v2.dta")
+df00_national_d_v2 <- read.dta("clean_data/df00_national_d_v2.dta")
+df00_national_r_v2 <- read.dta("clean_data/df00_national_r_v2.dta")
+df88st_d_v2 <- read.dta("clean_data/df88st_d_v2.dta")
+df88st_r_v2 <- read.dta("clean_data/df88st_r_v2.dta")
+df84cm_d_v2 <- read.dta("clean_data/df84cm_d_v2.dta")
+
+df04_nh_d_v2 <- read.dta("clean_data/df04_nh_d_v2.dta")
+df00_nh_d_v2 <- read.dta("clean_data/df00_nh_d_v2.dta")
+df00_nh_r_v2 <- read.dta("clean_data/df00_nh_r_v2.dta")
+df00_super_d_v2 <- read.dta("clean_data/df00_super_d_v2.dta")
+df00_super_r_v2 <- read.dta("clean_data/df00_super_r_v2.dta")
+df00_ia_d_v2 <- read.dta("clean_data/df00_ia_d_v2.dta")
+df00_ia_r_v2 <- read.dta("clean_data/df00_ia_r_v2.dta")
+```
+
+
+## Run Regressions (Part One - Viability)
+
+```{r}
+df08phone_d_reg_v <- clogit(data = df08phone_d, formula = VoteCandidate ~ CLINTON +
+                            EDWARDS + NORMALIZED_FT + NORMALIZED_VIABILITY + 
+                            NORMALIZED_IDEOLOGY + 
+                            strata(ID))
+df08phone_r_reg_v <- clogit(data = df08phone_r, formula = VoteCandidate ~ ROMNEY +
+                            HUCKABEE + NORMALIZED_FT + NORMALIZED_VIABILITY + 
+                            NORMALIZED_IDEOLOGY + 
+                            strata(ID))
+df04_national_d_reg_v <- clogit(data = df04_national_d, formula = VoteCandidate ~ 
+                            EDWARDS + NORMALIZED_FT + NORMALIZED_VIABILITY + 
+                            NORMALIZED_IDEOLOGY + 
+                            strata(ID))
+df00_national_d_reg_v <- clogit(data = df00_national_d, formula = VoteCandidate ~ 
+                            BRADLEY + NORMALIZED_FT + NORMALIZED_VIABILITY + 
+                            NORMALIZED_IDEOLOGY + 
+                            strata(ID))
+df00_national_r_reg_v <- clogit(data = df00_national_r, formula = VoteCandidate ~ 
+                            MCCAIN + NORMALIZED_FT + NORMALIZED_VIABILITY + 
+                            NORMALIZED_IDEOLOGY + 
+                            strata(ID))
+df88st_d_reg_v <- clogit(data = df88st_d, formula = VoteCandidate ~ GEPHARDT + 
+                         GORE + HART + JACKSON + NORMALIZED_FT + 
+                         NORMALIZED_VIABILITY + 
+                         NORMALIZED_IDEOLOGY + strata(ID))
+df88st_r_reg_v <- clogit(data = df88st_r, formula = VoteCandidate ~ DOLE + KEMP + 
+                     ROBERTSON + NORMALIZED_FT + NORMALIZED_VIABILITY + 
+                     NORMALIZED_IDEOLOGY + 
+                     strata(ID))
+df84cm_d_reg_v <- clogit(data = df84cm_d, formula = VoteCandidate ~ HART + 
+                         JACKSON + NORMALIZED_FT + NORMALIZED_VIABILITY + 
+                         NORMALIZED_IDEOLOGY + 
+                         strata(ID))
+
+df04_nh_d_reg_v <- clogit(data = df04_nh_d, formula = VoteCandidate ~ EDWARDS +
+                      NORMALIZED_FT + NORMALIZED_VIABILITY + 
+                      NORMALIZED_IDEOLOGY + 
+                      strata(ID))
+df00_nh_d_reg_v <- clogit(data = df00_nh_d, formula = VoteCandidate ~ BRADLEY +  
+                      NORMALIZED_FT + NORMALIZED_VIABILITY + 
+                      NORMALIZED_IDEOLOGY + 
+                      strata(ID))
+df00_nh_r_reg_v <- clogit(data = df00_nh_r, formula = VoteCandidate ~ MCCAIN +
+                      NORMALIZED_FT + NORMALIZED_VIABILITY + 
+                      NORMALIZED_IDEOLOGY + 
+                      strata(ID))
+df00_super_d_reg_v <- clogit(data = df00_super_d, formula = VoteCandidate ~ 
+                             BRADLEY + NORMALIZED_FT + NORMALIZED_VIABILITY + 
+                             NORMALIZED_IDEOLOGY + 
+                             strata(ID))
+df00_super_r_reg_v <- clogit(data = df00_super_r, formula = VoteCandidate ~ 
+                             MCCAIN + NORMALIZED_FT + NORMALIZED_VIABILITY + 
+                             NORMALIZED_IDEOLOGY + 
+                             strata(ID))
+df00_ia_d_reg_v <- clogit(data = df00_ia_d, formula = VoteCandidate ~ BRADLEY + 
+                      NORMALIZED_FT + NORMALIZED_VIABILITY + 
+                      NORMALIZED_IDEOLOGY + 
+                      strata(ID))
+df00_ia_r_reg_v <- clogit(data = df00_ia_r, formula = VoteCandidate ~ MCCAIN +
+                      NORMALIZED_FT + NORMALIZED_VIABILITY + 
+                      NORMALIZED_IDEOLOGY + 
+                      strata(ID))
+```
+
+
+## Run Regressions (Part Two - Electability)
+
+```{r}
+df08phone_d_reg_e <- clogit(data = df08phone_d, formula = VoteCandidate ~ CLINTON +
+                            EDWARDS + NORMALIZED_FT + 
+                            NORMALIZED_ELECTABILITY + NORMALIZED_IDEOLOGY + 
+                            strata(ID))
+df08phone_r_reg_e <- clogit(data = df08phone_r, formula = VoteCandidate ~ ROMNEY +
+                            HUCKABEE + NORMALIZED_FT + 
+                            NORMALIZED_ELECTABILITY + NORMALIZED_IDEOLOGY + 
+                            strata(ID))
+df04_national_d_reg_e <- clogit(data = df04_national_d, formula = VoteCandidate ~ 
+                            EDWARDS + NORMALIZED_FT + 
+                            NORMALIZED_ELECTABILITY + NORMALIZED_IDEOLOGY + 
+                            strata(ID))
+df00_national_d_reg_e <- clogit(data = df00_national_d, formula = VoteCandidate ~ 
+                            BRADLEY + NORMALIZED_FT + 
+                            NORMALIZED_ELECTABILITY + NORMALIZED_IDEOLOGY + 
+                            strata(ID))
+df00_national_r_reg_e <- clogit(data = df00_national_r, formula = VoteCandidate ~ 
+                            MCCAIN + NORMALIZED_FT + 
+                            NORMALIZED_ELECTABILITY + NORMALIZED_IDEOLOGY + 
+                            strata(ID))
+df88st_d_reg_e <- clogit(data = df88st_d, formula = VoteCandidate ~ GEPHARDT + 
+                         GORE + HART + JACKSON + NORMALIZED_FT + 
+                         NORMALIZED_ELECTABILITY + NORMALIZED_IDEOLOGY + 
+                         strata(ID))
+df88st_r_reg_e <- clogit(data = df88st_r, formula = VoteCandidate ~ DOLE + KEMP + 
+                     ROBERTSON + NORMALIZED_FT + 
+                     NORMALIZED_ELECTABILITY + NORMALIZED_IDEOLOGY + 
+                     strata(ID))
+df84cm_d_reg_e <- clogit(data = df84cm_d, formula = VoteCandidate ~ HART + 
+                         JACKSON + NORMALIZED_FT + 
+                         NORMALIZED_ELECTABILITY + NORMALIZED_IDEOLOGY + 
+                         strata(ID))
+
+df04_nh_d_reg_e <- clogit(data = df04_nh_d, formula = VoteCandidate ~ EDWARDS +
+                      NORMALIZED_FT + 
+                      NORMALIZED_ELECTABILITY + NORMALIZED_IDEOLOGY + 
+                      strata(ID))
+df00_nh_d_reg_e <- clogit(data = df00_nh_d, formula = VoteCandidate ~ BRADLEY +  
+                      NORMALIZED_FT + 
+                      NORMALIZED_ELECTABILITY + NORMALIZED_IDEOLOGY + 
+                      strata(ID))
+df00_nh_r_reg_e <- clogit(data = df00_nh_r, formula = VoteCandidate ~ MCCAIN +
+                      NORMALIZED_FT + 
+                      NORMALIZED_ELECTABILITY + NORMALIZED_IDEOLOGY + 
+                      strata(ID))
+df00_super_d_reg_e <- clogit(data = df00_super_d, formula = VoteCandidate ~ 
+                             BRADLEY + NORMALIZED_FT + 
+                             NORMALIZED_ELECTABILITY + NORMALIZED_IDEOLOGY + 
+                             strata(ID))
+df00_super_r_reg_e <- clogit(data = df00_super_r, formula = VoteCandidate ~ 
+                             MCCAIN + NORMALIZED_FT + 
+                             NORMALIZED_ELECTABILITY + NORMALIZED_IDEOLOGY + 
+                             strata(ID))
+df00_ia_d_reg_e <- clogit(data = df00_ia_d, formula = VoteCandidate ~ BRADLEY + 
+                      NORMALIZED_FT + 
+                      NORMALIZED_ELECTABILITY + NORMALIZED_IDEOLOGY + 
+                      strata(ID))
+df00_ia_r_reg_e <- clogit(data = df00_ia_r, formula = VoteCandidate ~ MCCAIN +
+                      NORMALIZED_FT + 
+                      NORMALIZED_ELECTABILITY + NORMALIZED_IDEOLOGY + 
+                      strata(ID))
+```
+
+
+## Run Regressions (Part Three - Viability and Electability)
+
+```{r}
+df08phone_d_reg_ve <- clogit(data = df08phone_d, formula = VoteCandidate ~ CLINTON +
+                            EDWARDS + NORMALIZED_FT + NORMALIZED_VIABILITY + 
+                            NORMALIZED_ELECTABILITY + NORMALIZED_IDEOLOGY + 
+                            strata(ID))
+df08phone_r_reg_ve <- clogit(data = df08phone_r, formula = VoteCandidate ~ ROMNEY +
+                            HUCKABEE + NORMALIZED_FT + NORMALIZED_VIABILITY + 
+                            NORMALIZED_ELECTABILITY + NORMALIZED_IDEOLOGY + 
+                            strata(ID))
+df04_national_d_reg_ve <- clogit(data = df04_national_d, formula = VoteCandidate ~ 
+                            EDWARDS + NORMALIZED_FT + NORMALIZED_VIABILITY + 
+                            NORMALIZED_ELECTABILITY + NORMALIZED_IDEOLOGY + 
+                            strata(ID))
+df00_national_d_reg_ve <- clogit(data = df00_national_d, formula = VoteCandidate ~ 
+                            BRADLEY + NORMALIZED_FT + NORMALIZED_VIABILITY + 
+                            NORMALIZED_ELECTABILITY + NORMALIZED_IDEOLOGY + 
+                            strata(ID))
+df00_national_r_reg_ve <- clogit(data = df00_national_r, formula = VoteCandidate ~ 
+                            MCCAIN + NORMALIZED_FT + NORMALIZED_VIABILITY + 
+                            NORMALIZED_ELECTABILITY + NORMALIZED_IDEOLOGY + 
+                            strata(ID))
+df84cm_d_reg_ve <- clogit(data = df84cm_d, formula = VoteCandidate ~ HART + 
+                         JACKSON + NORMALIZED_FT + NORMALIZED_VIABILITY + 
+                         NORMALIZED_ELECTABILITY + NORMALIZED_IDEOLOGY + 
+                         strata(ID))
+
+df00_super_d_reg_ve <- clogit(data = df00_super_d, formula = VoteCandidate ~ 
+                             BRADLEY + NORMALIZED_FT + NORMALIZED_VIABILITY + 
+                             NORMALIZED_ELECTABILITY + NORMALIZED_IDEOLOGY + 
+                             strata(ID))
+df00_super_r_reg_ve <- clogit(data = df00_super_r, formula = VoteCandidate ~ 
+                             MCCAIN + NORMALIZED_FT + NORMALIZED_VIABILITY + 
+                             NORMALIZED_ELECTABILITY + NORMALIZED_IDEOLOGY + 
+                             strata(ID))
+df88st_d_reg_ve <- clogit(data = df88st_d, formula = VoteCandidate ~ GEPHARDT + 
+                         GORE + HART + JACKSON + NORMALIZED_FT + 
+                         NORMALIZED_VIABILITY + NORMALIZED_ELECTABILITY + 
+                         NORMALIZED_IDEOLOGY + strata(ID))
+df88st_r_reg_ve <- clogit(data = df88st_r, formula = VoteCandidate ~ DOLE + KEMP + 
+                     ROBERTSON + NORMALIZED_FT + NORMALIZED_VIABILITY + 
+                     NORMALIZED_ELECTABILITY + NORMALIZED_IDEOLOGY + 
+                     strata(ID))
+
+df04_nh_d_reg_ve <- clogit(data = df04_nh_d, formula = VoteCandidate ~ EDWARDS +
+                      NORMALIZED_FT + NORMALIZED_VIABILITY + 
+                      NORMALIZED_ELECTABILITY + NORMALIZED_IDEOLOGY + 
+                      strata(ID))
+df00_nh_d_reg_ve <- clogit(data = df00_nh_d, formula = VoteCandidate ~ BRADLEY +  
+                      NORMALIZED_FT + NORMALIZED_VIABILITY + 
+                      NORMALIZED_ELECTABILITY + NORMALIZED_IDEOLOGY + 
+                      strata(ID))
+df00_nh_r_reg_ve <- clogit(data = df00_nh_r, formula = VoteCandidate ~ MCCAIN +
+                      NORMALIZED_FT + NORMALIZED_VIABILITY + 
+                      NORMALIZED_ELECTABILITY + NORMALIZED_IDEOLOGY + 
+                      strata(ID))
+
+df00_ia_d_reg_ve <- clogit(data = df00_ia_d, formula = VoteCandidate ~ BRADLEY + 
+                      NORMALIZED_FT + NORMALIZED_VIABILITY + 
+                      NORMALIZED_ELECTABILITY + NORMALIZED_IDEOLOGY + 
+                      strata(ID))
+df00_ia_r_reg_ve <- clogit(data = df00_ia_r, formula = VoteCandidate ~ MCCAIN +
+                      NORMALIZED_FT + NORMALIZED_VIABILITY + 
+                      NORMALIZED_ELECTABILITY + NORMALIZED_IDEOLOGY + 
+                      strata(ID))
+```
+
+
+## Run Regressions (Part Four - Strategy)
+
+```{r}
+df08phone_d_reg_s <- clogit(data = df08phone_d_v2, formula = VoteCandidate ~ CLINTON 
+                          + EDWARDS + NORMALIZED_FT + NORMALIZED_STRATEGY + NORMALIZED_IDEOLOGY + 
+                            strata(ID))
+df08phone_r_reg_s <- clogit(data = df08phone_r_v2, formula = VoteCandidate ~ ROMNEY +
+                            HUCKABEE + NORMALIZED_FT + NORMALIZED_STRATEGY + NORMALIZED_IDEOLOGY + 
+                            strata(ID))
+df04_national_d_reg_s <- clogit(data = df04_national_d_v2, formula = VoteCandidate ~ 
+                            EDWARDS + NORMALIZED_FT + NORMALIZED_STRATEGY + NORMALIZED_IDEOLOGY + 
+                            strata(ID))
+df00_national_d_reg_s <- clogit(data = df00_national_d_v2, formula = VoteCandidate ~ 
+                            BRADLEY + NORMALIZED_FT + NORMALIZED_STRATEGY + NORMALIZED_IDEOLOGY + 
+                            strata(ID))
+df00_national_r_reg_s <- clogit(data = df00_national_r_v2, formula = VoteCandidate ~ 
+                            MCCAIN + NORMALIZED_FT + NORMALIZED_STRATEGY + NORMALIZED_IDEOLOGY + 
+                            strata(ID))
+df84cm_d_reg_s <- clogit(data = df84cm_d_v2, formula = VoteCandidate ~ HART + 
+                         JACKSON + NORMALIZED_FT + NORMALIZED_STRATEGY + NORMALIZED_IDEOLOGY + 
+                         strata(ID))
+
+df04_nh_d_reg_s <- clogit(data = df04_nh_d_v2, formula = VoteCandidate ~ EDWARDS +
+                      NORMALIZED_FT + NORMALIZED_STRATEGY + NORMALIZED_IDEOLOGY + 
+                      strata(ID))
+df00_nh_d_reg_s <- clogit(data = df00_nh_d_v2, formula = VoteCandidate ~ BRADLEY +  
+                      NORMALIZED_FT + NORMALIZED_STRATEGY + NORMALIZED_IDEOLOGY + 
+                      strata(ID))
+df00_nh_r_reg_s <- clogit(data = df00_nh_r_v2, formula = VoteCandidate ~ MCCAIN +
+                      NORMALIZED_FT + NORMALIZED_STRATEGY + NORMALIZED_IDEOLOGY + 
+                      strata(ID))
+df00_super_d_reg_s <- clogit(data = df00_super_d_v2, formula = VoteCandidate ~ 
+                             BRADLEY + NORMALIZED_FT + NORMALIZED_STRATEGY + NORMALIZED_IDEOLOGY + 
+                             strata(ID))
+df00_super_r_reg_s <- clogit(data = df00_super_r_v2, formula = VoteCandidate ~ 
+                             MCCAIN + NORMALIZED_FT + NORMALIZED_STRATEGY + NORMALIZED_IDEOLOGY + 
+                             strata(ID))
+df88st_d_reg_s <- clogit(data = df88st_d_v2, formula = VoteCandidate ~ GEPHARDT + 
+                         GORE + HART + JACKSON + NORMALIZED_STRATEGY + 
+                         NORMALIZED_IDEOLOGY + strata(ID))
+df88st_r_reg_s <- clogit(data = df88st_r_v2, formula = VoteCandidate ~ DOLE + KEMP + 
+                     ROBERTSON + NORMALIZED_FT + NORMALIZED_STRATEGY + NORMALIZED_IDEOLOGY + 
+                     strata(ID))
+df00_ia_d_reg_s <- clogit(data = df00_ia_d_v2, formula = VoteCandidate ~ BRADLEY + 
+                      NORMALIZED_FT + NORMALIZED_STRATEGY + NORMALIZED_IDEOLOGY + 
+                      strata(ID))
+df00_ia_r_reg_s <- clogit(data = df00_ia_r_v2, formula = VoteCandidate ~ MCCAIN +
+                      NORMALIZED_FT + NORMALIZED_STRATEGY + NORMALIZED_IDEOLOGY + 
+                      strata(ID))
+```
+
+
+## Convert Regressions to Tibbles, Calculate Odds and Confidence Intervals
+
+```{r}
+reg_to_df <- function(x, y, z) {
+  data.frame(variable = rownames(summary(x)$coef),
+  coef = summary(x)$coef[, 1],
+  se = summary(x)$coef[, 3],
+  exp_coef = summary(x)$coef[, 2],
+  modelname = deparse(substitute(x)),
+  party = deparse(substitute(y)),
+  scope = deparse(substitute(z)))
+}
+
+factor_odds <- function(x) {
+  exp(x)
+}
+
+# Just viability.
+
+df08phone_d_reg_v_df <- reg_to_df(df08phone_d_reg_v, D, national)
+# df08phone_d_controls_reg_v_df <- reg_to_df(df08phone_d_controls_reg_v, D, national)
+df08phone_r_reg_v_df <- reg_to_df(df08phone_r_reg_v, R, national) 
+df04_national_d_reg_v_df <- reg_to_df(df04_national_d_reg_v, D, national)
+df00_national_d_reg_v_df <- reg_to_df(df00_national_d_reg_v, D, national)
+df00_national_r_reg_v_df <- reg_to_df(df00_national_r_reg_v, R, national)
+df84cm_d_reg_v_df <- reg_to_df(df84cm_d_reg_v, D, national)
+df00_super_d_reg_v_df <- reg_to_df(df00_super_d_reg_v, D, st)
+df00_super_r_reg_v_df <- reg_to_df(df00_super_r_reg_v, R, st)
+df88st_d_reg_v_df <- reg_to_df(df88st_d_reg_v, D, national)
+df88st_r_reg_v_df <- reg_to_df(df88st_r_reg_v, R, national)
+df04_nh_d_reg_v_df <- reg_to_df(df04_nh_d_reg_v, D, nh)
+df00_nh_d_reg_v_df <- reg_to_df(df00_nh_d_reg_v, D, nh)
+df00_nh_r_reg_v_df <- reg_to_df(df00_nh_r_reg_v, R, nh)
+df00_ia_d_reg_v_df <- reg_to_df(df00_ia_d_reg_v, D, ia)
+df00_ia_r_reg_v_df <- reg_to_df(df00_ia_r_reg_v, R, ia)
+
+allModelFrame_v <- data.frame(rbind(df08phone_d_reg_v_df, 
+                                  # df08phone_d_controls_reg_v_df, 
+                                  df08phone_r_reg_v_df, 
+                                  df04_national_d_reg_v_df, 
+                                  df00_national_d_reg_v_df, 
+                                  df00_national_r_reg_v_df, 
+                                  df84cm_d_reg_v_df, df00_super_d_reg_v_df, 
+                                  df00_super_r_reg_v_df, df88st_d_reg_v_df, 
+                                  df88st_r_reg_v_df, df04_nh_d_reg_v_df, 
+                                  df00_nh_d_reg_v_df, df00_nh_r_reg_v_df, 
+                                  df00_ia_d_reg_v_df, df00_ia_r_reg_v_df))
+
+allModelFrame_v <- allModelFrame_v %>%
+  rowwise() %>%
+  mutate(fctodds = factor_odds(coef))
+
+# Just electability.
+
+df08phone_d_reg_e_df <- reg_to_df(df08phone_d_reg_e, D, national)
+# df08phone_d_controls_reg_e_df <- reg_to_df(df08phone_d_controls_reg_e, D, national)
+df08phone_r_reg_e_df <- reg_to_df(df08phone_r_reg_e, R, national) 
+df04_national_d_reg_e_df <- reg_to_df(df04_national_d_reg_e, D, national)
+df00_national_d_reg_e_df <- reg_to_df(df00_national_d_reg_e, D, national)
+df00_national_r_reg_e_df <- reg_to_df(df00_national_r_reg_e, R, national)
+df84cm_d_reg_e_df <- reg_to_df(df84cm_d_reg_e, D, national)
+df00_super_d_reg_e_df <- reg_to_df(df00_super_d_reg_e, D, st)
+df00_super_r_reg_e_df <- reg_to_df(df00_super_r_reg_e, R, st)
+df88st_d_reg_e_df <- reg_to_df(df88st_d_reg_e, D, national)
+df88st_r_reg_e_df <- reg_to_df(df88st_r_reg_e, R, national)
+df04_nh_d_reg_e_df <- reg_to_df(df04_nh_d_reg_e, D, nh)
+df00_nh_d_reg_e_df <- reg_to_df(df00_nh_d_reg_e, D, nh)
+df00_nh_r_reg_e_df <- reg_to_df(df00_nh_r_reg_e, R, nh)
+df00_ia_d_reg_e_df <- reg_to_df(df00_ia_d_reg_e, D, ia)
+df00_ia_r_reg_e_df <- reg_to_df(df00_ia_r_reg_e, R, ia)
+
+allModelFrame_e <- data.frame(rbind(df08phone_d_reg_e_df, 
+                                  # df08phone_d_controls_reg_e_df, 
+                                  df08phone_r_reg_e_df, 
+                                  df04_national_d_reg_e_df, 
+                                  df00_national_d_reg_e_df, 
+                                  df00_national_r_reg_e_df, 
+                                  df84cm_d_reg_e_df, df00_super_d_reg_e_df, 
+                                  df00_super_r_reg_e_df, df88st_d_reg_e_df, 
+                                  df88st_r_reg_e_df, df04_nh_d_reg_e_df, 
+                                  df00_nh_d_reg_e_df, df00_nh_r_reg_e_df, 
+                                  df00_ia_d_reg_e_df, df00_ia_r_reg_e_df))
+
+allModelFrame_e <- allModelFrame_e %>%
+  rowwise() %>%
+  mutate(fctodds = factor_odds(coef))
+
+# Viability and electability.
+
+df08phone_d_reg_ve_df <- reg_to_df(df08phone_d_reg_ve, D, national)
+# df08phone_d_controls_reg_ve_df <- reg_to_df(df08phone_d_controls_reg, D, national)
+df08phone_r_reg_ve_df <- reg_to_df(df08phone_r_reg_ve, R, national) 
+df04_national_d_reg_ve_df <- reg_to_df(df04_national_d_reg_ve, D, national)
+df00_national_d_reg_ve_df <- reg_to_df(df00_national_d_reg_ve, D, national)
+df00_national_r_reg_ve_df <- reg_to_df(df00_national_r_reg_ve, R, national)
+df84cm_d_reg_ve_df <- reg_to_df(df84cm_d_reg_ve, D, national)
+df00_super_d_reg_ve_df <- reg_to_df(df00_super_d_reg_ve, D, st)
+df00_super_r_reg_ve_df <- reg_to_df(df00_super_r_reg_ve, R, st)
+df88st_d_reg_ve_df <- reg_to_df(df88st_d_reg_ve, D, national)
+df88st_r_reg_ve_df <- reg_to_df(df88st_r_reg_ve, R, national)
+df04_nh_d_reg_ve_df <- reg_to_df(df04_nh_d_reg_ve, D, nh)
+df00_nh_d_reg_ve_df <- reg_to_df(df00_nh_d_reg_ve, D, nh)
+df00_nh_r_reg_ve_df <- reg_to_df(df00_nh_r_reg_ve, R, nh)
+df00_ia_d_reg_ve_df <- reg_to_df(df00_ia_d_reg_ve, D, ia)
+df00_ia_r_reg_ve_df <- reg_to_df(df00_ia_r_reg_ve, R, ia)
+
+allModelFrame_ve <- data.frame(rbind(df08phone_d_reg_ve_df, 
+                                  # df08phone_d_controls_reg_ve_df, 
+                                  df08phone_r_reg_ve_df, 
+                                  df04_national_d_reg_ve_df, 
+                                  df00_national_d_reg_ve_df, 
+                                  df00_national_r_reg_ve_df, 
+                                  df84cm_d_reg_ve_df, df00_super_d_reg_ve_df, 
+                                  df00_super_r_reg_ve_df, df88st_d_reg_ve_df, 
+                                  df88st_r_reg_ve_df, df04_nh_d_reg_ve_df, 
+                                  df00_nh_d_reg_ve_df, df00_nh_r_reg_ve_df, 
+                                  df00_ia_d_reg_ve_df, df00_ia_r_reg_ve_df))
+
+allModelFrame_ve <- allModelFrame_ve %>%
+  rowwise() %>%
+  mutate(fctodds = factor_odds(coef))
+
+# Just strategy.
+
+df08phone_d_reg_s_df <- reg_to_df(df08phone_d_reg_s, D, national)
+df08phone_r_reg_s_df <- reg_to_df(df08phone_r_reg_s, R, national) 
+df04_national_d_reg_s_df <- reg_to_df(df04_national_d_reg_s, D, national)
+df00_national_d_reg_s_df <- reg_to_df(df00_national_d_reg_s, D, national)
+df00_national_r_reg_s_df <- reg_to_df(df00_national_r_reg_s, R, national)
+df84cm_d_reg_s_df <- reg_to_df(df84cm_d_reg_s, D, national)
+df00_super_d_reg_s_df <- reg_to_df(df00_super_d_reg_s, D, st)
+df00_super_r_reg_s_df <- reg_to_df(df00_super_r_reg_s, R, st)
+df88st_d_reg_s_df <- reg_to_df(df88st_d_reg_s, D, national)
+df88st_r_reg_s_df <- reg_to_df(df88st_r_reg_s, R, national)
+df04_nh_d_reg_s_df <- reg_to_df(df04_nh_d_reg_s, D, nh)
+df00_nh_d_reg_s_df <- reg_to_df(df00_nh_d_reg_s, D, nh)
+df00_nh_r_reg_s_df <- reg_to_df(df00_nh_r_reg_s, R, nh)
+df00_ia_d_reg_s_df <- reg_to_df(df00_ia_d_reg_s, D, ia)
+df00_ia_r_reg_s_df <- reg_to_df(df00_ia_r_reg_s, R, ia)
+
+allModelFrame_s <- data.frame(rbind(df08phone_d_reg_s_df, df08phone_r_reg_s_df, 
+                                  df04_national_d_reg_s_df, 
+                                  df00_national_d_reg_s_df, 
+                                  df00_national_r_reg_s_df, 
+                                  df84cm_d_reg_s_df, df00_super_d_reg_s_df, 
+                                  df00_super_r_reg_s_df, df88st_d_reg_s_df, 
+                                  df88st_r_reg_s_df, df04_nh_d_reg_s_df, 
+                                  df00_nh_d_reg_s_df, df00_nh_r_reg_s_df, 
+                                  df00_ia_d_reg_s_df, df00_ia_r_reg_s_df))
+
+allModelFrame_s <- allModelFrame_s %>%
+  rowwise() %>%
+  mutate(fctodds = factor_odds(coef))
+
+interval1 <- -qnorm((1 - 0.9) / 2)  # 90% CI multiplier
+interval2 <- -qnorm((1 - 0.95) / 2)  # 95% CI multiplier
+```
+
+
+## Robustness Checks
+
+```{r}
+# Factor analysis.
+
+df08phone_d_s_fa <- df08phone_d_v2 %>% 
+  select(NORMALIZED_FT, NORMALIZED_STRATEGY, NORMALIZED_IDEOLOGY) %>%
+  factanal(factors = 1)
+df08phone_d_s_fa
+
+# VIF test.
+
+car::vif(df08phone_d_reg_s)
+
+# Correlation matricies.
+
+df08phone_d_v2 %>%
+  select(NORMALIZED_FT, NORMALIZED_IDEOLOGY, NORMALIZED_STRATEGY) %>%
+  cor(.)
+```
+
+
+## Export Results
+
+```{r message=FALSE, warning=FALSE}
+# Viability, electability, and strategy. 
+
+stargazer(df84cm_d_reg_v, df84cm_d_reg_e, df84cm_d_reg_s, 
+          df88st_d_reg_v, df88st_d_reg_e, df88st_d_reg_s, 
+          df88st_r_reg_v, df88st_r_reg_e, df88st_r_reg_s, 
+          title = "Results", type = "html",
+          out = "regression_outputs/regressions_over_time_ves_1.xls", align = TRUE)
+
+stargazer(df00_national_d_reg_v, df00_national_d_reg_e, df00_national_d_reg_s, 
+          df00_national_r_reg_v, df00_national_r_reg_e, df00_national_r_reg_s,
+          df04_national_d_reg_v, df04_national_d_reg_e, df04_national_d_reg_s, 
+          df08phone_d_reg_v, df08phone_d_reg_e, df08phone_d_reg_s, 
+          df08phone_r_reg_v, df08phone_r_reg_e, df08phone_r_reg_s,
+          title = "Results", type = "html",
+          out = "regression_outputs/regressions_over_time_ves_2.xls", align = TRUE)
+
+# Only strategy.
+
+stargazer(df84cm_d_reg_s, df88st_d_reg_s, df88st_r_reg_s, 
+          df00_national_d_reg_s, df00_national_r_reg_s,
+          df04_national_d_reg_s, df08phone_d_reg_s, df08phone_r_reg_s,
+          title = "Results", type = "html",
+          out = "regression_outputs/regressions_over_time_s.doc", align = TRUE)
+```
+
+
+## Create Regression Tables (Part One - Viability and Electability)
+
+```{r}
+# Aggregate results for all national contests.
+
+allModelFrame2_ve <- allModelFrame_ve %>%
+  filter(variable %in% c("NORMALIZED_FT", "NORMALIZED_VIABILITY", 
+                     "NORMALIZED_ELECTABILITY", "NORMALIZED_IDEOLOGY"),
+         scope == "national") %>%
+  group_by(variable) %>%
+  summarise(avg_coef = mean(coef)) %>%
+  mutate(avg_fctodds = factor_odds(avg_coef))
+
+# Aggregate results for all Super Tuesday contests.
+
+allModelFrame2_ve <- allModelFrame_ve %>%
+  filter(variable %in% c("NORMALIZED_FT", "NORMALIZED_VIABILITY", 
+                     "NORMALIZED_ELECTABILITY", "NORMALIZED_IDEOLOGY"),
+         scope == "st") %>%
+  group_by(variable) 
+
+# National results, disaggregated by contest.
+
+allModelFrame2_ve <- allModelFrame_ve %>%
+  filter(variable %in% c("NORMALIZED_FT", "NORMALIZED_VIABILITY", 
+                     "NORMALIZED_ELECTABILITY", "NORMALIZED_IDEOLOGY"),
+         scope == "national") %>%
+  select(variable, coef, modelname, party)
+
+# National results, disaggregated by party.
+
+allModelFrame2_ve <- allModelFrame_ve %>%
+  filter(variable %in% c("NORMALIZED_FT", "NORMALIZED_VIABILITY", 
+                     "NORMALIZED_ELECTABILITY", "NORMALIZED_IDEOLOGY"),
+         party == "D") %>%
+  group_by(variable) %>%
+  summarise(avg_coef = mean(coef)) %>%
+  mutate(avg_fctodds = factor_odds(avg_coef))
+
+allModelFrame2_ve <- allModelFrame_ve %>%
+  filter(variable %in% c("NORMALIZED_FT", "NORMALIZED_VIABILITY", 
+                     "NORMALIZED_ELECTABILITY", "NORMALIZED_IDEOLOGY"),
+         party == "R") %>%
+  group_by(variable) %>%
+  summarise(avg_coef = mean(coef)) %>%
+  mutate(avg_fctodds = factor_odds(avg_coef))
+
+# National results, disaggregated by incumbency.
+
+allModelFrame2_ve <- allModelFrame_ve %>%
+  filter(variable %in% c("NORMALIZED_FT", "NORMALIZED_VIABILITY", 
+                     "NORMALIZED_ELECTABILITY", "NORMALIZED_IDEOLOGY"),
+         modelname %in% c("df08phone_d_reg", "df00_national_d_reg")) %>%
+  group_by(variable) %>%
+  summarise(avg_coef = mean(coef)) %>%
+  mutate(avg_fctodds = factor_odds(avg_coef))
+
+allModelFrame2_ve <- allModelFrame_ve %>%
+  filter(variable %in% c("NORMALIZED_FT", "NORMALIZED_VIABILITY", 
+                     "NORMALIZED_ELECTABILITY", "NORMALIZED_IDEOLOGY"),
+         modelname %in% c("df04_national_d_reg", "df84cm_d_reg")) %>%
+  group_by(variable) %>%
+  summarise(avg_coef = mean(coef)) %>%
+  mutate(avg_fctodds = factor_odds(avg_coef))
+
+# Contests with highest feeling thermometer coefficients.
+
+allModelFrame2_ve <- allModelFrame_ve %>%
+  filter(variable %in% c("NORMALIZED_FT")) %>%
+  group_by(variable) 
+
+# Contests with highest viability coefficients.
+
+allModelFrame2_ve <- allModelFrame_ve %>%
+  filter(variable %in% c("NORMALIZED_VIABILITY")) %>%
+  group_by(variable) 
+
+# Contests with highest electability coefficients.
+
+allModelFrame2_ve <- allModelFrame_ve %>%
+  filter(variable %in% c("NORMALIZED_ELECTABILITY")) %>%
+  group_by(variable) 
+```
+
+
+## Create Regression Tables (Part Two - Strategy)
+
+```{r}
+# Aggregate results for all national contests.
+
+allModelFrame2_s <- allModelFrame_s %>%
+  filter(variable %in% c("NORMALIZED_FT", "NORMALIZED_STRATEGY", "NORMALIZED_IDEOLOGY"),
+         scope == "national") %>%
+  group_by(variable) %>%
+  summarise(avg_coef = mean(coef)) %>%
+  mutate(avg_fctodds = factor_odds(avg_coef))
+
+# Aggregate results for all Super Tuesday contests.
+
+allModelFrame2_s <- allModelFrame_s %>%
+  filter(variable %in% c("NORMALIZED_FT", "NORMALIZED_STRATEGY", "NORMALIZED_IDEOLOGY"),
+         scope == "st") %>%
+  group_by(variable) 
+
+# National results, disaggregated by contest.
+
+allModelFrame2_s <- allModelFrame_s %>%
+  filter(variable %in% c("NORMALIZED_FT", "NORMALIZED_STRATEGY", "NORMALIZED_IDEOLOGY"),
+         scope == "national") %>%
+  select(variable, coef, se, modelname, party)
+
+# National results, disaggregated by party.
+
+allModelFrame2_s <- allModelFrame_s %>%
+  filter(variable %in% c("NORMALIZED_FT", "NORMALIZED_STRATEGY", "NORMALIZED_IDEOLOGY"),
+         party == "D") %>%
+  group_by(variable) %>%
+  summarise(avg_coef = mean(coef)) %>%
+  mutate(avg_fctodds = factor_odds(avg_coef))
+
+allModelFrame2_s <- allModelFrame_s %>%
+  filter(variable %in% c("NORMALIZED_FT", "NORMALIZED_STRATEGY", "NORMALIZED_IDEOLOGY"),
+         party == "R") %>%
+  group_by(variable) %>%
+  summarise(avg_coef = mean(coef)) %>%
+  mutate(avg_fctodds = factor_odds(avg_coef))
+
+# National results, disaggregated by incumbency.
+
+allModelFrame2_s <- allModelFrame_s %>%
+  filter(variable %in% c("NORMALIZED_FT", "NORMALIZED_STRATEGY", "NORMALIZED_IDEOLOGY"),
+         modelname %in% c("df08phone_d_reg", "df00_national_d_reg")) %>%
+  group_by(variable) %>%
+  summarise(avg_coef = mean(coef)) %>%
+  mutate(avg_fctodds = factor_odds(avg_coef))
+
+allModelFrame2_s <- allModelFrame_s %>%
+  filter(variable %in% c("NORMALIZED_FT", "NORMALIZED_STRATEGY", "NORMALIZED_IDEOLOGY"),
+         modelname %in% c("df04_national_d_reg", "df84cm_d_reg")) %>%
+  group_by(variable) %>%
+  summarise(avg_coef = mean(coef)) %>%
+  mutate(avg_fctodds = factor_odds(avg_coef))
+
+# Contests with highest feeling thermometer coefficients.
+
+allModelFrame2_s <- allModelFrame_s %>%
+  filter(variable %in% c("NORMALIZED_FT")) %>%
+  group_by(variable) 
+
+# Contests with highest strategy coefficients.
+
+allModelFrame2_s <- allModelFrame_s %>%
+  filter(variable %in% c("NORMALIZED_STRATEGY")) %>%
+  group_by(variable) 
+```
+
+
+## Create Regression Graphs (Part One - Viability and Electability)
+
+```{r}
+# Coefficients over time (national surveys).
+
+allModelFrame_ve %>%
+  filter(variable %in% c("NORMALIZED_VIABILITY", "NORMALIZED_ELECTABILITY", 
+                         "NORMALIZED_FT", "NORMALIZED_IDEOLOGY"),
+         scope == "national") %>%
+  mutate(modelname = factor(modelname, levels = c("df84cm_d_reg_ve", 
+                                                  "df88st_d_reg_ve",
+                                                  "df88st_r_reg_ve",
+                                                  "df00_national_d_reg_ve", 
+                                                  "df00_national_r_reg_ve", 
+                                                  "df04_national_d_reg_ve",
+                                                  "df08phone_d_reg_ve",
+                                                  "df08phone_r_reg_ve"))) %>%
+  mutate(variable = factor(variable, levels = c("NORMALIZED_VIABILITY", 
+                                                "NORMALIZED_ELECTABILITY", 
+                                                "NORMALIZED_FT", 
+                                                "NORMALIZED_IDEOLOGY"),
+                           labels = c("Viability", "Electability",
+                                      "Feeling Thermometer", "Ideology"))) %>%
+  ggplot(aes(color = modelname)) +
+    geom_hline(yintercept = 0, colour = gray(1 / 2), lty = 2) +
+    geom_pointrange(aes(x = modelname, y = coef, 
+                        ymin = coef - se * interval2,
+                        ymax = coef + se * interval2),
+                    lwd = 1 / 2, shape = 21, fill = "WHITE") +
+    theme_bw() +
+    scale_x_discrete(labels = c("1984 (D)", "1988 (D)", "1988 (R)", "2000 (D)", 
+                                "2000 (R)", "2004 (D)", 
+                                "2008 (D)", "2008 (R)")) +
+    facet_wrap(~ variable, nrow = 2) + 
+    scale_color_manual(values = c("black", "black", "black", "black", "black", 
+                                  "black", "black", "black")) + 
+    theme(legend.position = "none") + 
+    labs(
+      title = "Model Coefficients Over Time",
+      subtitle = "Comparing Sincere and Strategic Considerations",
+      x = "Nominating Contest",
+      y = "Coefficient",
+      caption = "Point estimates and 95% confidence intervals are shown."
+    ) + 
+  ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure9a2.bmp", 
+         width = 7.5, height = 4.5)
+
+# Coefficients over time (Super Tuesday surveys).
+
+allModelFrame_ve %>%
+  filter(variable %in% c("NORMALIZED_VIABILITY", "NORMALIZED_ELECTABILITY", 
+                         "NORMALIZED_FT", "NORMALIZED_IDEOLOGY"),
+         scope == "st") %>%
+  mutate(modelname = factor(modelname, levels = c("df88st_d_reg_ve", 
+                                                  "df88st_r_reg_ve",
+                                                  "df00_super_d_reg_ve", 
+                                                  "df00_super_r_reg_ve"))) %>%
+  mutate(variable = factor(variable, levels = c("NORMALIZED_VIABILITY", 
+                                                "NORMALIZED_ELECTABILITY", 
+                                                "NORMALIZED_FT", 
+                                                "NORMALIZED_IDEOLOGY"),
+                           labels = c("Viability", "Electability",
+                                      "Feeling Thermometer", "Ideology"))) %>%
+  ggplot(aes(color = modelname)) +
+    geom_hline(yintercept = 0, colour = gray(1 / 2), lty = 2) +
+    geom_pointrange(aes(x = modelname, y = coef, 
+                        ymin = coef - se * interval2,
+                        ymax = coef + se * interval2),
+                    lwd = 1 / 2, shape = 21, fill = "WHITE") +
+    theme_bw() +
+    scale_x_discrete(labels = c("1988 (D)", "1988 (R)",
+                                "2000 (D)", "2000 (R)")) +
+    facet_wrap(~ variable, nrow = 2) + 
+    scale_color_manual(values = c("black", "black", "black", "black")) + 
+    theme(legend.position = "none") + 
+    labs(
+      title = "Model Coefficients Over Time",
+      subtitle = "Comparing Sincere and Strategic Considerations",
+      x = "Nominating Contest",
+      y = "Coefficient",
+      caption = "Point estimates and 95% confidence intervals are shown."
+    ) + 
+  ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure9b.bmp", 
+         width = 7.5, height = 4.5)
+```
+
+
+## Create Regression Graphs (Part Two - Strategy)
+
+```{r}
+# National surveys
+
+allModelFrame_s %>%
+  filter(variable %in% c("NORMALIZED_STRATEGY", 
+                         "NORMALIZED_FT", "NORMALIZED_IDEOLOGY"),
+         scope == "national") %>%
+  mutate(modelname = factor(modelname, levels = c("df84cm_d_reg_s", 
+                                                  "df88st_d_reg_s",
+                                                  "df88st_r_reg_s",
+                                                  "df00_national_d_reg_s", 
+                                                  "df00_national_r_reg_s", 
+                                                  "df04_national_d_reg_s",
+                                                  "df08phone_d_reg_s",
+                                                  "df08phone_r_reg_s"))) %>%
+  mutate(variable = factor(variable, levels = c("NORMALIZED_STRATEGY", 
+                                                "NORMALIZED_FT", 
+                                                "NORMALIZED_IDEOLOGY"),
+                           labels = c("Strategy",
+                                      "Feeling Thermometer", "Ideology"))) %>%
+  ggplot(aes(color = modelname)) +
+    geom_hline(yintercept = 0, colour = gray(1 / 2), lty = 2) +
+    geom_pointrange(aes(x = modelname, y = coef, 
+                        ymin = coef - se * interval2,
+                        ymax = coef + se * interval2),
+                    lwd = 1 / 2, shape = 21, fill = "WHITE") +
+    theme_bw() +
+    scale_x_discrete(labels = c("1984 (D)", "1988 (D)", "1988 (R)", "2000 (D)", 
+                                "2000 (R)", "2004 (D)", 
+                                "2008 (D)", "2008 (R)")) +
+    facet_wrap(~ variable, nrow = 3) + 
+    scale_color_manual(values = c("black", "black", "black", "black", "black", 
+                                  "black", "black", "black")) + 
+    theme(legend.position = "none") + 
+    labs(
+      title = "Model Coefficients Over Time",
+      subtitle = "Comparing Sincere and Strategic Considerations",
+      x = "Nominating Contest",
+      y = "Coefficient",
+      caption = "Point estimates and 95% confidence intervals are shown."
+    ) + 
+  ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure9a2_v2.bmp", 
+         width = 7.5, height = 4.5)
+
+# Super Tuesday surveys
+
+allModelFrame_s %>%
+  filter(variable %in% c("NORMALIZED_STRATEGY", "NORMALIZED_FT", "NORMALIZED_IDEOLOGY"),
+         scope == "st") %>%
+  mutate(modelname = factor(modelname, levels = c("df88st_d_reg_s", 
+                                                  "df88st_r_reg_s",
+                                                  "df00_super_d_reg_s", 
+                                                  "df00_super_r_reg_s"))) %>%
+  mutate(variable = factor(variable, levels = c("NORMALIZED_STRATEGY", 
+                                                "NORMALIZED_FT", 
+                                                "NORMALIZED_IDEOLOGY"),
+                           labels = c("Strategy",
+                                      "Feeling Thermometer", "Ideology"))) %>%
+  ggplot(aes(color = modelname)) +
+    geom_hline(yintercept = 0, colour = gray(1 / 2), lty = 2) +
+    geom_pointrange(aes(x = modelname, y = coef, 
+                        ymin = coef - se * interval2,
+                        ymax = coef + se * interval2),
+                    lwd = 1 / 2, shape = 21, fill = "WHITE") +
+    theme_bw() +
+    scale_x_discrete(labels = c("1988 (D)", "1988 (R)",
+                                "2000 (D)", "2000 (R)")) +
+    facet_wrap(~ variable, nrow = 2) + 
+    scale_color_manual(values = c("black", "black", "black", "black")) + 
+    theme(legend.position = "none") + 
+    labs(
+      title = "Model Coefficients Over Time",
+      subtitle = "Comparing Sincere and Strategic Considerations",
+      x = "Nominating Contest",
+      y = "Coefficient",
+      caption = "Point estimates and 95% confidence intervals are shown."
+    ) + 
+  ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure9b_v2.bmp", 
+         width = 7.5, height = 4.5)
+```
+
+
+
+##########
+
+## Prediction Section
+
+```{r}
+# Creating the model.
+
+df08phone_d_controls_stan <- stan_glm(data = df08phone_d_controls, formula = 
+                                 VoteCandidate ~ CLINTON + EDWARDS +
+                                 NORMALIZED_FT + NORMALIZED_VIABILITY + 
+                                 NORMALIZED_ELECTABILITY + NORMALIZED_IDEOLOGY +
+                                 WA02_c + WA04_c + SOMEHS + HS + VOCATIONAL +
+                                 SOMECOLLEGE + ASSOCIATES + BACHELORS + 
+                                 SOMEPROFESSIONAL + PROFESSIONAL + BLACK +
+                                 ASIAN + NATIVE + HISPANIC + MIXED + OTHER + 
+                                 FEMALE + WEAK + SOMEWHATCLOSELY + 
+                                 NOTTOOCLOSELY + NOTCLOSELYATALL)
+
+# Prediction template (all variables set to average values).
+
+newobs <- tibble(CLINTON = mean(df08phone_d_controls$CLINTON),
+                 EDWARDS = mean(df08phone_d_controls$EDWARDS),
+                 NORMALIZED_FT = mean(df08phone_d_controls$NORMALIZED_FT),
+                 NORMALIZED_VIABILITY = mean(df08phone_d_controls$NORMALIZED_VIABILITY),
+                 NORMALIZED_ELECTABILITY = mean(df08phone_d_controls$NORMALIZED_ELECTABILITY),
+                 NORMALIZED_IDEOLOGY = mean(df08phone_d_controls$NORMALIZED_IDEOLOGY),
+                 WA02_c = mean(df08phone_d_controls$WA02_c),
+                 WA04_c = mean(df08phone_d_controls$WA04_c),
+                 SOMEHS = mean(df08phone_d_controls$SOMEHS),
+                 HS = mean(df08phone_d_controls$HS),
+                 VOCATIONAL = mean(df08phone_d_controls$VOCATIONAL),
+                 SOMECOLLEGE = mean(df08phone_d_controls$SOMECOLLEGE),
+                 ASSOCIATES = mean(df08phone_d_controls$ASSOCIATES),
+                 BACHELORS = mean(df08phone_d_controls$BACHELORS),
+                 SOMEPROFESSIONAL = mean(df08phone_d_controls$SOMEPROFESSIONAL),
+                 PROFESSIONAL = mean(df08phone_d_controls$PROFESSIONAL),
+                 BLACK = mean(df08phone_d_controls$BLACK),
+                 ASIAN = mean(df08phone_d_controls$ASIAN),
+                 NATIVE = mean(df08phone_d_controls$NATIVE),
+                 HISPANIC = mean(df08phone_d_controls$HISPANIC),
+                 MIXED = mean(df08phone_d_controls$MIXED),
+                 OTHER = mean(df08phone_d_controls$OTHER),
+                 FEMALE = mean(df08phone_d_controls$FEMALE),
+                 WEAK = mean(df08phone_d_controls$WEAK),
+                 SOMEWHATCLOSELY = mean(df08phone_d_controls$SOMEWHATCLOSELY),
+                 NOTTOOCLOSELY = mean(df08phone_d_controls$NOTTOOCLOSELY),
+                 NOTCLOSELYATALL = mean(df08phone_d_controls$NOTCLOSELYATALL),
+                 )
+
+pe <- posterior_epred(object = df08phone_d_controls_stan,
+                newdata = newobs) %>% 
+        as_tibble()
+
+pe %>% 
+  ggplot(aes(x = `1`)) +
+    geom_histogram(aes(y = after_stat(count/sum(count))),
+                   bins = 100) +
+    scale_x_continuous(labels = scales::number_format()) +
+    scale_y_continuous(labels = scales::percent_format())
+
+### Predictions ###
+
+# Varying viability, uneducated voters
+
+newobs <- tibble(CLINTON = mean(df08phone_d_controls$CLINTON),
+                 EDWARDS = mean(df08phone_d_controls$EDWARDS),
+                 NORMALIZED_FT = mean(df08phone_d_controls$NORMALIZED_FT),
+                 NORMALIZED_VIABILITY = c(0, 1),
+                 NORMALIZED_ELECTABILITY = mean(df08phone_d_controls$NORMALIZED_ELECTABILITY),
+                 NORMALIZED_IDEOLOGY = mean(df08phone_d_controls$NORMALIZED_IDEOLOGY),
+                 WA02_c = mean(df08phone_d_controls$WA02_c),
+                 WA04_c = mean(df08phone_d_controls$WA04_c),
+                 SOMEHS = 0,
+                 HS = 0,
+                 VOCATIONAL = 0,
+                 SOMECOLLEGE = 0,
+                 ASSOCIATES = 0,
+                 BACHELORS = 0,
+                 SOMEPROFESSIONAL = 0,
+                 PROFESSIONAL = 0,
+                 BLACK = mean(df08phone_d_controls$BLACK),
+                 ASIAN = mean(df08phone_d_controls$ASIAN),
+                 NATIVE = mean(df08phone_d_controls$NATIVE),
+                 HISPANIC = mean(df08phone_d_controls$HISPANIC),
+                 MIXED = mean(df08phone_d_controls$MIXED),
+                 OTHER = mean(df08phone_d_controls$OTHER),
+                 FEMALE = mean(df08phone_d_controls$FEMALE),
+                 WEAK = mean(df08phone_d_controls$WEAK),
+                 SOMEWHATCLOSELY = mean(df08phone_d_controls$SOMEWHATCLOSELY),
+                 NOTTOOCLOSELY = mean(df08phone_d_controls$NOTTOOCLOSELY),
+                 NOTCLOSELYATALL = mean(df08phone_d_controls$NOTCLOSELYATALL),
+                 )
+
+pe <- posterior_epred(object = df08phone_d_controls_stan,
+                newdata = newobs) %>% 
+  as_tibble() %>% 
+  rename("NotViable" = `1`,
+         "Viable" = `2`)
+
+pe %>% 
+ pivot_longer(cols = NotViable:Viable, 
+               names_to = "Viability",
+               values_to = "probability") %>% 
+  ggplot(aes(probability, fill = Viability)) +
+    geom_histogram(aes(y = after_stat(count/sum(count))),
+                   alpha = 0.5, 
+                   bins = 100, 
+                   position = "identity") +
+    scale_x_continuous(labels = scales::number_format())
+    scale_y_continuous(labels = scales::percent_format())
+    theme_classic()
+    
+# Varying viability, educated voters
+
+newobs <- tibble(CLINTON = mean(df08phone_d_controls$CLINTON),
+                 EDWARDS = mean(df08phone_d_controls$EDWARDS),
+                 NORMALIZED_FT = mean(df08phone_d_controls$NORMALIZED_FT),
+                 NORMALIZED_VIABILITY = c(0, 1),
+                 NORMALIZED_ELECTABILITY = mean(df08phone_d_controls$NORMALIZED_ELECTABILITY),
+                 NORMALIZED_IDEOLOGY = mean(df08phone_d_controls$NORMALIZED_IDEOLOGY),
+                 WA02_c = mean(df08phone_d_controls$WA02_c),
+                 WA04_c = mean(df08phone_d_controls$WA04_c),
+                 SOMEHS = 0,
+                 HS = 0,
+                 VOCATIONAL = 0,
+                 SOMECOLLEGE = 0,
+                 ASSOCIATES = 0,
+                 BACHELORS = 0,
+                 SOMEPROFESSIONAL = 0,
+                 PROFESSIONAL = 1,
+                 BLACK = mean(df08phone_d_controls$BLACK),
+                 ASIAN = mean(df08phone_d_controls$ASIAN),
+                 NATIVE = mean(df08phone_d_controls$NATIVE),
+                 HISPANIC = mean(df08phone_d_controls$HISPANIC),
+                 MIXED = mean(df08phone_d_controls$MIXED),
+                 OTHER = mean(df08phone_d_controls$OTHER),
+                 FEMALE = mean(df08phone_d_controls$FEMALE),
+                 WEAK = mean(df08phone_d_controls$WEAK),
+                 SOMEWHATCLOSELY = mean(df08phone_d_controls$SOMEWHATCLOSELY),
+                 NOTTOOCLOSELY = mean(df08phone_d_controls$NOTTOOCLOSELY),
+                 NOTCLOSELYATALL = mean(df08phone_d_controls$NOTCLOSELYATALL),
+                 )
+
+pe <- posterior_epred(object = df08phone_d_controls_stan,
+                newdata = newobs) %>% 
+  as_tibble() %>% 
+  rename("NotViable" = `1`,
+         "Viable" = `2`)
+
+pe %>% 
+ pivot_longer(cols = NotViable:Viable, 
+               names_to = "Viability",
+               values_to = "probability") %>% 
+  ggplot(aes(probability, fill = Viability)) +
+    geom_histogram(aes(y = after_stat(count/sum(count))),
+                   alpha = 0.5, 
+                   bins = 100, 
+                   position = "identity") +
+    scale_x_continuous(labels = scales::number_format())
+    scale_y_continuous(labels = scales::percent_format())
+    theme_classic()
+```
+
+
+```{r include=FALSE}
+rm(list = ls())
+```
