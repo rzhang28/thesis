@@ -23,11 +23,11 @@ library(lubridate)
 
 ```{r warning=FALSE}
 # Read in the raw data file, converting non-responses to NAs and only filtering
-# for results before March 3, 1984 (since that is the date before Super
+# for results before March 13, 1984 (since that is the date before Super
 # Tuesday primaries).
 
-anes84_national <- spss.get("raw_data/anes/anes84-national.por", 
-                            use.value.labels = TRUE)
+# anes84_national <- spss.get("raw_data/anes/anes84-national.por", 
+#                             use.value.labels = TRUE)
 anes84_cm <- spss.get("raw_data/anes/anes84-continuous-monitoring.por", 
                       use.value.labels = TRUE) %>%
   mutate(date = as.Date(paste(VCM0105, VCM0106, 1984), format = "%m%d%Y")) %>%
@@ -292,6 +292,7 @@ df_final[-1][my_index] <- 1
 
 ```{r}
 df_final %>%
+  select(-TRAITS) %>%
   drop_na() %>%
   write.dta("clean_data/df84cm_d_v2.dta")
 ```
@@ -304,28 +305,16 @@ df_final %>%
 
 ```{r}
 df_final %>%
-  ggplot(aes(x = NORMALIZED_ELECTABILITY)) +
+  ggplot(aes(x = NORMALIZED_STRATEGY)) +
     geom_density() +
     facet_wrap(~ Candidate) +
     theme_bw() + 
     labs(
-      title = "Candidate Electability",
-      x = "Normalized Electability",
+      title = "Candidate Strategy",
+      x = "Normalized Strategy",
       y = "Density"
     ) +
-  ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure2/anes84_cm_d_electability.bmp", width = 7.5, height = 4.5)
-
-df_final %>%
-  ggplot(aes(x = NORMALIZED_VIABILITY)) +
-    geom_density() +
-    facet_wrap(~ Candidate) +
-    theme_bw() + 
-    labs(
-      title = "Candidate Viability",
-      x = "Normalized Viability",
-      y = "Density"
-    ) +
-  ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure2/nanes84_cm_d_viability.bmp", width = 7.5, height = 4.5)
+  ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure2/anes84_cm_d_strategy.bmp", width = 7.5, height = 4.5)
 ```
 
 
@@ -341,7 +330,7 @@ df_final %>%
 
 df_final_2 <- df_final %>%
   rowwise() %>%
-  mutate(SINCERE = (NORMALIZED_FT + TRAITS) / 2,
+  mutate(SINCERE = NORMALIZED_FT,
          STRATEGIC = NORMALIZED_STRATEGY) %>%
   select(ID, Candidate, VoteCandidate, SINCERE, STRATEGIC) %>%
   group_by(ID) %>%

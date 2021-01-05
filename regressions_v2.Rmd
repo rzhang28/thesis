@@ -9,31 +9,23 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 
 library(tidyverse)
-library(Hmisc)
-library(rqPen)
-library(vctrs)
 library(foreign)
 library(margins)
-library(mfx)
-library(nnet)
-library(RStata)
-library(mlogit)
-library(jtools)
 library(ggstance)
 library(clogitboost)
 library(ggplot2)
-library(scales)
 library(survival)
 library(ggeffects)
 library(effects)
 library(dplyr)
+library(stargazer)
+library(dcolumn)
 ```
 
 
 # Read Data
 
 ```{r}
-
 df08phone_d <- read.dta("clean_data/df08phone_d_v2.dta")
 df08phone_r <- read.dta("clean_data/df08phone_r_v2.dta")
 
@@ -53,19 +45,15 @@ df00_nh_r <- read.dta("clean_data/df00_nh_r_v2.dta")
 
 df00_ia_d <- read.dta("clean_data/df00_ia_d_v2.dta")
 df00_ia_r <- read.dta("clean_data/df00_ia_r_v2.dta")
-
 ```
 
 
-## Regressions
+## Run Regressions
 
 ```{r}
-
 df08phone_d_reg <- clogit(data = df08phone_d, formula = VoteCandidate ~ CLINTON 
                           + EDWARDS + NORMALIZED_FT + NORMALIZED_STRATEGY + NORMALIZED_IDEOLOGY + 
                             strata(ID))
-df08phone_d_reg
-
 df08phone_r_reg <- clogit(data = df08phone_r, formula = VoteCandidate ~ ROMNEY +
                             HUCKABEE + NORMALIZED_FT + NORMALIZED_STRATEGY + NORMALIZED_IDEOLOGY + 
                             strata(ID))
@@ -112,13 +100,18 @@ df00_ia_r_reg <- clogit(data = df00_ia_r, formula = VoteCandidate ~ MCCAIN +
                       NORMALIZED_FT + NORMALIZED_STRATEGY + NORMALIZED_IDEOLOGY + 
                       strata(ID))
 
+stargazer(df84cm_d_reg, df88st_d_reg, df88st_r_reg, 
+          df00_national_d_reg, df00_national_r_reg,
+          df04_national_d_reg, df08phone_d_reg, df08phone_r_reg,
+          title = "Results", type = "html",
+          out = "regressions_over_time.xls", align = TRUE)
+
 ```
 
 
-## Merging and Calculation of Odds and Confidence Intervals
+## Convert Regressions to Tibbles, Calculate Odds and Confidence Intervals
 
 ```{r}
-
 reg_to_df <- function(x, y, z) {
   data.frame(variable = rownames(summary(x)$coef),
   coef = summary(x)$coef[, 1],
@@ -165,15 +158,35 @@ allModelFrame <- allModelFrame %>%
 
 interval1 <- -qnorm((1 - 0.9) / 2)  # 90% CI multiplier
 interval2 <- -qnorm((1 - 0.95) / 2)  # 95% CI multiplier
-
 ```
 
 
-# Regression Output Tables
+## Robustness Checks
 
 ```{r}
+# Factor analysis.
 
-# Grouped in the aggregate
+df08phone_d_fa <- df08phone_d %>% 
+  select(NORMALIZED_FT, NORMALIZED_STRATEGY, NORMALIZED_IDEOLOGY) %>%
+  factanal(factors = 1)
+df08phone_d_fa
+
+# VIF test.
+
+car::vif(df08phone_d_reg)
+
+# Correlation matricies.
+
+df08phone_d %>%
+  select(NORMALIZED_FT, NORMALIZED_IDEOLOGY, NORMALIZED_STRATEGY) %>%
+  cor(.)
+```
+
+
+## Create Regression Tables
+
+```{r}
+# Aggregate results for all national contests.
 
 allModelFrame2 <- allModelFrame %>%
   filter(variable %in% c("NORMALIZED_FT", "NORMALIZED_STRATEGY", "NORMALIZED_IDEOLOGY"),
@@ -182,14 +195,21 @@ allModelFrame2 <- allModelFrame %>%
   summarise(avg_coef = mean(coef)) %>%
   mutate(avg_fctodds = factor_odds(avg_coef))
 
-# Individual contests
+# Aggregate results for all Super Tuesday contests.
+
+allModelFrame2 <- allModelFrame %>%
+  filter(variable %in% c("NORMALIZED_FT", "NORMALIZED_STRATEGY", "NORMALIZED_IDEOLOGY"),
+         scope == "st") %>%
+  group_by(variable) 
+
+# National results, disaggregated by contest.
 
 allModelFrame2 <- allModelFrame %>%
   filter(variable %in% c("NORMALIZED_FT", "NORMALIZED_STRATEGY", "NORMALIZED_IDEOLOGY"),
          scope == "national") %>%
-  select(variable, coef, modelname, party)
+  select(variable, coef, se, modelname, party)
 
-# Grouped by party
+# National results, disaggregated by party.
 
 allModelFrame2 <- allModelFrame %>%
   filter(variable %in% c("NORMALIZED_FT", "NORMALIZED_STRATEGY", "NORMALIZED_IDEOLOGY"),
@@ -205,7 +225,7 @@ allModelFrame2 <- allModelFrame %>%
   summarise(avg_coef = mean(coef)) %>%
   mutate(avg_fctodds = factor_odds(avg_coef))
 
-# Grouped by incumbency
+# National results, disaggregated by incumbency.
 
 allModelFrame2 <- allModelFrame %>%
   filter(variable %in% c("NORMALIZED_FT", "NORMALIZED_STRATEGY", "NORMALIZED_IDEOLOGY"),
@@ -221,32 +241,23 @@ allModelFrame2 <- allModelFrame %>%
   summarise(avg_coef = mean(coef)) %>%
   mutate(avg_fctodds = factor_odds(avg_coef))
 
-# Highest strategy
-
-allModelFrame2 <- allModelFrame %>%
-  filter(variable %in% c("NORMALIZED_STRATEGY")) %>%
-  group_by(variable) 
-
-# Highest feeling thermometer
+# Contests with highest feeling thermometer coefficients.
 
 allModelFrame2 <- allModelFrame %>%
   filter(variable %in% c("NORMALIZED_FT")) %>%
   group_by(variable) 
 
-# Super Tuesday only
+# Contests with highest strategy coefficients.
 
 allModelFrame2 <- allModelFrame %>%
-  filter(variable %in% c("NORMALIZED_FT", "NORMALIZED_STRATEGY", "NORMALIZED_IDEOLOGY"),
-         scope == "st") %>%
+  filter(variable %in% c("NORMALIZED_STRATEGY")) %>%
   group_by(variable) 
-
 ```
 
 
-## Graph of Coefficients Over Time
+## Create Regression Graphs
 
 ```{r}
-
 # National surveys
 
 allModelFrame %>%
@@ -276,7 +287,7 @@ allModelFrame %>%
     scale_x_discrete(labels = c("1984 (D)", "1988 (D)", "1988 (R)", "2000 (D)", 
                                 "2000 (R)", "2004 (D)", 
                                 "2008 (D)", "2008 (R)")) +
-    facet_wrap(~ variable, nrow = 2) + 
+    facet_wrap(~ variable, nrow = 3) + 
     scale_color_manual(values = c("black", "black", "black", "black", "black", 
                                   "black", "black", "black")) + 
     theme(legend.position = "none") + 
@@ -289,7 +300,6 @@ allModelFrame %>%
     ) + 
   ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure9a2_v2.bmp", 
          width = 7.5, height = 4.5)
-
 
 # Super Tuesday surveys
 
@@ -326,67 +336,5 @@ allModelFrame %>%
     ) + 
   ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure9b_v2.bmp", 
          width = 7.5, height = 4.5)
-
 ```
 
-
-## Factor Analysis
-
-```{r}
-
-df08phone_d_fa <- df08phone_d %>% 
-  select(NORMALIZED_FT, NORMALIZED_IDEOLOGY, NORMALIZED_VIABILITY, NORMALIZED_ELECTABILITY) %>%
-  factanal(factors = 1)
-df08phone_d_fa
-
-df08phone_d_fa_v2 <- df08phone_d_v2 %>% 
-  select(NORMALIZED_FT, NORMALIZED_STRATEGY, NORMALIZED_IDEOLOGY) %>%
-  factanal(factors = 1)
-df08phone_d_fa_v2
-
-```
-
-
-## VIF Test and Correlation Matricies
-
-```{r}
-
-car::vif(df08phone_d_reg)
-car::vif(df08phone_d_reg_v2)
-
-df08phone_d %>%
-  select(NORMALIZED_FT, NORMALIZED_IDEOLOGY, NORMALIZED_VIABILITY, NORMALIZED_ELECTABILITY) %>%
-  cor(.)
-
-df08phone_d_v2 %>%
-  select(NORMALIZED_FT, NORMALIZED_IDEOLOGY, NORMALIZED_STRATEGY) %>%
-  cor(.)
-```
-
-
-## Miscellaneous
-
-```{r}
-
-model1 <- survival::clogit(data = df00_national_d, formula = VoteCandidate ~ BRADLEY +
-                      NORMALIZED_FT + NORMALIZED_VIABILITY + 
-                      NORMALIZED_ELECTABILITY + NORMALIZED_IDEOLOGY + 
-                      strata(Candidate)) %>%
-  ggpredict(terms = "NORMALIZED_FT")
-
-
-mlogit(data = df00_national_d, formula = VoteCandidate ~ NORMALIZED_FT + NORMALIZED_VIABILITY + NORMALIZED_ELECTABILITY + NORMALIZED_IDEOLOGY, reflevel = "GORE")
-
-
-effects(df00_national_d_reg, covariate = "NORMALIZED_FT", data = df00_national_d)
-
-df08phone_d_reg %>%
-  ggplot(aes(x = coefficients)) +
-    geom_histogram()
-
-effect_plot(df08phone_d_reg, pred = NORMALIZED_FT, interval = TRUE, plot.points = TRUE)
-plot_summs(df08phone_d_reg)
-plot_model(df08phone_d_reg)
-
-
-```

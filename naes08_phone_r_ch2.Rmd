@@ -6,14 +6,13 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-
 knitr::opts_chunk$set(echo = TRUE)
+
 library(tidyverse)
 library(Hmisc)
 library(rqPen)
 library(vctrs)
 library(foreign)
-
 ```
 
 

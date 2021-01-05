@@ -24,7 +24,9 @@ library(foreign)
 # Read in the raw data file, converting non-responses to NAs.
 
 naes04 <- read.spss("raw_data/naes/naes04-national.sav",
-                    to.data.frame = TRUE, use.value.labels = FALSE)
+                    to.data.frame = TRUE, use.value.labels = FALSE) %>%
+    filter(cDATE >= 20040101,
+           cDATE <= 20040302)
 naes04[naes04 == 998] <- NA
 naes04[naes04 == 999] <- NA
 ```
@@ -33,7 +35,6 @@ naes04[naes04 == 999] <- NA
 ## Clean Data (Part One - Select Columns)
 
 ```{r}
-
 df04 <- naes04 %>%
 
   # Only select columns that correspond to the survey questions that I am
@@ -290,32 +291,20 @@ df_final %>%
 ##########
 
 
-## Graphs of Candidate Viability and Electability 
+## Graphs of Candidate Strategy
 
 ```{r}
 df_final %>%
-  ggplot(aes(x = NORMALIZED_ELECTABILITY)) +
+  ggplot(aes(x = NORMALIZED_STRATEGY)) +
     geom_density() +
     facet_wrap(~ Candidate) +
     theme_bw() + 
     labs(
-      title = "Candidate Electability",
-      x = "Normalized Electability",
+      title = "Candidate Strategy",
+      x = "Normalized Strategy",
       y = "Density"
     ) +
-  ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure2/naes04_national_d_electability.bmp", width = 7.5, height = 4.5)
-
-df_final %>%
-  ggplot(aes(x = NORMALIZED_VIABILITY)) +
-    geom_density() +
-    facet_wrap(~ Candidate) +
-    theme_bw() + 
-    labs(
-      title = "Candidate Viability",
-      x = "Normalized Viability",
-      y = "Density"
-    ) +
-  ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure2/naes04_national_d_viability.bmp", width = 7.5, height = 4.5)
+  ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure2/naes04_national_d_strategy.bmp", width = 7.5, height = 4.5)
 ```
 
 
@@ -331,7 +320,7 @@ df_final %>%
 
 df_final_2 <- df_final %>%
   rowwise() %>%
-  mutate(SINCERE = (NORMALIZED_FT + TRAITS) / 2,
+  mutate(SINCERE = NORMALIZED_FT,
          STRATEGIC = NORMALIZED_STRATEGY) %>%
   select(ID, Candidate, VoteCandidate, SINCERE, STRATEGIC) %>%
   group_by(ID) %>%

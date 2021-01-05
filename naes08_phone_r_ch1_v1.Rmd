@@ -27,7 +27,8 @@ library(foreign)
 
 naes08_phone <- read.spss("raw_data/naes/naes08-phone-nat-rcs-data-full.sav",
                   to.data.frame = TRUE, use.value.labels = FALSE) %>%
-    filter(DATE_c <= 20080129)
+    filter(DATE_c >= 20080101,
+           DATE_c <= 20080129)
 naes08_phone[naes08_phone == 998] <- NA
 naes08_phone[naes08_phone == 999] <- NA
 ```
@@ -309,7 +310,6 @@ my_index <- cbind(seq_len(nrow(df_final)),
 
 # Assign 1 to my_index cells.
 df_final[-1][my_index] <- 1
-
 ```
 
 
@@ -366,7 +366,7 @@ df_final %>%
 
 df_final_2 <- df_final %>%
   rowwise() %>%
-  mutate(SINCERE = (NORMALIZED_FT + TRAITS) / 2,
+  mutate(SINCERE = NORMALIZED_FT,
          STRATEGIC = (NORMALIZED_VIABILITY + NORMALIZED_ELECTABILITY) / 2) %>%
   select(ID, Candidate, VoteCandidate, SINCERE, STRATEGIC) %>%
   group_by(ID) %>%

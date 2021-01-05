@@ -22,7 +22,9 @@ library(foreign)
 # Read in the raw data file, converting non-responses to NAs.
 
 naes04 <- read.spss("raw_data/naes/naes04-national.sav",
-                    to.data.frame = TRUE, use.value.labels = FALSE)
+                    to.data.frame = TRUE, use.value.labels = FALSE) %>%
+    filter(cDATE >= 20040101,
+           cDATE <= 20040302)
 naes04[naes04 == 998] <- NA
 naes04[naes04 == 999] <- NA
 ```

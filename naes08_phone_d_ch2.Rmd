@@ -276,11 +276,11 @@ df_final_post[-1][my_index] <- 1
 ## Clean Data (Part Four - Combine Pre- and Post-Super Tuesday Tibbles)
 
 ```{r}
-
 df_final_pre <- read.dta("clean_data/df08phone_d.dta") %>%
   drop_na()
 
 df_final_post <- df_final_post %>%
+  select(-TRAITS) %>%
   drop_na()
 
 df_final_full <- full_join(df_final_pre, df_final_post)
@@ -294,7 +294,7 @@ naes08_phone_full <- naes08_phone_full %>%
 
 df_final_full_2 <- df_final_full %>%
   rowwise() %>%
-  mutate(SINCERE = (NORMALIZED_FT + TRAITS) / 2,
+  mutate(SINCERE = NORMALIZED_FT,
          STRATEGIC = (NORMALIZED_VIABILITY + NORMALIZED_ELECTABILITY) / 2) %>%
   select(ID, Candidate, VoteCandidate, SINCERE, STRATEGIC) %>%
   group_by(ID) %>%
@@ -1180,6 +1180,7 @@ naes08_phone_full %>%
   arrange(NAc02_c)
 ```
 
+
 ## Graphs (Part Four - Candidate Traits Over Time)
 
 ```{r message=FALSE, warning=FALSE}
@@ -1364,7 +1365,6 @@ naes08_phone_full %>%
 ## Graphs (Part Five - Voter Demographics Over Time)
 
 ```{r message=FALSE, warning=FALSE}
-
 # Voter political orientation ratings before vs. after the Iowa caucuses.
 
 naes08_phone_full %>%

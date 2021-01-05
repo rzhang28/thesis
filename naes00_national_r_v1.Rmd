@@ -27,7 +27,8 @@ library(foreign)
 
 naes00 <- read.spss("raw_data/naes/NAES-2000-Nat-CS-19991214-20000403-Data.sav",
                     to.data.frame = TRUE, use.value.labels = FALSE) %>%
-    filter(cdate <= 20000307)
+    filter(cdate >= 20000101,
+           cdate <= 20000307)
 naes00[naes00 == 998] <- NA
 naes00[naes00 == 999] <- NA
 ```

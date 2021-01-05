@@ -27,7 +27,8 @@ library(foreign)
 
 naes08_phone <- read.spss("raw_data/naes/naes08-phone-nat-rcs-data-full.sav",
                   to.data.frame = TRUE, use.value.labels = FALSE) %>%
-    filter(DATE_c <= 20080129)
+    filter(DATE_c >= 20080101,
+           DATE_c <= 20080129)
 naes08_phone[naes08_phone == 998] <- NA
 naes08_phone[naes08_phone == 999] <- NA
 ```
@@ -309,28 +310,16 @@ df_final %>%
 
 ```{r}
 df_final %>%
-  ggplot(aes(x = NORMALIZED_ELECTABILITY)) +
+  ggplot(aes(x = NORMALIZED_STRATEGY)) +
     geom_density() +
     facet_wrap(~ Candidate) +
     theme_bw() + 
     labs(
-      title = "Candidate Electability",
-      x = "Normalized Electability",
+      title = "Candidate Strategy",
+      x = "Normalized Strategy",
       y = "Density"
     ) +
-  ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure2/naes08_phone_r_electability.bmp", width = 7.5, height = 4.5)
-
-df_final %>%
-  ggplot(aes(x = NORMALIZED_VIABILITY)) +
-    geom_density() +
-    facet_wrap(~ Candidate) +
-    theme_bw() + 
-    labs(
-      title = "Candidate Viability",
-      x = "Normalized Viability",
-      y = "Density"
-    ) +
-  ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure2/naes08_phone_r_viability.bmp", width = 7.5, height = 4.5)
+  ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure2/naes08_phone_r_strategy.bmp", width = 7.5, height = 4.5)
 ```
 
 
@@ -346,7 +335,7 @@ df_final %>%
 
 df_final_2 <- df_final %>%
   rowwise() %>%
-  mutate(SINCERE = (NORMALIZED_FT + TRAITS) / 2,
+  mutate(SINCERE = NORMALIZED_FT,
          STRATEGIC = NORMALIZED_STRATEGY) %>%
   select(ID, Candidate, VoteCandidate, SINCERE, STRATEGIC) %>%
   group_by(ID) %>%

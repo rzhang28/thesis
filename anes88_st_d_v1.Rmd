@@ -337,6 +337,7 @@ df_final[-1][my_index] <- 1
 
 ```{r}
 df_final %>%
+  select(-TRAITS) %>%
   drop_na() %>%
   write.dta("clean_data/df88st_d.dta")
 ```
@@ -386,7 +387,7 @@ df_final %>%
 
 df_final_2 <- df_final %>%
   rowwise() %>%
-  mutate(SINCERE = (NORMALIZED_FT + TRAITS) / 2,
+  mutate(SINCERE = NORMALIZED_FT,
          STRATEGIC = (NORMALIZED_VIABILITY + NORMALIZED_ELECTABILITY) / 2) %>%
   select(ID, Candidate, VoteCandidate, SINCERE, STRATEGIC) %>%
   group_by(ID) %>%
