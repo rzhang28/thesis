@@ -37,7 +37,7 @@ df00 <- naes00 %>%
 
   # Only select columns that correspond to the survey questions that I am
   # interested in, which includes question about favorability, viability,
-  # electability, ideology, and candidate traits.
+  # electability, and ideology.
   
   select(ckey, cr12, 
          ca11, ca30, 

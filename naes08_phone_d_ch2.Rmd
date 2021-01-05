@@ -6,8 +6,8 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-
 knitr::opts_chunk$set(echo = TRUE)
+
 library(tidyverse)
 library(Hmisc)
 library(rqPen)
@@ -19,28 +19,32 @@ library(ggplot2)
 library(survival)
 
 set.seed(123)
-
 ```
 
 
 ## Create Post-Super Tuesday Dataset
 
 ```{r warning=FALSE}
+# Read in the raw data file, converting non-responses to NAs and only filtering
+# for results after January 29, 2008 (since that is the date before Super
+# Tuesday primaries).
 
 naes08_phone_post <- read.spss("raw_data/naes/naes08-phone-nat-rcs-data-full.sav",
                   to.data.frame = TRUE, use.value.labels = FALSE) %>%
     filter(DATE_c > 20080129)
 naes08_phone_post[naes08_phone_post == 998] <- NA
 naes08_phone_post[naes08_phone_post == 999] <- NA
-
 ```
 
 
-## Cleaning Data
+## Clean Data (Part One - Select Columns)
 
 ```{r}
-
 df08phone <- naes08_phone_post %>%
+
+  # Only select columns that correspond to the survey questions that I am
+  # interested in, which includes question about favorability, viability,
+  # electability, ideology, and candidate traits.
 
   select(RKEY, RBa02_c, 
          ABc01_c, ABo01_c,
@@ -52,7 +56,7 @@ df08phone <- naes08_phone_post %>%
          ABo05_c, ABo06_c, ABo07_c, ABo08_c,
          )
 
-# Rename columns
+# Rename columns.
 
 my_candidate <- c("CLINTON", "OBAMA")
 my_candidate_id <- as.integer(c(2, 7))
@@ -68,25 +72,33 @@ my_names <- c("ID", "voting",
               )
 
 colnames(df08phone) <- my_names
-
 ```
 
 
 ```{r}
+# Create a new columns that includes a column named VoteCandidate, which
+# displays the respondent's ultimate primary pick. This column is needed, since
+# it will be the dependent variable in my conditional logistic regression later.
 
 df <- data.frame(my_candidate_id, my_candidate, stringsAsFactors = FALSE)
 df08phone <-merge(df08phone, df, by.x = "voting", 
                   by.y = "my_candidate_id", all.x = TRUE)
 names(df08phone)[names(df08phone) == "my_candidate"] <- "VoteCandidate"
-
 ```
 
 
-## Normalize Variables
+```{r eval=FALSE, include=FALSE}
+# Verify that the column renaming, candidates, and their number 1-5 mapping are
+# all correct.
+
+str(df08phone)
+```
+
+
+## Clean Data (Part Two - Normalize Variables)
 
 ```{r warning=FALSE}
-
-# 1) Normalize feeling thermometers
+# 1. Build function that normalizes feeling thermometer ratings. 
 
 my_rescale1 <- function(X) { 
   if (max(X, na.rm = TRUE) == min(X, na.rm = TRUE)) 
@@ -96,24 +108,34 @@ my_rescale1 <- function(X) {
             (max(X, na.rm = TRUE) - min(X, na.rm = TRUE)), 6)
 }
 
+# Pass feeling thermometer columns (each representing the feeling thermometer
+# rating for a different candidate) through the function.
+
 df08phone[, c("NORMALIZED_FT1", "NORMALIZED_FT2")] <- t(apply(
   df08phone[, c("Feeling1", "Feeling2")],
   MARGIN = 1,
   FUN = my_rescale1))
 
-# 2) Normalize viability and electability
+# 2/3. Build function that normalizes viability and electability ratings. 
 
 my_rescale2 <- function(X) round(X / sum(X, na.rm = TRUE), 6)
+
+# Pass viability columns (each representing the viability rating for a different
+# candidate) through the function.
 
 df08phone[, c("NORMALIZED_VIABILITY1", "NORMALIZED_VIABILITY2")] <- t(apply(
                 df08phone[, c("Viability1", "Viability2")],
                 MARGIN = 1, FUN = my_rescale2))
 
+# Pass electability columns (each representing the electability rating for a
+# different candidate) through the function.
+
 df08phone[, c("NORMALIZED_ELECTABILITY1", "NORMALIZED_ELECTABILITY2")] <- t(apply(
                 df08phone[, c("Electability1", "Electability2")],
                 MARGIN = 1, FUN = my_rescale2))
 
-# 3) Rescale ideological distance
+# 4. Calculate ideological distance. Each column represents the ideological
+# rating for a different candidate.
 
 df08phone[, c("temp_1", "temp_2")] <- square(
   df08phone[, c("Ideology1", "Ideology2")] -
@@ -134,7 +156,7 @@ df08phone <- df08phone %>%
                                                temp_max_min, 6))) %>%
   select(-starts_with("temp_") )
 
-# 4) Average candidate traits
+# Average of all the relevant candidate traits. 
 
 df08phone$TRAITS1 = rowMeans(
   df08phone[, c("Lead1", "Trust1", "Experience1", "Judgement1")],
@@ -143,18 +165,17 @@ df08phone$TRAITS2 = rowMeans(
   df08phone[, c("Lead2", "Trust2", "Experience2", "Judgement2")],
   na.rm = TRUE) / 10
 
-# 5) Convert NaN to NA
+# Convert NANs to NAs, which will eventually be dropped. 
 
 df08phone[df08phone == "NaN"] <- NA
-
 ```
  
 
-## Pivoting Data (Part Two)
+## Clean Data (Part Three - Pivot Tibble)
 
 ```{r}
-
-# 1) Subset: df08phone_normalized_ft
+# 1. Pivot feeling thermometer ratings longer, since conditional logistic
+# regressions require multiple rows per respondent (1 row per candidate).
 
 my_cols <- c("ID", "VoteCandidate", "NORMALIZED_FT1", "NORMALIZED_FT2")
 df <- df08phone[, my_cols]
@@ -166,7 +187,8 @@ df <- df %>%
                cols = -c(ID, VoteCandidate))
 df_final_post <- df
 
-# 2) Subset: df08phone_normalized_viability
+# 2. Pivot viability ratings longer, since conditional logistic regressions
+# require multiple rows per respondent (1 row per candidate).
 
 my_cols <- c("ID", "NORMALIZED_VIABILITY1", "NORMALIZED_VIABILITY2")
 df <- df08phone[, my_cols]
@@ -177,13 +199,16 @@ df <- df %>%
                values_to = "NORMALIZED_VIABILITY", 
                cols = -ID)
 
+# Merge pivoted viability ratings with the already-pivoted tibble.
+
 df_final_post = merge(df_final_post, df, by = c("ID", "Candidate"))
 
-# Convert Vote Candidate to 0, 1
+# Convert VoteCandidate to 0, 1.
 
 df_final_post$VoteCandidate <- 1 * (df_final_post$Candidate == df_final_post$VoteCandidate)
 
-# 3) Subset: df08phone_normalized_electability
+# 3. Pivot electability ratings longer, since conditional logistic regressions
+# require multiple rows per respondent (1 row per candidate).
 
 my_cols <- c("ID", "NORMALIZED_ELECTABILITY1", "NORMALIZED_ELECTABILITY2")
 df <- df08phone[, my_cols]
@@ -194,9 +219,12 @@ df <- df %>%
                values_to = "NORMALIZED_ELECTABILITY", 
                cols = -ID)
 
+# Merge pivoted electability ratings with the already-pivoted tibble.
+
 df_final_post = merge(df_final_post, df, by = c("ID", "Candidate"))
 
-# 4) Subset: df08phone_normalized_ideology
+# 4. Pivot ideology ratings longer, since conditional logistic regressions
+# require multiple rows per respondent (1 row per candidate).
 
 my_cols <- c("ID", "NORMALIZED_IDEOLOGY1", "NORMALIZED_IDEOLOGY2")
 df <- df08phone[, my_cols]
@@ -207,9 +235,12 @@ df <- df %>%
                values_to = "NORMALIZED_IDEOLOGY", 
                cols = -ID)
 
+# Merge pivoted ideology ratings with the already-pivoted tibble.
+
 df_final_post = merge(df_final_post, df, by = c("ID", "Candidate"))
 
-# 5) Subset: df08phone_traits
+# 5. Pivot candidate traits ratings longer, since conditional logistic
+# regressions require multiple rows per respondent (1 row per candidate).
 
 my_cols <- c("ID", "TRAITS1", "TRAITS2")
 df <- df08phone[, my_cols]
@@ -220,24 +251,29 @@ df <- df %>%
                values_to = "TRAITS", 
                cols = -ID)
 
-df_final_post = merge(df_final_post, df, by = c("ID", "Candidate"))
+# Merge the pivoted character traits ratings with the already-pivoted tibble.
 
+df_final_post = merge(df_final_post, df, by = c("ID", "Candidate"))
 ```
 
 
 ```{r}
+# Create new columns using candidate names, assign 0 to all.
 
 df_final_post[, sort(my_candidate)] <- 0
+
+# Get index when intersection column name/value matches.
 
 my_index <- cbind(seq_len(nrow(df_final_post)), 
                   match(df_final_post$Candidate, names(df_final_post)[-1]))
 
-df_final_post[-1][my_index] <- 1
+# Assign 1 to my_index cells.
 
+df_final_post[-1][my_index] <- 1
 ```
 
 
-## Clean Data
+## Clean Data (Part Four - Combine Pre- and Post-Super Tuesday Tibbles)
 
 ```{r}
 
@@ -267,15 +303,18 @@ df_final_full_2 <- df_final_full %>%
   mutate(SINCERE_MAX2 = ifelse(SINCERE == SINCERE_MAX1, 1, 0),
          STRATEGIC_MAX2 = ifelse(STRATEGIC == STRATEGIC_MAX1, 1, 0)) %>%
   filter(VoteCandidate == 1) 
-
 ```
 
 
-## Graphs of Voting Types Over Time
+##########
+
+## Graphs (Part One - Voter Classification Over Time)
 
 ```{r}
 
-# Voting types over time (aggregated)
+###### Graphs of Voting Types ######
+
+### All voting types over time. ###
 
 df_final_full_3 <- df_final_full_2 %>%
   full_join(naes08_phone_full, by = c("ID" = "RKEY")) %>%
@@ -309,7 +348,7 @@ df_final_full_3 %>%
     ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11a_voting_behavior_over_time.bmp", 
            width = 7.5, height = 4.5)
 
-# Voting types over time (disaggregated)
+### Voting types over time, disaggregated by candidate. ###
 
 df_final_full_3 <- df_final_full_2 %>%
   inner_join(naes08_phone_full, by = c("ID" = "RKEY")) %>%
@@ -324,6 +363,8 @@ df_final_full_3 <- df_final_full_2 %>%
   group_by(Candidate, DATE_c) %>%
   mutate(percent = (n / sum(n) * 100),
          df = "naes08_phone_d")
+
+# Ideal voting over time, disaggregated by candidate.
 
 df_final_full_3 %>%
   filter(sincere_strategic == 4) %>%
@@ -341,6 +382,8 @@ df_final_full_3 %>%
     ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11b_ideal_voting_over_time.bmp", 
            width = 7.5, height = 4.5)
 
+# Expressive voting over time, disaggregated by candidate.
+
 df_final_full_3 %>%
   filter(sincere_strategic == 2) %>%
   ggplot(aes(x = DATE_c, y = percent, color = Candidate)) + 
@@ -356,6 +399,8 @@ df_final_full_3 %>%
     ) +
     ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11b_expressive_voting_over_time.bmp", 
            width = 7.5, height = 4.5)
+
+# Instrumental voting over time, disaggregated by candidate.
 
 df_final_full_3 %>%
   filter(sincere_strategic == 3) %>%
@@ -373,6 +418,8 @@ df_final_full_3 %>%
     ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11b_instrumental_voting_over_time.bmp", 
            width = 7.5, height = 4.5)
 
+# Irrational voting over time, disaggregated by candidate.
+
 df_final_full_3 %>%
   filter(sincere_strategic == 1) %>%
   ggplot(aes(x = DATE_c, y = percent, color = Candidate)) + 
@@ -389,79 +436,56 @@ df_final_full_3 %>%
     ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11b_irrational_voting_over_time.bmp", 
            width = 7.5, height = 4.5)
 
+
+###### Tables of Changes in Voting Types ######
+
+# Week-by-week changes in voting types, not disaggregated by candidate.
+
+df_final_full_3 <- df_final_full_2 %>%
+  full_join(naes08_phone_full, by = c("ID" = "RKEY")) %>%
+  group_by(SINCERE_MAX2, STRATEGIC_MAX2, WEEK_c) %>%
+  count() %>%
+  mutate(sincere_strategic = case_when(
+    (SINCERE_MAX2 == 0 & STRATEGIC_MAX2 == 0) ~ "irrational",
+    (SINCERE_MAX2 == 1 & STRATEGIC_MAX2 == 0) ~ "expressive",
+    (SINCERE_MAX2 == 0 & STRATEGIC_MAX2 == 1) ~ "instrumental",
+    (SINCERE_MAX2 == 1 & STRATEGIC_MAX2 == 1) ~ "ideal",
+    )) %>%
+  group_by(WEEK_c) %>%
+  drop_na() %>%
+  mutate(percent = n / sum(n)) %>%
+  group_by(SINCERE_MAX2, STRATEGIC_MAX2) %>%
+  mutate(percent_change = percent - lag(percent))
+
+df_final_full_3 %>%
+  write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure13/voting_types_aggregated_week.csv")
+
+# Week-by-week changes in voting types, disaggregated by candidate.
+
+df_final_full_3 <- df_final_full_2 %>%
+  inner_join(naes08_phone_full, by = c("ID" = "RKEY")) %>%
+  group_by(Candidate, SINCERE_MAX2, STRATEGIC_MAX2, WEEK_c) %>%
+  count() %>%
+  mutate(sincere_strategic = case_when(
+    (SINCERE_MAX2 == 0 & STRATEGIC_MAX2 == 0) ~ 1,
+    (SINCERE_MAX2 == 1 & STRATEGIC_MAX2 == 0) ~ 2,
+    (SINCERE_MAX2 == 0 & STRATEGIC_MAX2 == 1) ~ 3,
+    (SINCERE_MAX2 == 1 & STRATEGIC_MAX2 == 1) ~ 4,
+    )) %>%
+  group_by(Candidate, WEEK_c) %>%
+  mutate(percent = n / sum(n)) %>%
+  group_by(SINCERE_MAX2, STRATEGIC_MAX2, Candidate) %>%
+  mutate(percent_change = percent - lag(percent))
+
+df_final_full_3 %>%
+  write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure13/voting_types_candidate_week.csv")
 ```
 
 
-## Acknowledge Bias
-
-```{r}
-
-# Viability -- all time, respondents primary vote choice
-
-naes08_phone_full %>%
-  filter(!(NAa06_c %in% c(998, 999)),
-         !(NAa07_c %in% c(998, 999)),
-         !(NAa08_c %in% c(998, 999)),
-         (RBa02_c %in% c(2, 4, 7))) %>%
-  pivot_longer(cols = c(NAa06_c, NAa07_c, NAa08_c), names_to = "candidate", values_to = "viability") %>%
-  mutate(primary_vote = case_when(
-    RBa02_c == 2 ~ "Clinton",
-    RBa02_c == 4 ~ "Edwards",
-    RBa02_c == 7 ~ "Obama"
-    )) %>%
-  group_by(DATE_c) %>%
-  ggplot(aes(x = DATE_c, y = viability, color = candidate)) + 
-    geom_smooth(method = "loess", se = FALSE) + 
-    facet_wrap(~ primary_vote) +
-    scale_color_discrete(name = "Candidate Viability",
-                         labels = c("Clinton", "Edwards", "Obama")) + 
-    labs(
-      title = "Candidate Viability Over Time",
-      subtitle = "2008 Democratic Nominating Contest (Disaggregated by Preferred Candidate)",
-      x = "Month",
-      y = "Viability Rating"
-    ) +
-    ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11d_faceted_candidate_viability.bmp", 
-           width = 7.5, height = 4.5)
-
-# Electability -- all time, respondents primary vote choice
-
-naes08_phone_full %>%
-  filter(!(NBa05_c %in% c(998, 999)),
-         !(NBa06_c %in% c(998, 999)),
-         !(NBa07_c %in% c(998, 999)),
-         (RBa02_c %in% c(2, 4, 7))) %>%
-  pivot_longer(cols = c(NBa05_c, NBa06_c, NBa07_c), names_to = "candidate", values_to = "electability") %>%
-  mutate(primary_vote = case_when(
-    RBa02_c == 2 ~ "Clinton",
-    RBa02_c == 4 ~ "Edwards",
-    RBa02_c == 7 ~ "Obama"
-    )) %>%
-  group_by(DATE_c) %>%
-  ggplot(aes(x = DATE_c, y = electability, color = candidate)) + 
-    geom_smooth(method = "loess", se = FALSE) + 
-    facet_wrap(~ primary_vote) +
-    scale_color_discrete(name = "Candidate Electability",
-                         labels = c("Clinton", "Edwards", "Obama")) + 
-    labs(
-      title = "Candidate Electability Over Time",
-      subtitle = "2008 Democratic Nominating Contest (Disaggregated by Preferred Candidate)",
-      x = "Month",
-      y = "Electability Rating"
-    ) +
-    ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11d_faceted_candidate_electability.bmp", 
-           width = 7.5, height = 4.5)
-
-```
-
-
-## Non-Normalized Graphs (Part 1 - Candidate Choice Over Time)
+## Graphs (Part Two - Candidate Choice Over Time)
 
 ```{r message=FALSE, warning=FALSE}
-
-######### Vote choice #########
-
-# Candidate support graph (unstratified, entire race)
+# Candidate choice over time, unstratified.
 
 naes08_phone_full %>%
   group_by(DATE_c) %>%
@@ -490,7 +514,7 @@ naes08_phone_full %>%
     ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11f_candidate_choice_over_time.bmp", 
            width = 7.5, height = 4.5)
 
-# Candidate support graph (unstratified, Iowa caucuses)
+# Candidate choice around the Iowa caucuses, unstratified.
 
 naes08_phone_full %>%
   group_by(DATE_c) %>%
@@ -526,7 +550,7 @@ naes08_phone_full %>%
   ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11f_candidate_choice_iowa_caucuses.bmp", 
          width = 7.5, height = 4.5)
 
-# Change in candidate support table (by day)
+# Changes in candidate choice (day-by-day table).
 
 naes08_phone_full_support_day <- naes08_phone_full %>%
   group_by(DATE_c) %>%
@@ -550,7 +574,7 @@ naes08_phone_full_support_day <- naes08_phone_full %>%
 naes08_phone_full_support_day %>%
   write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure13/voting_types_aggregated_day.csv")
 
-# Change in candidate support table (by week)
+# Changes in candidate choice (week-by-week table).
 
 naes08_phone_full_support_week <- naes08_phone_full %>%
   group_by(WEEK_c) %>%
@@ -573,8 +597,7 @@ naes08_phone_full_support_week <- naes08_phone_full %>%
 naes08_phone_full_support_week %>%
   write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure13/voting_types_aggregated_week.csv")
 
-# Change in candidate support table (Iowa caucuses)
-# Table
+# Changes in candidate choice (before vs. after Iowa caucuses table).
 
 naes08_phone_full %>%
   filter(DATE_c <= "2008-01-08",
@@ -609,8 +632,1370 @@ naes08_phone_full %>%
   mutate(iowa_change = percent - lag(percent)) %>%
   select(-RBa02_c) %>%
   arrange(primary_vote, iowa_caucuses)
+```
 
-# Map
+
+## Graphs (Part Three A - Candidate Ratings Over Time)
+
+```{r}
+
+# Favorability ratings over time, stratified by candidate. 
+
+naes08_phone_full %>%
+  filter(!(ABc01_c %in% c(998, 999)),
+         !(ABe01_c %in% c(998, 999)),
+         !(ABo01_c %in% c(998, 999)),
+         DATE_c <= "2008-06-08") %>%
+  pivot_longer(cols = c(ABc01_c, ABe01_c, ABo01_c), names_to = "candidate", values_to = "feeling_thermometer") %>%
+  group_by(DATE_c) %>%
+  ggplot(aes(x = DATE_c, y = feeling_thermometer, color = candidate)) + 
+    geom_smooth(method = "loess", se = FALSE) + 
+    scale_color_discrete(name = "Candidate",
+                         labels = c("Clinton", "Edwards", "Obama")) + 
+    labs(
+      title = "Feeling Thermometer Ratings Over Time",
+      subtitle = "2008 Democratic Nominating Contest",
+      x = "Month",
+      y = "Feeling Thermometer Rating"
+    ) +
+    ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11g_ft_over_time.bmp", 
+           width = 7.5, height = 4.5)
+
+# Viability ratings over time, stratified by candidate. 
+
+naes08_phone_full %>%
+  filter(!(NAa06_c %in% c(998, 999)),
+         !(NAa07_c %in% c(998, 999)),
+         !(NAa08_c %in% c(998, 999)),
+         DATE_c <= "2008-06-08") %>%
+  pivot_longer(cols = c(NAa06_c, NAa07_c, NAa08_c), names_to = "candidate", values_to = "viability") %>%
+  group_by(DATE_c) %>%
+  ggplot(aes(x = DATE_c, y = viability, color = candidate)) + 
+    geom_smooth(method = "loess", se = FALSE) + 
+    scale_color_discrete(name = "Candidate",
+                         labels = c("Clinton", "Edwards", "Obama")) + 
+    labs(
+      title = "Candidate Viability Over Time",
+      subtitle = "2008 Democratic Nominating Contest",
+      x = "Month",
+      y = "Viability Rating"
+    ) +
+    ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11g_viability_over_time.bmp", 
+           width = 7.5, height = 4.5)
+
+# Electability ratings over time, stratified by candidate. 
+
+naes08_phone_full %>%
+  filter(!(NBa05_c %in% c(998, 999)),
+         !(NBa06_c %in% c(998, 999)),
+         !(NBa07_c %in% c(998, 999)),
+         DATE_c <= "2008-06-08") %>%
+  pivot_longer(cols = c(NBa05_c, NBa06_c, NBa07_c), names_to = "candidate", values_to = "electability") %>%
+  group_by(DATE_c) %>%
+  ggplot(aes(x = DATE_c, y = electability, color = candidate)) + 
+    geom_smooth(method = "loess", se = FALSE) + 
+    scale_color_discrete(name = "Candidate",
+                         labels = c("Clinton", "Edwards", "Obama")) + 
+    labs(
+      title = "Candidate Electability Over Time",
+      subtitle = "2008 Democratic Nominating Contest (Disaggregated by Candidate)",
+      x = "Month",
+      y = "Electability Rating"
+    ) +
+    ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11g_electability_over_time.bmp", 
+           width = 7.5, height = 4.5)
+
+# Ideology ratings over time, stratified by candidate. 
+
+naes08_phone_full %>%
+  filter(!(ABc03_c %in% c(998, 999)),
+         !(ABe02_c %in% c(998, 999)),
+         !(ABo04_c %in% c(998, 999)),
+         DATE_c <= "2008-06-08") %>%
+  pivot_longer(cols = c(ABc03_c, ABe02_c, ABo04_c), names_to = "candidate", values_to = "ideology") %>%
+  group_by(DATE_c) %>%
+  ggplot(aes(x = DATE_c, y = ideology, color = candidate)) + 
+    geom_smooth(method = "loess", se = FALSE) + 
+    scale_color_discrete(name = "Candidate",
+                         labels = c("Clinton", "Edwards", "Obama")) + 
+    labs(
+      title = "Candidate Ideology Over Time",
+      subtitle = "2008 Democratic Nominating Contest (Disaggregated by Candidate)",
+      x = "Month",
+      y = "Ideological Distance"
+    ) +
+    ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11g_ideology_over_time.bmp", 
+           width = 7.5, height = 4.5)
+```
+
+
+## Graphs (Part Three B - Candidate Ratings Before vs. After the Iowa Caucuses)
+
+```{r message=FALSE, warning=FALSE}
+
+colors <- c("Clinton" = "#F8766D", "Edwards" = "#00BA38", "Obama" = "#619CFF")
+
+### Respondents Unstratified ###
+
+# Candidate favorability ratings before and after Iowa Caucus. Respondents not
+# stratified.
+
+naes08_phone_full %>%
+  filter(!(ABc01_c %in% c(998, 999)),
+         !(ABe01_c %in% c(998, 999)),
+         !(ABo01_c %in% c(998, 999))) %>%
+  filter(DATE_c <= "2008-01-08",
+         DATE_c >= "2007-12-30") %>%
+  mutate(iowa_caucuses = case_when(
+    DATE_c <= "2008-01-03" ~ 0,
+    DATE_c > "2008-01-03" ~ 1,
+  )) %>%
+  ggplot(aes(x = DATE_c, group = iowa_caucuses)) + 
+    geom_smooth(aes(y = ABc01_c, color = "Clinton"), method = "loess", se = FALSE) +
+    geom_smooth(aes(y = ABe01_c, color = "Edwards"), method = "loess", se = FALSE) +
+    geom_smooth(aes(y = ABo01_c, color = "Obama"), method = "loess", se = FALSE) +
+    scale_color_manual(name = "Candidate", values = colors) +
+    geom_vline(xintercept = as.numeric(as.Date("2008-01-03")), linetype = 4) +
+    labs(
+      title = "Candidate Favorability (Iowa Caucuses)",
+      subtitle = "2008 Democratic Nominating Contest",
+      x = "Month",
+      y = "Feeling Thermometer Rating"
+    ) +
+    ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11h_ft_iowa_caucuses.bmp", 
+           width = 7.5, height = 4.5)
+
+# Candidate ideology ratings before and after Iowa Caucus. Respondents not
+# stratified.
+
+naes08_phone_full %>%
+  filter(!(ABc03_c %in% c(998, 999)),
+         !(ABe02_c %in% c(998, 999)),
+         !(ABo04_c %in% c(998, 999))) %>%
+  filter(DATE_c <= "2008-01-08",
+         DATE_c >= "2007-12-30") %>%
+  mutate(iowa_caucuses = case_when(
+    DATE_c <= "2008-01-03" ~ 0,
+    DATE_c > "2008-01-03" ~ 1,
+  )) %>%
+  ggplot(aes(x = DATE_c, group = iowa_caucuses)) + 
+    geom_smooth(aes(y = ABc03_c, color = "Clinton"), method = "loess", se = FALSE) +
+    geom_smooth(aes(y = ABe02_c, color = "Edwards"), method = "loess", se = FALSE) +
+    geom_smooth(aes(y = ABo04_c, color = "Obama"), method = "loess", se = FALSE) +
+    scale_color_manual(name = "Candidate", values = colors) +
+    geom_vline(xintercept = as.numeric(as.Date("2008-01-03")), linetype = 4) +
+    labs(
+      title = "Candidate Ideology (Iowa Caucuses)",
+      subtitle = "2008 Democratic Nominating Contest",
+      x = "Month",
+      y = "Ideological Rating"
+    ) +
+    ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11h_ideology_iowa_caucuses.bmp", 
+           width = 7.5, height = 4.5)
+
+# Candidate viability ratings before and after Iowa Caucus. Respondents not
+# stratified.
+
+naes08_phone_full %>%
+  filter(!(NAa06_c %in% c(998, 999)),
+         !(NAa07_c %in% c(998, 999)),
+         !(NAa08_c %in% c(998, 999))) %>%
+  filter(DATE_c <= "2008-01-08",
+         DATE_c >= "2007-12-30") %>%
+  mutate(iowa_caucuses = case_when(
+    DATE_c <= "2008-01-03" ~ 0,
+    DATE_c > "2008-01-03" ~ 1,
+  )) %>%
+  ggplot(aes(x = DATE_c, group = iowa_caucuses)) + 
+    geom_smooth(aes(y = NAa06_c, color = "Clinton"), method = "loess", se = FALSE) +
+    geom_smooth(aes(y = NAa07_c, color = "Edwards"), method = "loess", se = FALSE) +
+    geom_smooth(aes(y = NAa08_c, color = "Obama"), method = "loess", se = FALSE) +
+    scale_color_manual(name = "Candidate", values = colors) +
+    geom_vline(xintercept = as.numeric(as.Date("2008-01-03")), linetype = 4) +
+    labs(
+      title = "Candidate Viability (Iowa Caucuses)",
+      subtitle = "2008 Democratic Nominating Contest",
+      x = "Month",
+      y = "Viability Rating"
+    ) +
+    ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11h_viability_iowa_caucuses_unstratified.bmp", 
+           width = 7.5, height = 4.5)
+
+# Candidate electability ratings before and after Iowa Caucus. Respondents not
+# stratified.
+
+naes08_phone_full %>%
+  filter(!(NBa05_c %in% c(998, 999)),
+         !(NBa06_c %in% c(998, 999)),
+         !(NBa07_c %in% c(998, 999))) %>%
+  filter(DATE_c <= "2008-01-08",
+         DATE_c >= "2007-12-30") %>%
+  mutate(iowa_caucuses = case_when(
+    DATE_c <= "2008-01-03" ~ 0,
+    DATE_c > "2008-01-03" ~ 1,
+  )) %>%
+  ggplot(aes(x = DATE_c, group = iowa_caucuses)) + 
+    geom_smooth(aes(y = NBa05_c, color = "Clinton"), method = "loess", se = FALSE) +
+    geom_smooth(aes(y = NBa06_c, color = "Edwards"), method = "loess", se = FALSE) +
+    geom_smooth(aes(y = NBa07_c, color = "Obama"), method = "loess", se = FALSE) +
+    scale_color_manual(name = "Candidate", values = colors) +
+    geom_vline(xintercept = as.numeric(as.Date("2008-01-03")), linetype = 4) +
+    labs(
+      title = "Candidate Electability Over Time (Iowa Caucuses)",
+      subtitle = "2008 Democratic Nominating Contest",
+      x = "Month",
+      y = "Electability Rating"
+    ) +
+    ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11h_electability_iowa_caucuses_unstratified.bmp", 
+           width = 7.5, height = 4.5)
+
+### Respondents Stratified by Education ###
+
+# Candidate favorability ratings before and after Iowa Caucus and New Hampshire
+# primary. Respondents stratified by education level.
+
+naes08_phone_full %>%
+  filter(!(NAa06_c %in% c(998, 999)),
+         !(NAa07_c %in% c(998, 999)),
+         !(NAa08_c %in% c(998, 999)),
+         !(WA03_c %in% c(998, 999))) %>%
+  filter(DATE_c <= "2008-01-13",
+         DATE_c >= "2007-12-30") %>%
+  mutate(iowa_caucuses = case_when(
+    DATE_c <= "2008-01-03" ~ 0,
+    (DATE_c >= "2008-01-04" & DATE_c <= "2008-01-08") ~ 1,
+    (DATE_c >= "2008-01-09" & DATE_c <= "2008-01-13") ~ 2
+  )) %>%
+  ggplot(aes(x = DATE_c, group = iowa_caucuses)) + 
+    geom_smooth(aes(y = NAa06_c, color = "Clinton"), method = "loess", se = FALSE) +
+    geom_smooth(aes(y = NAa07_c, color = "Edwards"), method = "loess", se = FALSE) +
+    geom_smooth(aes(y = NAa08_c, color = "Obama"), method = "loess", se = FALSE) +
+    scale_color_manual(name = "Candidate", values = colors) +
+    facet_wrap(~ WA03_c) +
+    labs(
+      title = "Candidate Viability (Iowa Caucuses)",
+      subtitle = "2008 Democratic Nominating Contest (Stratified by Education)",
+      x = "Month",
+      y = "Viability Rating"
+    ) +
+    ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11h_viability_iowa_caucuses_education.bmp", 
+           width = 7.5, height = 4.5)
+
+# Candidate electability ratings before and after Iowa Caucus and New Hampshire
+# primary. Respondents stratified by education level.
+
+naes08_phone_full %>%
+  filter(!(NBa05_c %in% c(998, 999)),
+         !(NBa06_c %in% c(998, 999)),
+         !(NBa07_c %in% c(998, 999)),
+         !(WA03_c %in% c(998, 999))) %>%
+  filter(DATE_c <= "2008-01-13",
+         DATE_c >= "2007-12-30") %>%
+  mutate(iowa_caucuses = case_when(
+    DATE_c <= "2008-01-03" ~ 0,
+    (DATE_c >= "2008-01-04" & DATE_c <= "2008-01-08") ~ 1,
+    (DATE_c >= "2008-01-09" & DATE_c <= "2008-01-13") ~ 2
+  )) %>%
+  ggplot(aes(x = DATE_c, group = iowa_caucuses)) + 
+    geom_smooth(aes(y = NBa05_c, color = "Clinton"), method = "loess", se = FALSE) +
+    geom_smooth(aes(y = NBa06_c, color = "Edwards"), method = "loess", se = FALSE) +
+    geom_smooth(aes(y = NBa07_c, color = "Obama"), method = "loess", se = FALSE) +
+    scale_color_manual(name = "Candidate", values = colors) +
+    facet_wrap(~ WA03_c) +
+    labs(
+      title = "Candidate Electability (Iowa Caucuses)",
+      subtitle = "2008 Democratic Nominating Contest (Stratified by Education)",
+      x = "Month",
+      y = "Electability Rating"
+    ) +
+    ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11h_electability_iowa_caucuses_education.bmp", 
+           width = 7.5, height = 4.5)
+
+### Respondents Stratified by Strength of Party Identification ###
+
+# Candidate viability ratings before and after Iowa Caucus and New Hampshire
+# primary. Respondents stratified by strength of party identification.
+
+naes08_phone_full %>%
+  filter(!(NAa06_c %in% c(998, 999)),
+         !(NAa07_c %in% c(998, 999)),
+         !(NAa08_c %in% c(998, 999)),
+         MA02_c %in% c(1, 2)) %>%
+  filter(DATE_c <= "2008-01-08",
+         DATE_c >= "2007-12-30") %>%
+  mutate(iowa_caucuses = case_when(
+    DATE_c <= "2008-01-03" ~ 0,
+    DATE_c > "2008-01-03" ~ 1,
+  )) %>%
+  mutate(party_strength = case_when(
+    MA02_c == 1 ~ "1 - Strong",
+    MA02_c == 2 ~ "2 - Weak"
+  )) %>%
+  ggplot(aes(x = DATE_c, group = iowa_caucuses)) +
+    geom_smooth(aes(y = NAa06_c, color = "Clinton"), method = "loess", se = FALSE) +
+    geom_smooth(aes(y = NAa07_c, color = "Edwards"), method = "loess", se = FALSE) +
+    geom_smooth(aes(y = NAa08_c, color = "Obama"), method = "loess", se = FALSE) +
+    scale_color_manual(name = "Candidate", values = colors) +
+    geom_vline(xintercept = as.numeric(as.Date("2008-01-03")), linetype = 4) + 
+    
+    facet_grid(~ party_strength) +
+    labs(
+      title = "Candidate Viability (Iowa Caucuses)",
+      subtitle = "2008 Democratic Nominating Contest (Stratified by Party ID Strength)",
+      x = "Month",
+      y = "Viability Rating"
+    ) +
+    ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11h_viability_iowa_caucuses_partyid_strength.bmp", 
+           width = 7.5, height = 4.5)
+
+# Candidate electability ratings before and after Iowa Caucus and New Hampshire
+# primary. Respondents stratified by strength of party identification.
+
+naes08_phone_full %>%
+  filter(!(NBa05_c %in% c(998, 999)),
+         !(NBa06_c %in% c(998, 999)),
+         !(NBa07_c %in% c(998, 999)),
+         MA02_c %in% c(1, 2)) %>%
+  filter(DATE_c <= "2008-01-08",
+         DATE_c >= "2007-12-30") %>%
+  mutate(iowa_caucuses = case_when(
+    DATE_c <= "2008-01-03" ~ 0,
+    DATE_c > "2008-01-03" ~ 1,
+  )) %>%
+  mutate(party_strength = case_when(
+    MA02_c == 1 ~ "1 - Strong",
+    MA02_c == 2 ~ "2 - Weak"
+  )) %>%
+  ggplot(aes(x = DATE_c, group = iowa_caucuses)) +
+    geom_smooth(aes(y = NBa05_c, color = "Clinton"), method = "loess", se = FALSE) +
+    geom_smooth(aes(y = NBa06_c, color = "Edwards"), method = "loess", se = FALSE) +
+    geom_smooth(aes(y = NBa07_c, color = "Obama"), method = "loess", se = FALSE) +
+    scale_color_manual(name = "Candidate", values = colors) +
+    geom_vline(xintercept = as.numeric(as.Date("2008-01-03")), linetype = 4) + 
+    
+    facet_grid(~ party_strength) +
+    labs(
+      title = "Candidate Electability (Iowa Caucuses)",
+      subtitle = "2008 Democratic Nominating Contest (Stratified by Party ID Strength)",
+      x = "Month",
+      y = "Electability Rating"
+    ) +
+    ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11h_electability_iowa_caucuses_partyid_strength.bmp", 
+           width = 7.5, height = 4.5)
+
+### Respondents Stratified by Level of Political Interest ###
+
+# Candidate viability ratings before and after Iowa Caucus and New Hampshire
+# primary. Respondents stratified by level of political interest.
+
+naes08_phone_full %>%
+  filter(!(NAa06_c %in% c(998, 999)),
+         !(NAa07_c %in% c(998, 999)),
+         !(NAa08_c %in% c(998, 999)),
+         KA01_c %in% c(1, 2, 3, 4)) %>%
+  filter(DATE_c <= "2008-01-08",
+         DATE_c >= "2007-12-30") %>%
+  mutate(iowa_caucuses = case_when(
+    DATE_c <= "2008-01-03" ~ 0,
+    DATE_c > "2008-01-03" ~ 1,
+  )) %>%
+  mutate(political_interest = case_when(
+    KA01_c == 1 ~ "1 - Closely",
+    KA01_c == 2 ~ "1 - Closely",
+    KA01_c == 3 ~ "2 - Not Closely",
+    KA01_c == 4 ~ "2 - Not Closely"
+  )) %>%
+  ggplot(aes(x = DATE_c, group = iowa_caucuses)) +
+    geom_smooth(aes(y = NAa06_c, color = "Clinton"), method = "loess", se = FALSE) +
+    geom_smooth(aes(y = NAa07_c, color = "Edwards"), method = "loess", se = FALSE) +
+    geom_smooth(aes(y = NAa08_c, color = "Obama"), method = "loess", se = FALSE) +
+    scale_color_manual(name = "Candidate", values = colors) +
+    geom_vline(xintercept = as.numeric(as.Date("2008-01-03")), linetype = 4) +
+    facet_wrap(~ political_interest) +
+    labs(
+      title = "Candidate Viability (Iowa Caucuses)",
+      subtitle = "2008 Democratic Nominating Contest (Stratified by Interest in Politics)",
+      x = "Month",
+      y = "Viability Rating"
+    ) +
+    ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11h_viability_iowa_caucuses_political_interest.bmp", 
+           width = 7.5, height = 4.5)
+
+# Candidate electability ratings before and after Iowa Caucus and New Hampshire
+# primary. Respondents stratified by strength of party identification.
+
+naes08_phone_full %>%
+  filter(!(NBa05_c %in% c(998, 999)),
+         !(NBa06_c %in% c(998, 999)),
+         !(NBa07_c %in% c(998, 999)),
+         KA01_c %in% c(1, 2, 3, 4)) %>%
+  filter(DATE_c <= "2008-01-08",
+         DATE_c >= "2007-12-30") %>%
+  mutate(iowa_caucuses = case_when(
+    DATE_c <= "2008-01-03" ~ 0,
+    DATE_c > "2008-01-03" ~ 1,
+  )) %>%
+  mutate(political_interest = case_when(
+    KA01_c == 1 ~ "1 - Closely",
+    KA01_c == 2 ~ "1 - Closely",
+    KA01_c == 3 ~ "2 - Not Closely",
+    KA01_c == 4 ~ "2 - Not Closely"
+  )) %>%
+  ggplot(aes(x = DATE_c, group = iowa_caucuses)) +
+    geom_smooth(aes(y = NBa05_c, color = "Clinton"), method = "loess", se = FALSE) +
+    geom_smooth(aes(y = NBa06_c, color = "Edwards"), method = "loess", se = FALSE) +
+    geom_smooth(aes(y = NBa07_c, color = "Obama"), method = "loess", se = FALSE) +
+    scale_color_manual(name = "Candidate", values = colors) +
+    geom_vline(xintercept = as.numeric(as.Date("2008-01-03")), linetype = 4) +
+    facet_wrap(~ political_interest) +
+    labs(
+      title = "Candidate Electability (Iowa Caucuses)",
+      subtitle = "2008 Democratic Nominating Contest (Stratified by Interest in Politics)",
+      x = "Month",
+      y = "Electability Rating"
+    ) +
+    ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11h_electability_iowa_caucuses_political_interest.bmp", 
+           width = 7.5, height = 4.5)
+
+### Respondents Stratified by Knowledge of Iowa Winner ###
+
+# Candidate viability ratings before and after Iowa Caucus and New Hampshire
+# primary. Respondents stratified by knowledge of Iowa winner.
+
+# Graph findings. 
+
+naes08_phone_full %>%
+  filter(!(NAa06_c %in% c(998, 999)),
+         !(NAa07_c %in% c(998, 999)),
+         !(NAa08_c %in% c(998, 999)),
+         NAc02_c %in% c(5, 7, 8)) %>%
+  filter(DATE_c <= "2008-01-08",
+         DATE_c >= "2007-12-30") %>%
+  mutate(iowa_caucuses = case_when(
+    DATE_c <= "2008-01-03" ~ 0,
+    DATE_c > "2008-01-03" ~ 1,
+  )) %>%
+  mutate(political_interest = case_when(
+    NAc02_c == 5 ~ "1 - Obama",
+    NAc02_c == 7 ~ "2 - Don't Know",
+    NAc02_c == 8 ~ "2 - Don't Know"
+  )) %>%
+  ggplot(aes(x = DATE_c, group = iowa_caucuses)) +
+    geom_smooth(aes(y = NAa06_c, color = "Clinton"), method = "loess", se = FALSE) +
+    geom_smooth(aes(y = NAa07_c, color = "Edwards"), method = "loess", se = FALSE) +
+    geom_smooth(aes(y = NAa08_c, color = "Obama"), method = "loess", se = FALSE) +
+    scale_color_manual(name = "Candidate", values = colors) +
+    geom_vline(xintercept = as.numeric(as.Date("2008-01-03")), linetype = 4) +
+    facet_wrap(~ political_interest) +
+    labs(
+      title = "Candidate Viability (Iowa Caucuses)",
+      subtitle = "2008 Democratic Nominating Contest (Stratified by Knowledge of Iowa Caucuses)",
+      x = "Month",
+      y = "Viability Rating"
+    ) +
+    ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11h_viability_iowa_caucuses_iowa_results.bmp", 
+           width = 7.5, height = 4.5)
+
+# Table findings. 
+
+naes08_phone_full %>%
+  filter(!(NAa06_c %in% c(998, 999)),
+         !(NAa07_c %in% c(998, 999)),
+         !(NAa08_c %in% c(998, 999)),
+         NAc02_c %in% c(5, 7, 8)) %>%
+  filter(DATE_c <= "2008-01-08",
+         DATE_c >= "2007-12-29") %>%
+  mutate(NAc02_c = case_when(
+    NAc02_c == 5 ~ "1 - Obama",
+    NAc02_c == 7 ~ "2 - Don't Know",
+    NAc02_c == 8 ~ "2 - Don't Know"
+  )) %>%
+  drop_na(NAa06_c, NAa07_c, NAa08_c) %>%
+  group_by(NAc02_c) %>%
+  mutate(clinton_viability = mean(NAa06_c),
+         edwards_viability = mean(NAa07_c),
+         obama_viability = mean(NAa08_c)) %>%
+  filter(!duplicated(clinton_viability)) %>%
+  select(NAc02_c, clinton_viability, edwards_viability, obama_viability) %>%
+  arrange(NAc02_c)
+
+# Candidate electability ratings before and after Iowa Caucus and New Hampshire
+# primary. Respondents stratified by knowledge of Iowa winner.
+
+# Graph findings.
+
+naes08_phone_full %>%
+  filter(!(NBa05_c %in% c(998, 999)),
+         !(NBa06_c %in% c(998, 999)),
+         !(NBa07_c %in% c(998, 999)),
+         NAc02_c %in% c(5, 7, 8)) %>%
+  filter(DATE_c <= "2008-01-08",
+         DATE_c >= "2007-12-30") %>%
+  mutate(iowa_caucuses = case_when(
+    DATE_c <= "2008-01-03" ~ 0,
+    DATE_c > "2008-01-03" ~ 1,
+  )) %>%
+  mutate(political_interest = case_when(
+    NAc02_c == 5 ~ "1 - Obama",
+    NAc02_c == 7 ~ "2 - Don't Know",
+    NAc02_c == 8 ~ "2 - Don't Know"
+  )) %>%
+  ggplot(aes(x = DATE_c, group = iowa_caucuses)) +
+    geom_smooth(aes(y = NBa05_c, color = "Clinton"), method = "loess", se = FALSE) +
+    geom_smooth(aes(y = NBa06_c, color = "Edwards"), method = "loess", se = FALSE) +
+    geom_smooth(aes(y = NBa07_c, color = "Obama"), method = "loess", se = FALSE) +
+    scale_color_manual(name = "Candidate", values = colors) +
+    geom_vline(xintercept = as.numeric(as.Date("2008-01-03")), linetype = 4) +
+    facet_wrap(~ political_interest) +
+    labs(
+      title = "Candidate Electability (Iowa Caucuses)",
+      subtitle = "2008 Democratic Nominating Contest (Stratified by Knowledge of Iowa Caucuses)",
+      x = "Month",
+      y = "Electability Rating"
+    ) +
+    ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11h_electability_iowa_caucuses_iowa_results.bmp", 
+           width = 7.5, height = 4.5)
+
+# Table findings.
+
+naes08_phone_full %>%
+  filter(!(NBa05_c %in% c(998, 999)),
+         !(NBa06_c %in% c(998, 999)),
+         !(NBa07_c %in% c(998, 999)),
+         NAc02_c %in% c(5, 7, 8)) %>%
+  filter(DATE_c <= "2008-01-08",
+         DATE_c >= "2007-12-29") %>%
+  mutate(NAc02_c = case_when(
+    NAc02_c == 5 ~ "1 - Obama",
+    NAc02_c == 7 ~ "2 - Don't Know",
+    NAc02_c == 8 ~ "2 - Don't Know"
+  )) %>%
+  drop_na(NBa05_c, NBa06_c, NBa07_c) %>%
+  group_by(NAc02_c) %>%
+  mutate(clinton_electability = mean(NBa05_c),
+         edwards_electability = mean(NBa06_c),
+         obama_electability = mean(NBa07_c)) %>%
+  filter(!duplicated(clinton_electability)) %>%
+  select(NAc02_c, clinton_electability, edwards_electability, obama_electability) %>%
+  arrange(NAc02_c)
+```
+
+## Graphs (Part Four - Candidate Traits Over Time)
+
+```{r message=FALSE, warning=FALSE}
+# Candidate experience ratings over time. 
+
+naes08_phone_full %>%
+  filter(!(ABc06_c %in% c(998, 999)),
+         !(ABe05_c %in% c(998, 999)),
+         !(ABo07_c %in% c(998, 999)),
+         DATE_c <= "2008-06-08") %>%
+  pivot_longer(cols = c(ABc06_c, ABe05_c, ABo07_c), names_to = "candidate", values_to = "experience") %>%
+  group_by(DATE_c) %>%
+  ggplot(aes(x = DATE_c, y = experience, color = candidate)) + 
+    geom_smooth(method = "loess", se = FALSE) + 
+    scale_color_discrete(name = "Candidate",
+                         labels = c("Clinton", "Edwards", "Obama")) + 
+    labs(
+      title = "Candidate Experience"
+    ) 
+
+# Candidate experience ratings before vs. after the Iowa caucuses. 
+
+naes08_phone_full %>%
+  filter(!(ABc06_c %in% c(998, 999)),
+         !(ABe05_c %in% c(998, 999)),
+         !(ABo07_c %in% c(998, 999))) %>%
+  filter(DATE_c <= "2008-01-08",
+         DATE_c >= "2007-12-30") %>%
+  mutate(iowa_caucuses = case_when(
+    DATE_c <= "2008-01-03" ~ 0,
+    DATE_c > "2008-01-03" ~ 1,
+  )) %>%
+  ggplot(aes(x = DATE_c, group = iowa_caucuses)) +
+    geom_smooth(aes(y = ABc06_c, color = "Clinton"), method = "loess", se = FALSE) +
+    geom_smooth(aes(y = ABe05_c, color = "Edwards"), method = "loess", se = FALSE) +
+    geom_smooth(aes(y = ABo07_c, color = "Obama"), method = "loess", se = FALSE) +
+    scale_color_manual(name = "Candidate", values = colors) +
+    geom_vline(xintercept = as.numeric(as.Date("2008-01-03")), linetype = 4) +
+    labs(
+      title = "Candidate Experience (Iowa Caucuses)",
+      subtitle = "2008 Democratic Nominating Contest",
+      x = "Month",
+      y = "Experience Rating"
+    ) +
+    ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11i_experience_iowa_caucuses.bmp", 
+           width = 7.5, height = 4.5)
+
+# Candidate judgement ratings over time. 
+
+naes08_phone_full %>%
+  filter(!(ABc07_c %in% c(998, 999)),
+         !(ABe06_c %in% c(998, 999)),
+         !(ABo08_c %in% c(998, 999)),
+         DATE_c <= "2008-06-08") %>%
+  pivot_longer(cols = c(ABc07_c, ABe06_c, ABo08_c), names_to = "candidate", values_to = "judgement") %>%
+  group_by(DATE_c) %>%
+  ggplot(aes(x = DATE_c, y = judgement, color = candidate)) + 
+    geom_smooth(method = "loess", se = FALSE) + 
+    scale_color_discrete(name = "Candidate",
+                         labels = c("Clinton", "Edwards", "Obama")) + 
+    labs(
+      title = "Candidate Judgement Over Time"
+    ) 
+
+# Candidate judgement before vs. after the Iowa caucuses.
+
+naes08_phone_full %>%
+  filter(!(ABc07_c %in% c(998, 999)),
+         !(ABe06_c %in% c(998, 999)),
+         !(ABo08_c %in% c(998, 999))) %>%
+  filter(DATE_c <= "2008-01-08",
+         DATE_c >= "2007-12-30") %>%
+  mutate(iowa_caucuses = case_when(
+    DATE_c <= "2008-01-03" ~ 0,
+    DATE_c > "2008-01-03" ~ 1,
+  )) %>%
+  ggplot(aes(x = DATE_c, group = iowa_caucuses)) +
+    geom_smooth(aes(y = ABc07_c, color = "Clinton"), method = "loess", se = FALSE) +
+    geom_smooth(aes(y = ABe06_c, color = "Edwards"), method = "loess", se = FALSE) +
+    geom_smooth(aes(y = ABo08_c, color = "Obama"), method = "loess", se = FALSE) +
+    scale_color_manual(name = "Candidate", values = colors) +
+    geom_vline(xintercept = as.numeric(as.Date("2008-01-03")), linetype = 4) +
+    labs(
+      title = "Candidate Judgement (Iowa Caucuses)",
+      subtitle = "2008 Democratic Nominating Contest",
+      x = "Month",
+      y = "Judgement Rating"
+    ) +
+    ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11i_judgement_iowa_caucuses.bmp", 
+           width = 7.5, height = 4.5)
+
+# Candidate leadership ratings over time. 
+
+naes08_phone_full %>%
+  filter(!(ABc04_c %in% c(998, 999)),
+         !(ABe03_c %in% c(998, 999)),
+         !(ABo05_c %in% c(998, 999)),
+         DATE_c <= "2008-06-08") %>%
+  pivot_longer(cols = c(ABc04_c, ABe03_c, ABo05_c), names_to = "candidate", values_to = "leadership") %>%
+  group_by(DATE_c) %>%
+  ggplot(aes(x = DATE_c, y = leadership, color = candidate)) + 
+    geom_smooth(method = "loess", se = FALSE) + 
+    scale_color_discrete(name = "Candidate",
+                         labels = c("Clinton", "Edwards", "Obama")) + 
+    labs(
+      title = "Candidate Leadership Over Time"
+    ) 
+
+# Candidate leadership ratings before vs. after the Iowa caucuses. 
+
+naes08_phone_full %>%
+  filter(!(ABc04_c %in% c(998, 999)),
+         !(ABe03_c %in% c(998, 999)),
+         !(ABo05_c %in% c(998, 999))) %>%
+  filter(DATE_c <= "2008-01-08",
+         DATE_c >= "2007-12-30") %>%
+  mutate(iowa_caucuses = case_when(
+    DATE_c <= "2008-01-03" ~ 0,
+    DATE_c > "2008-01-03" ~ 1,
+  )) %>%
+  ggplot(aes(x = DATE_c, group = iowa_caucuses)) +
+    geom_smooth(aes(y = ABc04_c, color = "Clinton"), method = "loess", se = FALSE) +
+    geom_smooth(aes(y = ABe03_c, color = "Edwards"), method = "loess", se = FALSE) +
+    geom_smooth(aes(y = ABo05_c, color = "Obama"), method = "loess", se = FALSE) +
+    scale_color_manual(name = "Candidate", values = colors) +
+    geom_vline(xintercept = as.numeric(as.Date("2008-01-03")), linetype = 4) +
+    labs(
+      title = "Candidate Leadership (Iowa Caucuses)",
+      subtitle = "2008 Democratic Nominating Contest",
+      x = "Month",
+      y = "Strong Leader Rating"
+    ) +
+    ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11i_leadership_iowa_caucuses.bmp", 
+           width = 7.5, height = 4.5)
+
+# Candidate trustworthiness ratings over time. 
+
+naes08_phone_full %>%
+  filter(!(ABc05_c %in% c(998, 999)),
+         !(ABe04_c %in% c(998, 999)),
+         !(ABo06_c %in% c(998, 999)),
+         DATE_c <= "2008-06-08") %>%
+  pivot_longer(cols = c(ABc05_c, ABe04_c, ABo06_c), names_to = "candidate", values_to = "trustworthiness") %>%
+  group_by(DATE_c) %>%
+  ggplot(aes(x = DATE_c, y = trustworthiness, color = candidate)) + 
+    geom_smooth(method = "loess", se = FALSE) + 
+    scale_color_discrete(name = "Candidate",
+                         labels = c("Clinton", "Edwards", "Obama")) + 
+    labs(
+      title = "Candidate Trustworthiness Over Time"
+    ) 
+
+# Candidate trustworthiness ratings before vs. after the Iowa caucuses. 
+
+naes08_phone_full %>%
+  filter(!(ABc05_c %in% c(998, 999)),
+         !(ABe04_c %in% c(998, 999)),
+         !(ABo06_c %in% c(998, 999))) %>%
+  filter(DATE_c <= "2008-01-08",
+         DATE_c >= "2007-12-30") %>%
+  mutate(iowa_caucuses = case_when(
+    DATE_c <= "2008-01-03" ~ 0,
+    DATE_c > "2008-01-03" ~ 1,
+  )) %>%
+  ggplot(aes(x = DATE_c, group = iowa_caucuses)) +
+    geom_smooth(aes(y = ABc05_c, color = "Clinton"), method = "loess", se = FALSE) +
+    geom_smooth(aes(y = ABe04_c, color = "Edwards"), method = "loess", se = FALSE) +
+    geom_smooth(aes(y = ABo06_c, color = "Obama"), method = "loess", se = FALSE) +
+    scale_color_manual(name = "Candidate", values = colors) +
+    geom_vline(xintercept = as.numeric(as.Date("2008-01-03")), linetype = 4) +
+    labs(
+      title = "Candidate Trustworthiness (Iowa Caucuses)",
+      subtitle = "2008 Democratic Nominating Contest",
+      x = "Month",
+      y = "Trustworthiness Rating"
+    ) +
+    ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11i_trustworthiness_iowa_caucuses.bmp", 
+           width = 7.5, height = 4.5)
+```
+
+
+## Graphs (Part Five - Voter Demographics Over Time)
+
+```{r message=FALSE, warning=FALSE}
+
+# Voter political orientation ratings before vs. after the Iowa caucuses.
+
+naes08_phone_full %>%
+  filter(!(MA04_c %in% c(998, 999))) %>%
+  filter(DATE_c <= "2008-01-08",
+         DATE_c >= "2007-12-30") %>%
+  mutate(iowa_caucuses = case_when(
+    DATE_c <= "2008-01-03" ~ "1 - Before Iowa",
+    DATE_c > "2008-01-03" ~ "2 - After Iowa",
+  )) %>%
+  group_by(iowa_caucuses) %>%
+  mutate(total_count = n()) %>%
+  group_by(MA04_c, iowa_caucuses) %>%
+  mutate(percent = (n() / total_count) * 100) %>%
+  filter(!duplicated(MA04_c)) %>%
+  ggplot(aes(x = MA04_c, fill = MA04_c)) +
+    geom_col(aes(y = percent)) +
+    facet_wrap(~ iowa_caucuses) +
+    theme(legend.position = "none") +
+    labs(
+      title = "Ideological Placement",
+      subtitle = "2008 Democratic Nominating Contest (Iowa Caucuses)",
+      x = "Response",
+      y = "Percent of Respondents",
+      caption = "Exact dates range from December 30, 2007 to January 8, 2008. Answer \n choices include 1) Very Conservative, 2) Somewhat Conservative, 3) Moderate, 4) Somewhat Liberal, and 5) Very Liberal." 
+    ) +
+    ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11j_political_orientation_iowa_caucuses.bmp", 
+           width = 7.5, height = 4.5)
+
+# Voter political interest ratings over time.
+
+naes08_phone_full %>%
+  filter(!(KA01_c %in% c(998, 999)),
+         !(KB01_c %in% c(998, 999)),
+         !(KD01_c %in% c(998, 999)),
+         !(KE01_c %in% c(998, 999)),
+         !(KG01_c %in% c(998, 999)),
+         DATE_c <= "2008-06-08") %>%
+  group_by(DATE_c) %>%
+  ggplot(aes(x = DATE_c)) + 
+    geom_smooth(aes(y = KA01_c), method = "loess", se = FALSE, color = "#F8766D") +
+    geom_smooth(aes(y = KB01_c), method = "loess", se = FALSE, color = "#00BA38") +
+    # geom_smooth(aes(y = KD01_c), method = "loess", se = FALSE) +
+    # geom_smooth(aes(y = KE01_c), method = "loess", se = FALSE) +
+    # geom_smooth(aes(y = KG01_c), method = "loess", se = FALSE) +
+    labs(
+      title = "Days Discussed Politics in Past Week"
+    ) 
+
+# Voter political interest ratings before vs. after the Iowa caucuses.
+
+naes08_phone_full %>%
+  filter(!(KA01_c %in% c(998, 999)),
+         !(KB01_c %in% c(998, 999)),
+         !(KD01_c %in% c(998, 999)),
+         !(KE01_c %in% c(998, 999)),
+         !(KG01_c %in% c(998, 999))) %>%
+  filter(DATE_c <= "2008-01-08",
+         DATE_c >= "2007-12-30") %>%
+  mutate(iowa_caucuses = case_when(
+    DATE_c <= "2008-01-03" ~ 0,
+    DATE_c > "2008-01-03" ~ 1,
+  )) %>%
+  ggplot(aes(x = DATE_c, group = iowa_caucuses)) +
+    # geom_smooth(aes(y = KA01_c), method = "loess", se = FALSE, color = "#F8766D") +
+    geom_smooth(aes(y = KB01_c), method = "loess", se = FALSE) +
+    # geom_smooth(aes(y = KD01_c), method = "loess", se = FALSE) +
+    # geom_smooth(aes(y = KE01_c), method = "loess", se = FALSE) +
+    # geom_smooth(aes(y = KG01_c), method = "loess", se = FALSE) +
+    geom_vline(xintercept = as.numeric(as.Date("2008-01-03")), linetype = 4) +
+    labs(
+      title = "Days Discussed Politics in Past Week (Iowa Caucuses)",
+      subtitle = "2008 Democratic Nominating Contest",
+      x = "Month",
+      y = "Number of Days"
+    ) +
+    ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11j_days_discussing_politics_iowa_caucuses.bmp", 
+           width = 7.5, height = 4.5)
+```
+
+
+## Graphs (Part Six - Policy Views Before vs. After the Iowa Caucuses)
+
+```{r}
+
+# Most important issue before vs. after the Iowa caucuses.
+
+health_terms <- c("health", "insur", "drug")
+economy_terms <- c("job", "econ", "stock", "market", "hous", "employ")
+war_terms <- c("war", "terror", "iraq", "secur")
+
+naes08_phone_full %>%
+  filter(DATE_c <= "2008-01-08",
+         DATE_c >= "2007-12-30") %>%
+  mutate(iowa_caucuses = case_when(
+    DATE_c <= "2008-01-03" ~ 0,
+    DATE_c > "2008-01-03" ~ 1,
+  )) %>%
+  mutate(CA01r1v_c = tolower(CA01r1v_c)) %>%
+  mutate(health = ifelse(grepl(paste(health_terms, collapse = "|"), 
+                               CA01r1v_c), 1, 0),
+         economy = ifelse(grepl(paste(economy_terms, collapse = "|"),
+                                CA01r1v_c), 1, 0),
+         war = ifelse(grepl(paste(war_terms, collapse = "|"),
+                                CA01r1v_c), 1, 0)) %>%
+  select(CA01r1v_c, health, economy, war, DATE_c, iowa_caucuses) %>%
+  arrange(DATE_c) %>%
+  group_by(iowa_caucuses) %>%
+  mutate(percentage_health = sum(health) / n(),
+         percentage_economy = sum(economy) / n(),
+         percentage_war = sum(war) / n()) %>%
+  filter(!duplicated(percentage_health)) %>%
+  select(c(iowa_caucuses, percentage_health, percentage_economy, percentage_war))
+
+# Views on the Iraq War before and after Iowa caucuses.
+
+naes08_phone_full %>%
+  filter(!(CDb01_c %in% c(998, 999))) %>%
+  filter(DATE_c <= "2008-01-08",
+         DATE_c >= "2007-12-30") %>%
+  mutate(iowa_caucuses = case_when(
+    DATE_c <= "2008-01-03" ~ "1 - Before Iowa",
+    DATE_c > "2008-01-03" ~ "2 - After Iowa",
+  )) %>%
+  group_by(iowa_caucuses) %>%
+  mutate(total_count = n()) %>%
+  group_by(CDb01_c, iowa_caucuses) %>%
+  mutate(percent = (n() / total_count) * 100) %>%
+  filter(!duplicated(CDb01_c)) %>%
+  ggplot(aes(x = CDb01_c, fill = CDb01_c)) +
+    geom_col(aes(y = percent)) +
+    facet_wrap(~ iowa_caucuses) +
+    theme(legend.position = "none") +
+    labs(
+      title = "Attitudes Towards the Iraq War",
+      subtitle = "2008 Democratic Nominating Contest (Iowa Caucuses)",
+      x = "Response",
+      y = "Percent of Respondents",
+      caption = "Exact dates range from December 30, 2007 to January 8, 2008. Answer \n choices include 1) Withdraw as Soon as Possible, 2) Set Withdrawal Deadline, \n 3) Keep Troops Until Stable Government, and 4) None of These."
+    ) +
+    ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11j_foreign_policy_iowa_caucuses.bmp", 
+           width = 7.5, height = 4.5)
+
+# Views on health care before and after Iowa caucuses.
+
+naes08_phone_full %>%
+  filter(!(CCa01_c %in% c(998, 999))) %>%
+  filter(DATE_c <= "2008-01-08",
+         DATE_c >= "2007-12-30") %>%
+  mutate(iowa_caucuses = case_when(
+    DATE_c <= "2008-01-03" ~ "1 - Before Iowa",
+    DATE_c > "2008-01-03" ~ "2 - After Iowa",
+  )) %>%
+  group_by(iowa_caucuses) %>%
+  mutate(total_count = n()) %>%
+  group_by(CCa01_c, iowa_caucuses) %>%
+  mutate(percent = (n() / total_count) * 100) %>%
+  filter(!duplicated(CCa01_c)) %>%
+  ggplot(aes(x = CCa01_c, fill = CCa01_c)) +
+    geom_col(aes(y = percent)) +
+    facet_wrap(~ iowa_caucuses) +
+    theme(legend.position = "none") +
+    labs(
+      title = "Views on Health Care",
+      subtitle = "2008 Democratic Nominating Contest (Iowa Caucuses)",
+      x = "Response",
+      y = "Percent of Respondents",
+      caption = "Exact dates range from December 30, 2007 to January 8, 2008. Answer \n choices include 1) One Government Program, 2) Current System, and 3) Neither."
+    ) +
+    ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11j_healthcare_iowa_caucuses.bmp", 
+           width = 7.5, height = 4.5)
+
+# Views on the economy before and after Iowa caucuses.
+
+naes08_phone_full %>%
+  filter(!(CBb01_c %in% c(998, 999))) %>%
+  filter(DATE_c <= "2008-01-08",
+         DATE_c >= "2007-12-30") %>%
+  mutate(iowa_caucuses = case_when(
+    DATE_c <= "2008-01-03" ~ "1 - Before Iowa",
+    DATE_c > "2008-01-03" ~ "2 - After Iowa",
+  )) %>%
+  group_by(iowa_caucuses) %>%
+  mutate(total_count = n()) %>%
+  group_by(CBb01_c, iowa_caucuses) %>%
+  mutate(percent = (n() / total_count) * 100) %>%
+  filter(!duplicated(CBb01_c)) %>%
+  ggplot(aes(x = CBb01_c, fill = CBb01_c)) +
+    geom_col(aes(y = percent)) +
+    facet_wrap(~ iowa_caucuses) +
+    theme(legend.position = "none") +
+    labs(
+      title = "Views on Economic Policy",
+      subtitle = "2008 Democratic Nominating Contest (Iowa Caucuses)",
+      x = "Response",
+      y = "Percent of Respondents",
+      caption = "Exact dates range from December 30, 2007 to January 8, 2008. Answer \n choices include 1) Cut Taxes, 2) Keep Taxes as They Are, 3) Raise Taxes if Necessary, and 4) None of These."
+    ) +
+    ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11j_economy_iowa_caucuses.bmp", 
+           width = 7.5, height = 4.5)
+```
+
+
+## Week-by-Week Regression Coefficients
+
+```{r}
+# Calculate weekly regressions.
+
+df_final_full_reg <- df_final_full %>%
+  full_join(naes08_phone_full, by = c("ID" = "RKEY")) %>%
+  select(WEEK_c, DATE_c, ID, VoteCandidate, CLINTON, EDWARDS, NORMALIZED_FT, NORMALIZED_VIABILITY,
+         NORMALIZED_ELECTABILITY, NORMALIZED_IDEOLOGY)
+
+reg_to_df <- function(x) {
+  data.frame(variable = rownames(summary(x)$coef),
+  coef = summary(x)$coef[, 1],
+  se = summary(x)$coef[, 3],
+  exp_coef = summary(x)$coef[, 2])
+}
+
+factor_odds <- function(x) {
+  exp(x)
+}
+
+for(i in 1:6) {
+  assign(paste0("df_final_full_reg_wk", i), df_final_full_reg %>%
+    filter(WEEK_c == i) %>%
+    clogit(data = ., formula = VoteCandidate ~ CLINTON + 
+           EDWARDS + NORMALIZED_FT + NORMALIZED_VIABILITY + 
+           NORMALIZED_ELECTABILITY + NORMALIZED_IDEOLOGY + 
+           strata(ID)) %>%
+    reg_to_df(.) %>%
+    mutate(week = i)) 
+}
+
+for(i in 7:25) {
+  assign(paste0("df_final_full_reg_wk", i), df_final_full_reg %>%
+    filter(WEEK_c == i) %>%
+    clogit(formula = VoteCandidate ~ CLINTON + 
+             NORMALIZED_FT + NORMALIZED_VIABILITY + 
+             NORMALIZED_ELECTABILITY + NORMALIZED_IDEOLOGY + 
+             strata(ID)) %>%
+    reg_to_df(.) %>%
+    mutate(week = i))
+}
+
+for(i in 1:25) {
+
+  df_final_full_reg_all <- rbind(paste0("df_final_full_reg_wk", i))
+  
+}
+
+df_final_full_reg_all <- data.frame(rbind(df_final_full_reg_wk1, 
+                                  df_final_full_reg_wk2, 
+                                  df_final_full_reg_wk3, 
+                                  df_final_full_reg_wk4, 
+                                  df_final_full_reg_wk5, 
+                                  df_final_full_reg_wk6, 
+                                  df_final_full_reg_wk7, 
+                                  df_final_full_reg_wk8, 
+                                  df_final_full_reg_wk9, 
+                                  df_final_full_reg_wk10, 
+                                  df_final_full_reg_wk11, 
+                                  df_final_full_reg_wk12, 
+                                  df_final_full_reg_wk13, 
+                                  df_final_full_reg_wk14, 
+                                  df_final_full_reg_wk15, 
+                                  df_final_full_reg_wk16, 
+                                  df_final_full_reg_wk17, 
+                                  df_final_full_reg_wk18, 
+                                  df_final_full_reg_wk19, 
+                                  df_final_full_reg_wk20, 
+                                  df_final_full_reg_wk21, 
+                                  df_final_full_reg_wk22, 
+                                  df_final_full_reg_wk23, 
+                                  df_final_full_reg_wk24, 
+                                  df_final_full_reg_wk25)) %>%
+  rowwise() %>%
+  mutate(fctodds = factor_odds(coef))
+
+interval1 <- -qnorm((1 - 0.9) / 2)  # 90% CI multiplier
+interval2 <- -qnorm((1 - 0.95) / 2)  # 95% CI multiplier
+
+### Graphs of Coefficients ###
+
+# Graph all coefficients week-by-week.
+
+df_final_full_reg_all %>%
+  filter(week %in% 1:25) %>%
+  filter(variable %in% c("NORMALIZED_VIABILITY", "NORMALIZED_ELECTABILITY", 
+                         "NORMALIZED_FT", "NORMALIZED_IDEOLOGY")) %>%
+  mutate(variable = factor(variable, levels = c("NORMALIZED_VIABILITY", 
+                                                "NORMALIZED_ELECTABILITY", 
+                                                "NORMALIZED_FT", 
+                                                "NORMALIZED_IDEOLOGY"),
+                           labels = c("Viability", "Electability",
+                                      "Feeling Thermometer", "Ideology"))) %>%
+  ggplot(aes(x = week, y = coef)) +
+    geom_hline(yintercept = 0, colour = gray(1 / 2), lty = 2) +
+    geom_pointrange(aes(ymin = coef - se * interval2,
+                        ymax = coef + se * interval2),
+                    lwd = 1 / 2, shape = 21, fill = "WHITE") +
+    geom_smooth(method = "loess") +
+    theme_bw() +
+    facet_wrap(~ variable, nrow = 2) + 
+    theme(legend.position = "none") + 
+    labs(
+      title = "Coefficients Over Time",
+      subtitle = "2008 Democratic Nominating Contest",
+      x = "Week",
+      y = "Coefficient",
+      caption = "Point estimates and 95% confidence intervals are shown."
+    )
+
+# Graph feeling thermometer coefficient week-by-week.
+
+df_final_full_reg_all %>%
+  filter(week %in% 1:25) %>%
+  filter(variable %in% c("NORMALIZED_FT")) %>%
+  mutate(variable = factor(variable, levels = c("NORMALIZED_FT"),
+                           labels = c("Feeling Thermometer"))) %>%
+  ggplot(aes(x = week, y = coef)) +
+    geom_hline(yintercept = 0, colour = gray(1 / 2), lty = 2) +
+    geom_pointrange(aes(ymin = coef - se * interval2,
+                        ymax = coef + se * interval2),
+                    lwd = 1 / 2, shape = 21, fill = "WHITE") +
+    geom_smooth(method = "loess") +
+    ylim(1, 8) + 
+    theme_bw() +
+    theme(legend.position = "none") + 
+    labs(
+      title = "Favorability Coefficient Over Time",
+      subtitle = "2008 Democratic Nominating Contest",
+      x = "Week",
+      y = "Coefficient",
+      caption = "Point estimates and 95% confidence intervals are shown."
+    ) +
+    ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11k_ft_coefficients_over_time.bmp", 
+           width = 7.5, height = 4.5)
+
+# Graph viability coefficient week-by-week.
+
+df_final_full_reg_all %>%
+  filter(week %in% 1:25) %>%
+  filter(variable %in% c("NORMALIZED_VIABILITY")) %>%
+  mutate(variable = factor(variable, levels = c("NORMALIZED_VIABILITY"),
+                           labels = c("Viability"))) %>%
+  ggplot(aes(x = week, y = coef)) +
+    geom_hline(yintercept = 0, colour = gray(1 / 2), lty = 2) +
+    geom_pointrange(aes(ymin = coef - se * interval2,
+                        ymax = coef + se * interval2),
+                    lwd = 1 / 2, shape = 21, fill = "WHITE") +
+    geom_smooth(method = "loess") +
+    theme_bw() +
+    theme(legend.position = "none") + 
+    labs(
+      title = "Viability Coefficient Over Time",
+      subtitle = "2008 Democratic Nominating Contest",
+      x = "Week",
+      y = "Coefficient",
+      caption = "Point estimates and 95% confidence intervals are shown."
+    ) +
+    ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11k_viability_coefficients_over_time.bmp", 
+           width = 7.5, height = 4.5)
+
+# Graph electability coefficient week-by-week.
+
+df_final_full_reg_all %>%
+  filter(week %in% 1:25) %>%
+  filter(variable %in% c("NORMALIZED_ELECTABILITY")) %>%
+  mutate(variable = factor(variable, levels = c("NORMALIZED_ELECTABILITY"),
+                           labels = c("Electability"))) %>%
+  ggplot(aes(x = week, y = coef)) +
+    geom_hline(yintercept = 0, colour = gray(1 / 2), lty = 2) +
+    geom_pointrange(aes(ymin = coef - se * interval2,
+                        ymax = coef + se * interval2),
+                    lwd = 1 / 2, shape = 21, fill = "WHITE") +
+    geom_smooth(method = "loess") +
+    theme_bw() +
+    theme(legend.position = "none") + 
+    labs(
+      title = "Electability Coefficient Over Time",
+      subtitle = "2008 Democratic Nominating Contest",
+      x = "Week",
+      y = "Coefficient",
+      caption = "Point estimates and 95% confidence intervals are shown."
+    ) +
+    ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11k_electability_coefficients_over_time.bmp", 
+           width = 7.5, height = 4.5)
+
+# Graph ideology coefficient week-by-week.
+
+df_final_full_reg_all %>%
+  filter(week %in% 1:25) %>%
+  filter(variable %in% c("NORMALIZED_IDEOLOGY")) %>%
+  mutate(variable = factor(variable, levels = c("NORMALIZED_IDEOLOGY"),
+                           labels = c("Ideology"))) %>%
+  ggplot(aes(x = week, y = coef)) +
+    geom_hline(yintercept = 0, colour = gray(1 / 2), lty = 2) +
+    geom_pointrange(aes(ymin = coef - se * interval2,
+                        ymax = coef + se * interval2),
+                    lwd = 1 / 2, shape = 21, fill = "WHITE") +
+    geom_smooth(method = "loess") +
+    theme_bw() +
+    theme(legend.position = "none") + 
+    labs(
+      title = "Ideological Distance Coefficient Over Time",
+      subtitle = "2008 Democratic Nominating Contest",
+      x = "Week",
+      y = "Coefficient",
+      caption = "Point estimates and 95% confidence intervals are shown."
+    ) +
+    ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11k_ideological_distance_coefficients_over_time.bmp", 
+           width = 7.5, height = 4.5)
+
+### Tables of Changes in Coefficients ###
+
+# Calculate week-by-week changes in candidate feeling thermometer ratings.
+
+naes08_phone_full_ft_week <- naes08_phone_full %>%
+  filter(!(ABc01_c %in% c(998, 999)),
+         !(ABe01_c %in% c(998, 999)),
+         !(ABo01_c %in% c(998, 999))) %>%
+  pivot_longer(cols = c(ABc01_c, ABe01_c, ABo01_c), names_to = "candidate", values_to = "feeling_thermometer") %>%
+  mutate(candidate = case_when(
+    candidate == "ABc01_c" ~ "Clinton",
+    candidate == "ABe01_c" ~ "Edwards",
+    candidate == "ABo01_c" ~ "Obama"
+    )) %>%
+  select(WEEK_c, candidate, feeling_thermometer) %>%
+  drop_na() %>%
+  group_by(WEEK_c, candidate) %>%
+  mutate(weekly_average = mean(feeling_thermometer)) %>%
+  filter(!duplicated(WEEK_c, candidate)) %>%
+  arrange(WEEK_c) %>%
+  select(-feeling_thermometer) %>%
+  group_by(candidate) %>%
+  mutate(change = weekly_average - lag(weekly_average))
+
+naes08_phone_full_ft_week %>%
+  write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure13/feeling_thermometer_week.csv")
+
+# Calculate day-by-day changes in candidate feeling thermometer ratings.
+
+naes08_phone_full_ft_day <- naes08_phone_full %>%
+  filter(!(ABc01_c %in% c(998, 999)),
+         !(ABe01_c %in% c(998, 999)),
+         !(ABo01_c %in% c(998, 999))) %>%
+  pivot_longer(cols = c(ABc01_c, ABe01_c, ABo01_c), names_to = "candidate", values_to = "feeling_thermometer") %>%
+  mutate(candidate = case_when(
+    candidate == "ABc01_c" ~ "Clinton",
+    candidate == "ABe01_c" ~ "Edwards",
+    candidate == "ABo01_c" ~ "Obama"
+    )) %>%
+  select(DATE_c, candidate, feeling_thermometer) %>%
+  drop_na() %>%
+  group_by(DATE_c, candidate) %>%
+  mutate(weekly_average = mean(feeling_thermometer)) %>%
+  filter(!duplicated(DATE_c, candidate)) %>%
+  arrange(DATE_c) %>%
+  select(-feeling_thermometer) %>%
+  group_by(candidate) %>%
+  mutate(change = weekly_average - lag(weekly_average))
+
+naes08_phone_full_ft_day %>%
+  write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure13/feeling_thermometer_day.csv")
+
+# Calculate week-by-week changes in candidate viability ratings.
+
+naes08_phone_full_viability_week <- naes08_phone_full %>%
+  filter(!(NAa06_c %in% c(998, 999)),
+         !(NAa07_c %in% c(998, 999)),
+         !(NAa08_c %in% c(998, 999))) %>%
+  pivot_longer(cols = c(NAa06_c, NAa07_c, NAa08_c), names_to = "candidate", values_to = "viability") %>%
+  mutate(candidate = case_when(
+    candidate == "NAa06_c" ~ "Clinton",
+    candidate == "NAa07_c" ~ "Edwards",
+    candidate == "NAa08_c" ~ "Obama"
+    )) %>%
+  select(WEEK_c, candidate, viability) %>%
+  drop_na() %>%
+  group_by(WEEK_c, candidate) %>%
+  mutate(weekly_average = mean(viability)) %>%
+  filter(!duplicated(WEEK_c, candidate)) %>%
+  arrange(WEEK_c) %>%
+  select(-viability) %>%
+  group_by(candidate) %>%
+  mutate(change = weekly_average - lag(weekly_average))
+
+naes08_phone_full_viability_week %>%
+  write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure13/viability_week.csv")
+
+# Calculate day-by-day changes in candidate viability ratings.
+
+naes08_phone_full_viability_day <- naes08_phone_full %>%
+  filter(!(NAa06_c %in% c(998, 999)),
+         !(NAa07_c %in% c(998, 999)),
+         !(NAa08_c %in% c(998, 999))) %>%
+  pivot_longer(cols = c(NAa06_c, NAa07_c, NAa08_c), names_to = "candidate", values_to = "viability") %>%
+  mutate(candidate = case_when(
+    candidate == "NAa06_c" ~ "Clinton",
+    candidate == "NAa07_c" ~ "Edwards",
+    candidate == "NAa08_c" ~ "Obama"
+    )) %>%
+  select(DATE_c, candidate, viability) %>%
+  drop_na() %>%
+  group_by(DATE_c, candidate) %>%
+  mutate(weekly_average = mean(viability)) %>%
+  filter(!duplicated(DATE_c, candidate)) %>%
+  arrange(DATE_c) %>%
+  select(-viability) %>%
+  group_by(candidate) %>%
+  mutate(change = weekly_average - lag(weekly_average))
+
+naes08_phone_full_viability_day %>%
+  write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure13/viability_day.csv")
+
+# Calculate week-by-week changes in candidate electability ratings.
+
+naes08_phone_full_electability_week <- naes08_phone_full %>%
+  filter(!(NBa05_c %in% c(998, 999)),
+         !(NBa06_c %in% c(998, 999)),
+         !(NBa07_c %in% c(998, 999))) %>%
+  pivot_longer(cols = c(NBa05_c, NBa06_c, NBa07_c), names_to = "candidate", values_to = "electability") %>%
+  mutate(candidate = case_when(
+    candidate == "NBa05_c" ~ "Clinton",
+    candidate == "NBa06_c" ~ "Edwards",
+    candidate == "NBa07_c" ~ "Obama"
+    )) %>%
+  select(WEEK_c, candidate, electability) %>%
+  drop_na() %>%
+  group_by(WEEK_c, candidate) %>%
+  mutate(weekly_average = mean(electability)) %>%
+  filter(!duplicated(WEEK_c, candidate)) %>%
+  arrange(WEEK_c) %>%
+  select(-electability) %>%
+  group_by(candidate) %>%
+  mutate(change = weekly_average - lag(weekly_average))
+
+naes08_phone_full_electability_week %>%
+  write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure13/electability_week.csv")
+
+# Calculate day-by-day changes in candidate electability ratings.
+
+naes08_phone_full_electability_day <- naes08_phone_full %>%
+  filter(!(NBa05_c %in% c(998, 999)),
+         !(NBa06_c %in% c(998, 999)),
+         !(NBa07_c %in% c(998, 999))) %>%
+  pivot_longer(cols = c(NBa05_c, NBa06_c, NBa07_c), names_to = "candidate", values_to = "electability") %>%
+  mutate(candidate = case_when(
+    candidate == "NBa05_c" ~ "Clinton",
+    candidate == "NBa06_c" ~ "Edwards",
+    candidate == "NBa07_c" ~ "Obama"
+    )) %>%
+  select(DATE_c, candidate, electability) %>%
+  drop_na() %>%
+  group_by(DATE_c, candidate) %>%
+  mutate(weekly_average = mean(electability)) %>%
+  filter(!duplicated(DATE_c, candidate)) %>%
+  arrange(DATE_c) %>%
+  select(-electability) %>%
+  group_by(candidate) %>%
+  mutate(change = weekly_average - lag(weekly_average))
+
+naes08_phone_full_electability_day %>%
+  write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure13/electability_day.csv")
+
+# Calculate week-by-week changes in candidate ideology ratings.
+
+naes08_phone_full_ideology_week <- naes08_phone_full %>%
+  filter(!(ABc03_c %in% c(998, 999)),
+         !(ABe02_c %in% c(998, 999)),
+         !(ABo04_c %in% c(998, 999))) %>%
+  pivot_longer(cols = c(ABc03_c, ABe02_c, ABo04_c), names_to = "candidate", values_to = "ideology") %>%
+  mutate(candidate = case_when(
+    candidate == "ABc03_c" ~ "Clinton",
+    candidate == "ABe02_c" ~ "Edwards",
+    candidate == "ABo04_c" ~ "Obama"
+    )) %>%
+  select(WEEK_c, candidate, ideology) %>%
+  drop_na() %>%
+  group_by(WEEK_c, candidate) %>%
+  mutate(weekly_average = mean(ideology)) %>%
+  filter(!duplicated(WEEK_c, candidate)) %>%
+  arrange(WEEK_c) %>%
+  select(-ideology) %>%
+  group_by(candidate) %>%
+  mutate(change = weekly_average - lag(weekly_average))
+
+naes08_phone_full_ideology_week %>%
+  write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure13/ideology_week.csv")
+
+# Calculate day-by-day changes in candidate ideology ratings.
+
+naes08_phone_full_ideology_day <- naes08_phone_full %>%
+  filter(!(ABc03_c %in% c(998, 999)),
+         !(ABe02_c %in% c(998, 999)),
+         !(ABo04_c %in% c(998, 999))) %>%
+  pivot_longer(cols = c(ABc03_c, ABe02_c, ABo04_c), names_to = "candidate", values_to = "ideology") %>%
+  mutate(candidate = case_when(
+    candidate == "ABc03_c" ~ "Clinton",
+    candidate == "ABe02_c" ~ "Edwards",
+    candidate == "ABo04_c" ~ "Obama"
+    )) %>%
+  select(DATE_c, candidate, ideology) %>%
+  drop_na() %>%
+  group_by(DATE_c, candidate) %>%
+  mutate(weekly_average = mean(ideology)) %>%
+  filter(!duplicated(DATE_c, candidate)) %>%
+  arrange(DATE_c) %>%
+  select(-ideology) %>%
+  group_by(candidate) %>%
+  mutate(change = weekly_average - lag(weekly_average))
+
+naes08_phone_full_ideology_day %>%
+  write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure13/ideology_day.csv")
+```
+
+
+```{r include=FALSE}
+rm(list = ls())
+```
+
+
+##########
+
+
+## Miscellaneous
+
+```{r}
+# ATTEMPTED: Changes in candidate choice (before vs. after Iowa caucuses map).
 
 naes08_phone_full_map <- naes08_phone_full %>%
   filter(!(NAa06_c %in% c(998, 999)),
@@ -717,1399 +2102,75 @@ naes08_phone_full_map %>%
     # scale_size(name = "", range = c(2, 15)) +
     # guides(size = guide_legend("clinton_change")) +
     theme_void()
-
 ```
 
 
-## Non-Normalized Graphs (Part 2 - Model Variables Over Time)
-
 ```{r}
 
-######### Feeling thermometers #########
+## Acknowledge Bias ###
 
-naes08_phone_full %>%
-  filter(!(ABc01_c %in% c(998, 999)),
-         !(ABe01_c %in% c(998, 999)),
-         !(ABo01_c %in% c(998, 999)),
-         DATE_c <= "2008-06-08") %>%
-  pivot_longer(cols = c(ABc01_c, ABe01_c, ABo01_c), names_to = "candidate", values_to = "feeling_thermometer") %>%
-  group_by(DATE_c) %>%
-  ggplot(aes(x = DATE_c, y = feeling_thermometer, color = candidate)) + 
-    geom_smooth(method = "loess", se = FALSE) + 
-    scale_color_discrete(name = "Candidate",
-                         labels = c("Clinton", "Edwards", "Obama")) + 
-    labs(
-      title = "Feeling Thermometer Ratings Over Time",
-      subtitle = "2008 Democratic Nominating Contest",
-      x = "Month",
-      y = "Feeling Thermometer Rating"
-    ) +
-    ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11g_ft_over_time.bmp", 
-           width = 7.5, height = 4.5)
-
-######### Viability #########
+# Viability over time, stratified by primary vote choice.
 
 naes08_phone_full %>%
   filter(!(NAa06_c %in% c(998, 999)),
          !(NAa07_c %in% c(998, 999)),
          !(NAa08_c %in% c(998, 999)),
-         DATE_c <= "2008-06-08") %>%
+         (RBa02_c %in% c(2, 4, 7))) %>%
   pivot_longer(cols = c(NAa06_c, NAa07_c, NAa08_c), names_to = "candidate", values_to = "viability") %>%
+  mutate(primary_vote = case_when(
+    RBa02_c == 2 ~ "Clinton",
+    RBa02_c == 4 ~ "Edwards",
+    RBa02_c == 7 ~ "Obama"
+    )) %>%
   group_by(DATE_c) %>%
   ggplot(aes(x = DATE_c, y = viability, color = candidate)) + 
     geom_smooth(method = "loess", se = FALSE) + 
-    scale_color_discrete(name = "Candidate",
+    facet_wrap(~ primary_vote) +
+    scale_color_discrete(name = "Candidate Viability",
                          labels = c("Clinton", "Edwards", "Obama")) + 
     labs(
       title = "Candidate Viability Over Time",
-      subtitle = "2008 Democratic Nominating Contest",
+      subtitle = "2008 Democratic Nominating Contest (Disaggregated by Preferred Candidate)",
       x = "Month",
       y = "Viability Rating"
     ) +
-    ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11g_viability_over_time.bmp", 
+    ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11d_faceted_candidate_viability.bmp", 
            width = 7.5, height = 4.5)
 
-######### Electability #########
+# Electability over time, stratified by primary vote choice.
 
 naes08_phone_full %>%
   filter(!(NBa05_c %in% c(998, 999)),
          !(NBa06_c %in% c(998, 999)),
          !(NBa07_c %in% c(998, 999)),
-         DATE_c <= "2008-06-08") %>%
+         (RBa02_c %in% c(2, 4, 7))) %>%
   pivot_longer(cols = c(NBa05_c, NBa06_c, NBa07_c), names_to = "candidate", values_to = "electability") %>%
+  mutate(primary_vote = case_when(
+    RBa02_c == 2 ~ "Clinton",
+    RBa02_c == 4 ~ "Edwards",
+    RBa02_c == 7 ~ "Obama"
+    )) %>%
   group_by(DATE_c) %>%
   ggplot(aes(x = DATE_c, y = electability, color = candidate)) + 
     geom_smooth(method = "loess", se = FALSE) + 
-    scale_color_discrete(name = "Candidate",
+    facet_wrap(~ primary_vote) +
+    scale_color_discrete(name = "Candidate Electability",
                          labels = c("Clinton", "Edwards", "Obama")) + 
     labs(
       title = "Candidate Electability Over Time",
-      subtitle = "2008 Democratic Nominating Contest (Disaggregated by Candidate)",
+      subtitle = "2008 Democratic Nominating Contest (Disaggregated by Preferred Candidate)",
       x = "Month",
       y = "Electability Rating"
     ) +
-    ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11g_electability_over_time.bmp", 
+    ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11d_faceted_candidate_electability.bmp", 
            width = 7.5, height = 4.5)
-
-######### Ideology #########
-
-naes08_phone_full %>%
-  filter(!(ABc03_c %in% c(998, 999)),
-         !(ABe02_c %in% c(998, 999)),
-         !(ABo04_c %in% c(998, 999)),
-         DATE_c <= "2008-06-08") %>%
-  pivot_longer(cols = c(ABc03_c, ABe02_c, ABo04_c), names_to = "candidate", values_to = "ideology") %>%
-  group_by(DATE_c) %>%
-  ggplot(aes(x = DATE_c, y = ideology, color = candidate)) + 
-    geom_smooth(method = "loess", se = FALSE) + 
-    scale_color_discrete(name = "Candidate",
-                         labels = c("Clinton", "Edwards", "Obama")) + 
-    labs(
-      title = "Candidate Ideology Over Time",
-      subtitle = "2008 Democratic Nominating Contest (Disaggregated by Candidate)",
-      x = "Month",
-      y = "Ideological Distance"
-    ) +
-    ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11g_ideology_over_time.bmp", 
-           width = 7.5, height = 4.5)
-
 ```
-
-
-## Non-Normalized Graphs (Part 3 -- Iowa Caucus Snapshot)
-
-```{r message=FALSE, warning=FALSE}
-
-colors <- c("Clinton" = "#F8766D", "Edwards" = "#00BA38", "Obama" = "#619CFF")
-
-# Favorability -- Iowa Caucus, respondents not stratified
-
-naes08_phone_full %>%
-  filter(!(ABc01_c %in% c(998, 999)),
-         !(ABe01_c %in% c(998, 999)),
-         !(ABo01_c %in% c(998, 999))) %>%
-  filter(DATE_c <= "2008-01-08",
-         DATE_c >= "2007-12-30") %>%
-  mutate(iowa_caucuses = case_when(
-    DATE_c <= "2008-01-03" ~ 0,
-    DATE_c > "2008-01-03" ~ 1,
-  )) %>%
-  ggplot(aes(x = DATE_c, group = iowa_caucuses)) + 
-    geom_smooth(aes(y = ABc01_c, color = "Clinton"), method = "loess", se = FALSE) +
-    geom_smooth(aes(y = ABe01_c, color = "Edwards"), method = "loess", se = FALSE) +
-    geom_smooth(aes(y = ABo01_c, color = "Obama"), method = "loess", se = FALSE) +
-    scale_color_manual(name = "Candidate", values = colors) +
-    geom_vline(xintercept = as.numeric(as.Date("2008-01-03")), linetype = 4) +
-    labs(
-      title = "Candidate Favorability (Iowa Caucuses)",
-      subtitle = "2008 Democratic Nominating Contest",
-      x = "Month",
-      y = "Feeling Thermometer Rating"
-    ) +
-    ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11h_ft_iowa_caucuses.bmp", 
-           width = 7.5, height = 4.5)
-
-# Ideology -- Iowa Caucus, respondents not stratified
-
-naes08_phone_full %>%
-  filter(!(ABc03_c %in% c(998, 999)),
-         !(ABe02_c %in% c(998, 999)),
-         !(ABo04_c %in% c(998, 999))) %>%
-  filter(DATE_c <= "2008-01-08",
-         DATE_c >= "2007-12-30") %>%
-  mutate(iowa_caucuses = case_when(
-    DATE_c <= "2008-01-03" ~ 0,
-    DATE_c > "2008-01-03" ~ 1,
-  )) %>%
-  ggplot(aes(x = DATE_c, group = iowa_caucuses)) + 
-    geom_smooth(aes(y = ABc03_c, color = "Clinton"), method = "loess", se = FALSE) +
-    geom_smooth(aes(y = ABe02_c, color = "Edwards"), method = "loess", se = FALSE) +
-    geom_smooth(aes(y = ABo04_c, color = "Obama"), method = "loess", se = FALSE) +
-    scale_color_manual(name = "Candidate", values = colors) +
-    geom_vline(xintercept = as.numeric(as.Date("2008-01-03")), linetype = 4) +
-    labs(
-      title = "Candidate Ideology (Iowa Caucuses)",
-      subtitle = "2008 Democratic Nominating Contest",
-      x = "Month",
-      y = "Ideological Rating"
-    ) +
-    ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11h_ideology_iowa_caucuses.bmp", 
-           width = 7.5, height = 4.5)
-
-# Viability -- Iowa Caucus, respondents not stratified
-
-naes08_phone_full %>%
-  filter(!(NAa06_c %in% c(998, 999)),
-         !(NAa07_c %in% c(998, 999)),
-         !(NAa08_c %in% c(998, 999))) %>%
-  filter(DATE_c <= "2008-01-08",
-         DATE_c >= "2007-12-30") %>%
-  mutate(iowa_caucuses = case_when(
-    DATE_c <= "2008-01-03" ~ 0,
-    DATE_c > "2008-01-03" ~ 1,
-  )) %>%
-  ggplot(aes(x = DATE_c, group = iowa_caucuses)) + 
-    geom_smooth(aes(y = NAa06_c, color = "Clinton"), method = "loess", se = FALSE) +
-    geom_smooth(aes(y = NAa07_c, color = "Edwards"), method = "loess", se = FALSE) +
-    geom_smooth(aes(y = NAa08_c, color = "Obama"), method = "loess", se = FALSE) +
-    scale_color_manual(name = "Candidate", values = colors) +
-    geom_vline(xintercept = as.numeric(as.Date("2008-01-03")), linetype = 4) +
-    labs(
-      title = "Candidate Viability (Iowa Caucuses)",
-      subtitle = "2008 Democratic Nominating Contest",
-      x = "Month",
-      y = "Viability Rating"
-    ) +
-    ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11h_viability_iowa_caucuses_unstratified.bmp", 
-           width = 7.5, height = 4.5)
-
-# Electability -- Iowa Caucus, respondents not stratified
-
-naes08_phone_full %>%
-  filter(!(NBa05_c %in% c(998, 999)),
-         !(NBa06_c %in% c(998, 999)),
-         !(NBa07_c %in% c(998, 999))) %>%
-  filter(DATE_c <= "2008-01-08",
-         DATE_c >= "2007-12-30") %>%
-  mutate(iowa_caucuses = case_when(
-    DATE_c <= "2008-01-03" ~ 0,
-    DATE_c > "2008-01-03" ~ 1,
-  )) %>%
-  ggplot(aes(x = DATE_c, group = iowa_caucuses)) + 
-    geom_smooth(aes(y = NBa05_c, color = "Clinton"), method = "loess", se = FALSE) +
-    geom_smooth(aes(y = NBa06_c, color = "Edwards"), method = "loess", se = FALSE) +
-    geom_smooth(aes(y = NBa07_c, color = "Obama"), method = "loess", se = FALSE) +
-    scale_color_manual(name = "Candidate", values = colors) +
-    geom_vline(xintercept = as.numeric(as.Date("2008-01-03")), linetype = 4) +
-    labs(
-      title = "Candidate Electability Over Time (Iowa Caucuses)",
-      subtitle = "2008 Democratic Nominating Contest",
-      x = "Month",
-      y = "Electability Rating"
-    ) +
-    ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11h_electability_iowa_caucuses_unstratified.bmp", 
-           width = 7.5, height = 4.5)
-
-# Viability -- Iowa caucuses and New Hampshire primary, respondents stratified by education
-
-naes08_phone_full %>%
-  filter(!(NAa06_c %in% c(998, 999)),
-         !(NAa07_c %in% c(998, 999)),
-         !(NAa08_c %in% c(998, 999)),
-         !(WA03_c %in% c(998, 999))) %>%
-  filter(DATE_c <= "2008-01-13",
-         DATE_c >= "2007-12-30") %>%
-  mutate(iowa_caucuses = case_when(
-    DATE_c <= "2008-01-03" ~ 0,
-    (DATE_c >= "2008-01-04" & DATE_c <= "2008-01-08") ~ 1,
-    (DATE_c >= "2008-01-09" & DATE_c <= "2008-01-13") ~ 2
-  )) %>%
-  ggplot(aes(x = DATE_c, group = iowa_caucuses)) + 
-    geom_smooth(aes(y = NAa06_c, color = "Clinton"), method = "loess", se = FALSE) +
-    geom_smooth(aes(y = NAa07_c, color = "Edwards"), method = "loess", se = FALSE) +
-    geom_smooth(aes(y = NAa08_c, color = "Obama"), method = "loess", se = FALSE) +
-    scale_color_manual(name = "Candidate", values = colors) +
-    facet_wrap(~ WA03_c) +
-    labs(
-      title = "Candidate Viability (Iowa Caucuses)",
-      subtitle = "2008 Democratic Nominating Contest (Stratified by Education)",
-      x = "Month",
-      y = "Viability Rating"
-    ) +
-    ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11h_viability_iowa_caucuses_education.bmp", 
-           width = 7.5, height = 4.5)
-
-# Electablity -- Iowa caucuses and New Hampshire primary, respondents stratified by education
-
-naes08_phone_full %>%
-  filter(!(NBa05_c %in% c(998, 999)),
-         !(NBa06_c %in% c(998, 999)),
-         !(NBa07_c %in% c(998, 999)),
-         !(WA03_c %in% c(998, 999))) %>%
-  filter(DATE_c <= "2008-01-13",
-         DATE_c >= "2007-12-30") %>%
-  mutate(iowa_caucuses = case_when(
-    DATE_c <= "2008-01-03" ~ 0,
-    (DATE_c >= "2008-01-04" & DATE_c <= "2008-01-08") ~ 1,
-    (DATE_c >= "2008-01-09" & DATE_c <= "2008-01-13") ~ 2
-  )) %>%
-  ggplot(aes(x = DATE_c, group = iowa_caucuses)) + 
-    geom_smooth(aes(y = NBa05_c, color = "Clinton"), method = "loess", se = FALSE) +
-    geom_smooth(aes(y = NBa06_c, color = "Edwards"), method = "loess", se = FALSE) +
-    geom_smooth(aes(y = NBa07_c, color = "Obama"), method = "loess", se = FALSE) +
-    scale_color_manual(name = "Candidate", values = colors) +
-    facet_wrap(~ WA03_c) +
-    labs(
-      title = "Candidate Electability (Iowa Caucuses)",
-      subtitle = "2008 Democratic Nominating Contest (Stratified by Education)",
-      x = "Month",
-      y = "Electability Rating"
-    ) +
-    ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11h_electability_iowa_caucuses_education.bmp", 
-           width = 7.5, height = 4.5)
-
-# Viability -- Iowa Caucuses, respondents stratified by party ID strength
-
-naes08_phone_full %>%
-  filter(!(NAa06_c %in% c(998, 999)),
-         !(NAa07_c %in% c(998, 999)),
-         !(NAa08_c %in% c(998, 999)),
-         MA02_c %in% c(1, 2)) %>%
-  filter(DATE_c <= "2008-01-08",
-         DATE_c >= "2007-12-30") %>%
-  mutate(iowa_caucuses = case_when(
-    DATE_c <= "2008-01-03" ~ 0,
-    DATE_c > "2008-01-03" ~ 1,
-  )) %>%
-  mutate(party_strength = case_when(
-    MA02_c == 1 ~ "1 - Strong",
-    MA02_c == 2 ~ "2 - Weak"
-  )) %>%
-  ggplot(aes(x = DATE_c, group = iowa_caucuses)) +
-    geom_smooth(aes(y = NAa06_c, color = "Clinton"), method = "loess", se = FALSE) +
-    geom_smooth(aes(y = NAa07_c, color = "Edwards"), method = "loess", se = FALSE) +
-    geom_smooth(aes(y = NAa08_c, color = "Obama"), method = "loess", se = FALSE) +
-    scale_color_manual(name = "Candidate", values = colors) +
-    geom_vline(xintercept = as.numeric(as.Date("2008-01-03")), linetype = 4) + 
-    
-    facet_grid(~ party_strength) +
-    labs(
-      title = "Candidate Viability (Iowa Caucuses)",
-      subtitle = "2008 Democratic Nominating Contest (Stratified by Party ID Strength)",
-      x = "Month",
-      y = "Viability Rating"
-    ) +
-    ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11h_viability_iowa_caucuses_partyid_strength.bmp", 
-           width = 7.5, height = 4.5)
-
-# Electability -- Iowa Caucuses, respondents stratified by party ID strength
-
-naes08_phone_full %>%
-  filter(!(NBa05_c %in% c(998, 999)),
-         !(NBa06_c %in% c(998, 999)),
-         !(NBa07_c %in% c(998, 999)),
-         MA02_c %in% c(1, 2)) %>%
-  filter(DATE_c <= "2008-01-08",
-         DATE_c >= "2007-12-30") %>%
-  mutate(iowa_caucuses = case_when(
-    DATE_c <= "2008-01-03" ~ 0,
-    DATE_c > "2008-01-03" ~ 1,
-  )) %>%
-  mutate(party_strength = case_when(
-    MA02_c == 1 ~ "1 - Strong",
-    MA02_c == 2 ~ "2 - Weak"
-  )) %>%
-  ggplot(aes(x = DATE_c, group = iowa_caucuses)) +
-    geom_smooth(aes(y = NBa05_c, color = "Clinton"), method = "loess", se = FALSE) +
-    geom_smooth(aes(y = NBa06_c, color = "Edwards"), method = "loess", se = FALSE) +
-    geom_smooth(aes(y = NBa07_c, color = "Obama"), method = "loess", se = FALSE) +
-    scale_color_manual(name = "Candidate", values = colors) +
-    geom_vline(xintercept = as.numeric(as.Date("2008-01-03")), linetype = 4) + 
-    
-    facet_grid(~ party_strength) +
-    labs(
-      title = "Candidate Electability (Iowa Caucuses)",
-      subtitle = "2008 Democratic Nominating Contest (Stratified by Party ID Strength)",
-      x = "Month",
-      y = "Electability Rating"
-    ) +
-    ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11h_electability_iowa_caucuses_partyid_strength.bmp", 
-           width = 7.5, height = 4.5)
-
-# Viability -- Iowa Caucuses, respondents stratified by political interest
-
-naes08_phone_full %>%
-  filter(!(NAa06_c %in% c(998, 999)),
-         !(NAa07_c %in% c(998, 999)),
-         !(NAa08_c %in% c(998, 999)),
-         KA01_c %in% c(1, 2, 3, 4)) %>%
-  filter(DATE_c <= "2008-01-08",
-         DATE_c >= "2007-12-30") %>%
-  mutate(iowa_caucuses = case_when(
-    DATE_c <= "2008-01-03" ~ 0,
-    DATE_c > "2008-01-03" ~ 1,
-  )) %>%
-  mutate(political_interest = case_when(
-    KA01_c == 1 ~ "1 - Closely",
-    KA01_c == 2 ~ "1 - Closely",
-    KA01_c == 3 ~ "2 - Not Closely",
-    KA01_c == 4 ~ "2 - Not Closely"
-  )) %>%
-  ggplot(aes(x = DATE_c, group = iowa_caucuses)) +
-    geom_smooth(aes(y = NAa06_c, color = "Clinton"), method = "loess", se = FALSE) +
-    geom_smooth(aes(y = NAa07_c, color = "Edwards"), method = "loess", se = FALSE) +
-    geom_smooth(aes(y = NAa08_c, color = "Obama"), method = "loess", se = FALSE) +
-    scale_color_manual(name = "Candidate", values = colors) +
-    geom_vline(xintercept = as.numeric(as.Date("2008-01-03")), linetype = 4) +
-    facet_wrap(~ political_interest) +
-    labs(
-      title = "Candidate Viability (Iowa Caucuses)",
-      subtitle = "2008 Democratic Nominating Contest (Stratified by Interest in Politics)",
-      x = "Month",
-      y = "Viability Rating"
-    ) +
-    ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11h_viability_iowa_caucuses_political_interest.bmp", 
-           width = 7.5, height = 4.5)
-
-# Electability -- Iowa Caucuses, respondents stratified by political interest
-
-naes08_phone_full %>%
-  filter(!(NBa05_c %in% c(998, 999)),
-         !(NBa06_c %in% c(998, 999)),
-         !(NBa07_c %in% c(998, 999)),
-         KA01_c %in% c(1, 2, 3, 4)) %>%
-  filter(DATE_c <= "2008-01-08",
-         DATE_c >= "2007-12-30") %>%
-  mutate(iowa_caucuses = case_when(
-    DATE_c <= "2008-01-03" ~ 0,
-    DATE_c > "2008-01-03" ~ 1,
-  )) %>%
-  mutate(political_interest = case_when(
-    KA01_c == 1 ~ "1 - Closely",
-    KA01_c == 2 ~ "1 - Closely",
-    KA01_c == 3 ~ "2 - Not Closely",
-    KA01_c == 4 ~ "2 - Not Closely"
-  )) %>%
-  ggplot(aes(x = DATE_c, group = iowa_caucuses)) +
-    geom_smooth(aes(y = NBa05_c, color = "Clinton"), method = "loess", se = FALSE) +
-    geom_smooth(aes(y = NBa06_c, color = "Edwards"), method = "loess", se = FALSE) +
-    geom_smooth(aes(y = NBa07_c, color = "Obama"), method = "loess", se = FALSE) +
-    scale_color_manual(name = "Candidate", values = colors) +
-    geom_vline(xintercept = as.numeric(as.Date("2008-01-03")), linetype = 4) +
-    facet_wrap(~ political_interest) +
-    labs(
-      title = "Candidate Electability (Iowa Caucuses)",
-      subtitle = "2008 Democratic Nominating Contest (Stratified by Interest in Politics)",
-      x = "Month",
-      y = "Electability Rating"
-    ) +
-    ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11h_electability_iowa_caucuses_political_interest.bmp", 
-           width = 7.5, height = 4.5)
-
-# Viability -- Iowa Caucuses, respondents stratified by whether they knew who won Iowa
-# Graph
-
-naes08_phone_full %>%
-  filter(!(NAa06_c %in% c(998, 999)),
-         !(NAa07_c %in% c(998, 999)),
-         !(NAa08_c %in% c(998, 999)),
-         NAc02_c %in% c(5, 7, 8)) %>%
-  filter(DATE_c <= "2008-01-08",
-         DATE_c >= "2007-12-30") %>%
-  mutate(iowa_caucuses = case_when(
-    DATE_c <= "2008-01-03" ~ 0,
-    DATE_c > "2008-01-03" ~ 1,
-  )) %>%
-  mutate(political_interest = case_when(
-    NAc02_c == 5 ~ "1 - Obama",
-    NAc02_c == 7 ~ "2 - Don't Know",
-    NAc02_c == 8 ~ "2 - Don't Know"
-  )) %>%
-  ggplot(aes(x = DATE_c, group = iowa_caucuses)) +
-    geom_smooth(aes(y = NAa06_c, color = "Clinton"), method = "loess", se = FALSE) +
-    geom_smooth(aes(y = NAa07_c, color = "Edwards"), method = "loess", se = FALSE) +
-    geom_smooth(aes(y = NAa08_c, color = "Obama"), method = "loess", se = FALSE) +
-    scale_color_manual(name = "Candidate", values = colors) +
-    geom_vline(xintercept = as.numeric(as.Date("2008-01-03")), linetype = 4) +
-    facet_wrap(~ political_interest) +
-    labs(
-      title = "Candidate Viability (Iowa Caucuses)",
-      subtitle = "2008 Democratic Nominating Contest (Stratified by Knowledge of Iowa Caucuses)",
-      x = "Month",
-      y = "Viability Rating"
-    ) +
-    ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11h_viability_iowa_caucuses_iowa_results.bmp", 
-           width = 7.5, height = 4.5)
-
-# Table
-
-naes08_phone_full %>%
-  filter(!(NAa06_c %in% c(998, 999)),
-         !(NAa07_c %in% c(998, 999)),
-         !(NAa08_c %in% c(998, 999)),
-         NAc02_c %in% c(5, 7, 8)) %>%
-  filter(DATE_c <= "2008-01-08",
-         DATE_c >= "2007-12-29") %>%
-  mutate(NAc02_c = case_when(
-    NAc02_c == 5 ~ "1 - Obama",
-    NAc02_c == 7 ~ "2 - Don't Know",
-    NAc02_c == 8 ~ "2 - Don't Know"
-  )) %>%
-  drop_na(NAa06_c, NAa07_c, NAa08_c) %>%
-  group_by(NAc02_c) %>%
-  mutate(clinton_viability = mean(NAa06_c),
-         edwards_viability = mean(NAa07_c),
-         obama_viability = mean(NAa08_c)) %>%
-  filter(!duplicated(clinton_viability)) %>%
-  select(NAc02_c, clinton_viability, edwards_viability, obama_viability) %>%
-  arrange(NAc02_c)
-
-# Electability -- Iowa Caucuses, respondents stratified by whether they knew who won Iowa
-# Graph
-
-naes08_phone_full %>%
-  filter(!(NBa05_c %in% c(998, 999)),
-         !(NBa06_c %in% c(998, 999)),
-         !(NBa07_c %in% c(998, 999)),
-         NAc02_c %in% c(5, 7, 8)) %>%
-  filter(DATE_c <= "2008-01-08",
-         DATE_c >= "2007-12-30") %>%
-  mutate(iowa_caucuses = case_when(
-    DATE_c <= "2008-01-03" ~ 0,
-    DATE_c > "2008-01-03" ~ 1,
-  )) %>%
-  mutate(political_interest = case_when(
-    NAc02_c == 5 ~ "1 - Obama",
-    NAc02_c == 7 ~ "2 - Don't Know",
-    NAc02_c == 8 ~ "2 - Don't Know"
-  )) %>%
-  ggplot(aes(x = DATE_c, group = iowa_caucuses)) +
-    geom_smooth(aes(y = NBa05_c, color = "Clinton"), method = "loess", se = FALSE) +
-    geom_smooth(aes(y = NBa06_c, color = "Edwards"), method = "loess", se = FALSE) +
-    geom_smooth(aes(y = NBa07_c, color = "Obama"), method = "loess", se = FALSE) +
-    scale_color_manual(name = "Candidate", values = colors) +
-    geom_vline(xintercept = as.numeric(as.Date("2008-01-03")), linetype = 4) +
-    facet_wrap(~ political_interest) +
-    labs(
-      title = "Candidate Electability (Iowa Caucuses)",
-      subtitle = "2008 Democratic Nominating Contest (Stratified by Knowledge of Iowa Caucuses)",
-      x = "Month",
-      y = "Electability Rating"
-    ) +
-    ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11h_electability_iowa_caucuses_iowa_results.bmp", 
-           width = 7.5, height = 4.5)
-
-# Table
-
-naes08_phone_full %>%
-  filter(!(NBa05_c %in% c(998, 999)),
-         !(NBa06_c %in% c(998, 999)),
-         !(NBa07_c %in% c(998, 999)),
-         NAc02_c %in% c(5, 7, 8)) %>%
-  filter(DATE_c <= "2008-01-08",
-         DATE_c >= "2007-12-29") %>%
-  mutate(NAc02_c = case_when(
-    NAc02_c == 5 ~ "1 - Obama",
-    NAc02_c == 7 ~ "2 - Don't Know",
-    NAc02_c == 8 ~ "2 - Don't Know"
-  )) %>%
-  drop_na(NBa05_c, NBa06_c, NBa07_c) %>%
-  group_by(NAc02_c) %>%
-  mutate(clinton_electability = mean(NBa05_c),
-         edwards_electability = mean(NBa06_c),
-         obama_electability = mean(NBa07_c)) %>%
-  filter(!duplicated(clinton_electability)) %>%
-  select(NAc02_c, clinton_electability, edwards_electability, obama_electability) %>%
-  arrange(NAc02_c)
-
-```
-
-
-## Non-Normalized Graphs (Part 4)
-
-```{r message=FALSE, warning=FALSE}
-
-# Experience (over time)
-
-naes08_phone_full %>%
-  filter(!(ABc06_c %in% c(998, 999)),
-         !(ABe05_c %in% c(998, 999)),
-         !(ABo07_c %in% c(998, 999)),
-         DATE_c <= "2008-06-08") %>%
-  pivot_longer(cols = c(ABc06_c, ABe05_c, ABo07_c), names_to = "candidate", values_to = "experience") %>%
-  group_by(DATE_c) %>%
-  ggplot(aes(x = DATE_c, y = experience, color = candidate)) + 
-    geom_smooth(method = "loess", se = FALSE) + 
-    scale_color_discrete(name = "Candidate",
-                         labels = c("Clinton", "Edwards", "Obama")) + 
-    labs(
-      title = "Candidate Experience"
-    ) 
-
-# Experience (Iowa caucuses)
-
-naes08_phone_full %>%
-  filter(!(ABc06_c %in% c(998, 999)),
-         !(ABe05_c %in% c(998, 999)),
-         !(ABo07_c %in% c(998, 999))) %>%
-  filter(DATE_c <= "2008-01-08",
-         DATE_c >= "2007-12-30") %>%
-  mutate(iowa_caucuses = case_when(
-    DATE_c <= "2008-01-03" ~ 0,
-    DATE_c > "2008-01-03" ~ 1,
-  )) %>%
-  ggplot(aes(x = DATE_c, group = iowa_caucuses)) +
-    geom_smooth(aes(y = ABc06_c, color = "Clinton"), method = "loess", se = FALSE) +
-    geom_smooth(aes(y = ABe05_c, color = "Edwards"), method = "loess", se = FALSE) +
-    geom_smooth(aes(y = ABo07_c, color = "Obama"), method = "loess", se = FALSE) +
-    scale_color_manual(name = "Candidate", values = colors) +
-    geom_vline(xintercept = as.numeric(as.Date("2008-01-03")), linetype = 4) +
-    labs(
-      title = "Candidate Experience (Iowa Caucuses)",
-      subtitle = "2008 Democratic Nominating Contest",
-      x = "Month",
-      y = "Experience Rating"
-    ) +
-    ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11i_experience_iowa_caucuses.bmp", 
-           width = 7.5, height = 4.5)
-
-# Judgement (over time)
-
-naes08_phone_full %>%
-  filter(!(ABc07_c %in% c(998, 999)),
-         !(ABe06_c %in% c(998, 999)),
-         !(ABo08_c %in% c(998, 999)),
-         DATE_c <= "2008-06-08") %>%
-  pivot_longer(cols = c(ABc07_c, ABe06_c, ABo08_c), names_to = "candidate", values_to = "judgement") %>%
-  group_by(DATE_c) %>%
-  ggplot(aes(x = DATE_c, y = judgement, color = candidate)) + 
-    geom_smooth(method = "loess", se = FALSE) + 
-    scale_color_discrete(name = "Candidate",
-                         labels = c("Clinton", "Edwards", "Obama")) + 
-    labs(
-      title = "Candidate Judgement Over Time"
-    ) 
-
-# Judgement (Iowa caucuses)
-
-naes08_phone_full %>%
-  filter(!(ABc07_c %in% c(998, 999)),
-         !(ABe06_c %in% c(998, 999)),
-         !(ABo08_c %in% c(998, 999))) %>%
-  filter(DATE_c <= "2008-01-08",
-         DATE_c >= "2007-12-30") %>%
-  mutate(iowa_caucuses = case_when(
-    DATE_c <= "2008-01-03" ~ 0,
-    DATE_c > "2008-01-03" ~ 1,
-  )) %>%
-  ggplot(aes(x = DATE_c, group = iowa_caucuses)) +
-    geom_smooth(aes(y = ABc07_c, color = "Clinton"), method = "loess", se = FALSE) +
-    geom_smooth(aes(y = ABe06_c, color = "Edwards"), method = "loess", se = FALSE) +
-    geom_smooth(aes(y = ABo08_c, color = "Obama"), method = "loess", se = FALSE) +
-    scale_color_manual(name = "Candidate", values = colors) +
-    geom_vline(xintercept = as.numeric(as.Date("2008-01-03")), linetype = 4) +
-    labs(
-      title = "Candidate Judgement (Iowa Caucuses)",
-      subtitle = "2008 Democratic Nominating Contest",
-      x = "Month",
-      y = "Judgement Rating"
-    ) +
-    ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11i_judgement_iowa_caucuses.bmp", 
-           width = 7.5, height = 4.5)
-
-# Strong leader (over time)
-
-naes08_phone_full %>%
-  filter(!(ABc04_c %in% c(998, 999)),
-         !(ABe03_c %in% c(998, 999)),
-         !(ABo05_c %in% c(998, 999)),
-         DATE_c <= "2008-06-08") %>%
-  pivot_longer(cols = c(ABc04_c, ABe03_c, ABo05_c), names_to = "candidate", values_to = "leadership") %>%
-  group_by(DATE_c) %>%
-  ggplot(aes(x = DATE_c, y = leadership, color = candidate)) + 
-    geom_smooth(method = "loess", se = FALSE) + 
-    scale_color_discrete(name = "Candidate",
-                         labels = c("Clinton", "Edwards", "Obama")) + 
-    labs(
-      title = "Candidate Leadership Over Time"
-    ) 
-
-# Strong leader (Iowa caucuses)
-
-naes08_phone_full %>%
-  filter(!(ABc04_c %in% c(998, 999)),
-         !(ABe03_c %in% c(998, 999)),
-         !(ABo05_c %in% c(998, 999))) %>%
-  filter(DATE_c <= "2008-01-08",
-         DATE_c >= "2007-12-30") %>%
-  mutate(iowa_caucuses = case_when(
-    DATE_c <= "2008-01-03" ~ 0,
-    DATE_c > "2008-01-03" ~ 1,
-  )) %>%
-  ggplot(aes(x = DATE_c, group = iowa_caucuses)) +
-    geom_smooth(aes(y = ABc04_c, color = "Clinton"), method = "loess", se = FALSE) +
-    geom_smooth(aes(y = ABe03_c, color = "Edwards"), method = "loess", se = FALSE) +
-    geom_smooth(aes(y = ABo05_c, color = "Obama"), method = "loess", se = FALSE) +
-    scale_color_manual(name = "Candidate", values = colors) +
-    geom_vline(xintercept = as.numeric(as.Date("2008-01-03")), linetype = 4) +
-    labs(
-      title = "Candidate Leadership (Iowa Caucuses)",
-      subtitle = "2008 Democratic Nominating Contest",
-      x = "Month",
-      y = "Strong Leader Rating"
-    ) +
-    ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11i_leadership_iowa_caucuses.bmp", 
-           width = 7.5, height = 4.5)
-
-# Trustworthiness (over time)
-
-naes08_phone_full %>%
-  filter(!(ABc05_c %in% c(998, 999)),
-         !(ABe04_c %in% c(998, 999)),
-         !(ABo06_c %in% c(998, 999)),
-         DATE_c <= "2008-06-08") %>%
-  pivot_longer(cols = c(ABc05_c, ABe04_c, ABo06_c), names_to = "candidate", values_to = "trustworthiness") %>%
-  group_by(DATE_c) %>%
-  ggplot(aes(x = DATE_c, y = trustworthiness, color = candidate)) + 
-    geom_smooth(method = "loess", se = FALSE) + 
-    scale_color_discrete(name = "Candidate",
-                         labels = c("Clinton", "Edwards", "Obama")) + 
-    labs(
-      title = "Candidate Trustworthiness Over Time"
-    ) 
-
-# Trustworthiness (Iowa caucuses)
-
-naes08_phone_full %>%
-  filter(!(ABc05_c %in% c(998, 999)),
-         !(ABe04_c %in% c(998, 999)),
-         !(ABo06_c %in% c(998, 999))) %>%
-  filter(DATE_c <= "2008-01-08",
-         DATE_c >= "2007-12-30") %>%
-  mutate(iowa_caucuses = case_when(
-    DATE_c <= "2008-01-03" ~ 0,
-    DATE_c > "2008-01-03" ~ 1,
-  )) %>%
-  ggplot(aes(x = DATE_c, group = iowa_caucuses)) +
-    geom_smooth(aes(y = ABc05_c, color = "Clinton"), method = "loess", se = FALSE) +
-    geom_smooth(aes(y = ABe04_c, color = "Edwards"), method = "loess", se = FALSE) +
-    geom_smooth(aes(y = ABo06_c, color = "Obama"), method = "loess", se = FALSE) +
-    scale_color_manual(name = "Candidate", values = colors) +
-    geom_vline(xintercept = as.numeric(as.Date("2008-01-03")), linetype = 4) +
-    labs(
-      title = "Candidate Trustworthiness (Iowa Caucuses)",
-      subtitle = "2008 Democratic Nominating Contest",
-      x = "Month",
-      y = "Trustworthiness Rating"
-    ) +
-    ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11i_trustworthiness_iowa_caucuses.bmp", 
-           width = 7.5, height = 4.5)
-
-#####################
-
-# Whether Iraq war was worth it -- before and after Iowa Caucuses 
-
-naes08_phone_full %>%
-  filter(!(CDb01_c %in% c(998, 999))) %>%
-  filter(DATE_c <= "2008-01-08",
-         DATE_c >= "2007-12-30") %>%
-  mutate(iowa_caucuses = case_when(
-    DATE_c <= "2008-01-03" ~ "1 - Before Iowa",
-    DATE_c > "2008-01-03" ~ "2 - After Iowa",
-  )) %>%
-  group_by(iowa_caucuses) %>%
-  mutate(total_count = n()) %>%
-  group_by(CDb01_c, iowa_caucuses) %>%
-  mutate(percent = (n() / total_count) * 100) %>%
-  filter(!duplicated(CDb01_c)) %>%
-  ggplot(aes(x = CDb01_c, fill = CDb01_c)) +
-    geom_col(aes(y = percent)) +
-    facet_wrap(~ iowa_caucuses) +
-    theme(legend.position = "none") +
-    labs(
-      title = "Attitudes Towards the Iraq War",
-      subtitle = "2008 Democratic Nominating Contest (Iowa Caucuses)",
-      x = "Response",
-      y = "Percent of Respondents",
-      caption = "Exact dates range from December 30, 2007 to January 8, 2008. Answer \n choices include 1) Withdraw as Soon as Possible, 2) Set Withdrawal Deadline, \n 3) Keep Troops Until Stable Government, and 4) None of These."
-    ) +
-    ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11j_foreign_policy_iowa_caucuses.bmp", 
-           width = 7.5, height = 4.5)
-
-# Views on health care -- before and after Iowa Caucuses 
-
-naes08_phone_full %>%
-  filter(!(CCa01_c %in% c(998, 999))) %>%
-  filter(DATE_c <= "2008-01-08",
-         DATE_c >= "2007-12-30") %>%
-  mutate(iowa_caucuses = case_when(
-    DATE_c <= "2008-01-03" ~ "1 - Before Iowa",
-    DATE_c > "2008-01-03" ~ "2 - After Iowa",
-  )) %>%
-  group_by(iowa_caucuses) %>%
-  mutate(total_count = n()) %>%
-  group_by(CCa01_c, iowa_caucuses) %>%
-  mutate(percent = (n() / total_count) * 100) %>%
-  filter(!duplicated(CCa01_c)) %>%
-  ggplot(aes(x = CCa01_c, fill = CCa01_c)) +
-    geom_col(aes(y = percent)) +
-    facet_wrap(~ iowa_caucuses) +
-    theme(legend.position = "none") +
-    labs(
-      title = "Views on Health Care",
-      subtitle = "2008 Democratic Nominating Contest (Iowa Caucuses)",
-      x = "Response",
-      y = "Percent of Respondents",
-      caption = "Exact dates range from December 30, 2007 to January 8, 2008. Answer \n choices include 1) One Government Program, 2) Current System, and 3) Neither."
-    ) +
-    ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11j_healthcare_iowa_caucuses.bmp", 
-           width = 7.5, height = 4.5)
-
-# Views on the economy -- before and after Iowa Caucuses 
-
-naes08_phone_full %>%
-  filter(!(CBb01_c %in% c(998, 999))) %>%
-  filter(DATE_c <= "2008-01-08",
-         DATE_c >= "2007-12-30") %>%
-  mutate(iowa_caucuses = case_when(
-    DATE_c <= "2008-01-03" ~ "1 - Before Iowa",
-    DATE_c > "2008-01-03" ~ "2 - After Iowa",
-  )) %>%
-  group_by(iowa_caucuses) %>%
-  mutate(total_count = n()) %>%
-  group_by(CBb01_c, iowa_caucuses) %>%
-  mutate(percent = (n() / total_count) * 100) %>%
-  filter(!duplicated(CBb01_c)) %>%
-  ggplot(aes(x = CBb01_c, fill = CBb01_c)) +
-    geom_col(aes(y = percent)) +
-    facet_wrap(~ iowa_caucuses) +
-    theme(legend.position = "none") +
-    labs(
-      title = "Views on Economic Policy",
-      subtitle = "2008 Democratic Nominating Contest (Iowa Caucuses)",
-      x = "Response",
-      y = "Percent of Respondents",
-      caption = "Exact dates range from December 30, 2007 to January 8, 2008. Answer \n choices include 1) Cut Taxes, 2) Keep Taxes as They Are, 3) Raise Taxes if Necessary, and 4) None of These."
-    ) +
-    ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11j_economy_iowa_caucuses.bmp", 
-           width = 7.5, height = 4.5)
-
-# Political orientation -- before and after Iowa Caucuses 
-
-naes08_phone_full %>%
-  filter(!(MA04_c %in% c(998, 999))) %>%
-  filter(DATE_c <= "2008-01-08",
-         DATE_c >= "2007-12-30") %>%
-  mutate(iowa_caucuses = case_when(
-    DATE_c <= "2008-01-03" ~ "1 - Before Iowa",
-    DATE_c > "2008-01-03" ~ "2 - After Iowa",
-  )) %>%
-  group_by(iowa_caucuses) %>%
-  mutate(total_count = n()) %>%
-  group_by(MA04_c, iowa_caucuses) %>%
-  mutate(percent = (n() / total_count) * 100) %>%
-  filter(!duplicated(MA04_c)) %>%
-  ggplot(aes(x = MA04_c, fill = MA04_c)) +
-    geom_col(aes(y = percent)) +
-    facet_wrap(~ iowa_caucuses) +
-    theme(legend.position = "none") +
-    labs(
-      title = "Ideological Placement",
-      subtitle = "2008 Democratic Nominating Contest (Iowa Caucuses)",
-      x = "Response",
-      y = "Percent of Respondents",
-      caption = "Exact dates range from December 30, 2007 to January 8, 2008. Answer \n choices include 1) Very Conservative, 2) Somewhat Conservative, 3) Moderate, 4) Somewhat Liberal, and 5) Very Liberal." 
-    ) +
-    ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11j_political_orientation_iowa_caucuses.bmp", 
-           width = 7.5, height = 4.5)
-
-#####################
-
-# Political interest (over time)
-
-naes08_phone_full %>%
-  filter(!(KA01_c %in% c(998, 999)),
-         !(KB01_c %in% c(998, 999)),
-         !(KD01_c %in% c(998, 999)),
-         !(KE01_c %in% c(998, 999)),
-         !(KG01_c %in% c(998, 999)),
-         DATE_c <= "2008-06-08") %>%
-  group_by(DATE_c) %>%
-  ggplot(aes(x = DATE_c)) + 
-    geom_smooth(aes(y = KA01_c), method = "loess", se = FALSE, color = "#F8766D") +
-    geom_smooth(aes(y = KB01_c), method = "loess", se = FALSE, color = "#00BA38") +
-    # geom_smooth(aes(y = KD01_c), method = "loess", se = FALSE) +
-    # geom_smooth(aes(y = KE01_c), method = "loess", se = FALSE) +
-    # geom_smooth(aes(y = KG01_c), method = "loess", se = FALSE) +
-    labs(
-      title = "Days Discussed Politics in Past Week"
-    ) 
-
-# Political interest (Iowa caucuses)
-
-naes08_phone_full %>%
-  filter(!(KA01_c %in% c(998, 999)),
-         !(KB01_c %in% c(998, 999)),
-         !(KD01_c %in% c(998, 999)),
-         !(KE01_c %in% c(998, 999)),
-         !(KG01_c %in% c(998, 999))) %>%
-  filter(DATE_c <= "2008-01-08",
-         DATE_c >= "2007-12-30") %>%
-  mutate(iowa_caucuses = case_when(
-    DATE_c <= "2008-01-03" ~ 0,
-    DATE_c > "2008-01-03" ~ 1,
-  )) %>%
-  ggplot(aes(x = DATE_c, group = iowa_caucuses)) +
-    # geom_smooth(aes(y = KA01_c), method = "loess", se = FALSE, color = "#F8766D") +
-    geom_smooth(aes(y = KB01_c), method = "loess", se = FALSE) +
-    # geom_smooth(aes(y = KD01_c), method = "loess", se = FALSE) +
-    # geom_smooth(aes(y = KE01_c), method = "loess", se = FALSE) +
-    # geom_smooth(aes(y = KG01_c), method = "loess", se = FALSE) +
-    geom_vline(xintercept = as.numeric(as.Date("2008-01-03")), linetype = 4) +
-    labs(
-      title = "Days Discussed Politics in Past Week (Iowa Caucuses)",
-      subtitle = "2008 Democratic Nominating Contest",
-      x = "Month",
-      y = "Number of Days"
-    ) +
-    ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11j_days_discussing_politics_iowa_caucuses.bmp", 
-           width = 7.5, height = 4.5)
-
-```
-
-## Mentions and Regressions
-
-```{r}
-
-# Calculating mentions (Iowa caucuses)
-
-health_terms <- c("health", "insur", "drug")
-economy_terms <- c("job", "econ", "stock", "market", "hous", "employ")
-war_terms <- c("war", "terror", "iraq", "secur")
-
-naes08_phone_full %>%
-  filter(DATE_c <= "2008-01-08",
-         DATE_c >= "2007-12-30") %>%
-  mutate(iowa_caucuses = case_when(
-    DATE_c <= "2008-01-03" ~ 0,
-    DATE_c > "2008-01-03" ~ 1,
-  )) %>%
-  mutate(CA01r1v_c = tolower(CA01r1v_c)) %>%
-  mutate(health = ifelse(grepl(paste(health_terms, collapse = "|"), 
-                               CA01r1v_c), 1, 0),
-         economy = ifelse(grepl(paste(economy_terms, collapse = "|"),
-                                CA01r1v_c), 1, 0),
-         war = ifelse(grepl(paste(war_terms, collapse = "|"),
-                                CA01r1v_c), 1, 0)) %>%
-  select(CA01r1v_c, health, economy, war, DATE_c, iowa_caucuses) %>%
-  arrange(DATE_c) %>%
-  group_by(iowa_caucuses) %>%
-  mutate(percentage_health = sum(health) / n(),
-         percentage_economy = sum(economy) / n(),
-         percentage_war = sum(war) / n()) %>%
-  filter(!duplicated(percentage_health)) %>%
-  select(c(iowa_caucuses, percentage_health, percentage_economy, percentage_war))
-
-# Calculating regressions (over time)
-
-df_final_full_reg <- df_final_full %>%
-  full_join(naes08_phone_full, by = c("ID" = "RKEY")) %>%
-  select(WEEK_c, DATE_c, ID, VoteCandidate, CLINTON, EDWARDS, NORMALIZED_FT, NORMALIZED_VIABILITY,
-         NORMALIZED_ELECTABILITY, NORMALIZED_IDEOLOGY)
-
-reg_to_df <- function(x) {
-  data.frame(variable = rownames(summary(x)$coef),
-  coef = summary(x)$coef[, 1],
-  se = summary(x)$coef[, 3],
-  exp_coef = summary(x)$coef[, 2])
-}
-
-factor_odds <- function(x) {
-  exp(x)
-}
-
-for(i in 1:6) {
-  assign(paste0("df_final_full_reg_wk", i), df_final_full_reg %>%
-    filter(WEEK_c == i) %>%
-    clogit(data = ., formula = VoteCandidate ~ CLINTON + 
-           EDWARDS + NORMALIZED_FT + NORMALIZED_VIABILITY + 
-           NORMALIZED_ELECTABILITY + NORMALIZED_IDEOLOGY + 
-           strata(ID)) %>%
-    reg_to_df(.) %>%
-    mutate(week = i)) 
-}
-
-for(i in 7:25) {
-  assign(paste0("df_final_full_reg_wk", i), df_final_full_reg %>%
-    filter(WEEK_c == i) %>%
-    clogit(formula = VoteCandidate ~ CLINTON + 
-             NORMALIZED_FT + NORMALIZED_VIABILITY + 
-             NORMALIZED_ELECTABILITY + NORMALIZED_IDEOLOGY + 
-             strata(ID)) %>%
-    reg_to_df(.) %>%
-    mutate(week = i))
-}
-
-for(i in 1:25) {
-
-  df_final_full_reg_all <- rbind(paste0("df_final_full_reg_wk", i))
-  
-}
-
-df_final_full_reg_all <- data.frame(rbind(df_final_full_reg_wk1, 
-                                  df_final_full_reg_wk2, 
-                                  df_final_full_reg_wk3, 
-                                  df_final_full_reg_wk4, 
-                                  df_final_full_reg_wk5, 
-                                  df_final_full_reg_wk6, 
-                                  df_final_full_reg_wk7, 
-                                  df_final_full_reg_wk8, 
-                                  df_final_full_reg_wk9, 
-                                  df_final_full_reg_wk10, 
-                                  df_final_full_reg_wk11, 
-                                  df_final_full_reg_wk12, 
-                                  df_final_full_reg_wk13, 
-                                  df_final_full_reg_wk14, 
-                                  df_final_full_reg_wk15, 
-                                  df_final_full_reg_wk16, 
-                                  df_final_full_reg_wk17, 
-                                  df_final_full_reg_wk18, 
-                                  df_final_full_reg_wk19, 
-                                  df_final_full_reg_wk20, 
-                                  df_final_full_reg_wk21, 
-                                  df_final_full_reg_wk22, 
-                                  df_final_full_reg_wk23, 
-                                  df_final_full_reg_wk24, 
-                                  df_final_full_reg_wk25)) %>%
-  rowwise() %>%
-  mutate(fctodds = factor_odds(coef))
-
-interval1 <- -qnorm((1 - 0.9) / 2)  # 90% CI multiplier
-interval2 <- -qnorm((1 - 0.95) / 2)  # 95% CI multiplier
-
-# Graph of coefficients
-# All
-
-df_final_full_reg_all %>%
-  filter(week %in% 1:25) %>%
-  filter(variable %in% c("NORMALIZED_VIABILITY", "NORMALIZED_ELECTABILITY", 
-                         "NORMALIZED_FT", "NORMALIZED_IDEOLOGY")) %>%
-  mutate(variable = factor(variable, levels = c("NORMALIZED_VIABILITY", 
-                                                "NORMALIZED_ELECTABILITY", 
-                                                "NORMALIZED_FT", 
-                                                "NORMALIZED_IDEOLOGY"),
-                           labels = c("Viability", "Electability",
-                                      "Feeling Thermometer", "Ideology"))) %>%
-  ggplot(aes(x = week, y = coef)) +
-    geom_hline(yintercept = 0, colour = gray(1 / 2), lty = 2) +
-    geom_pointrange(aes(ymin = coef - se * interval2,
-                        ymax = coef + se * interval2),
-                    lwd = 1 / 2, shape = 21, fill = "WHITE") +
-    geom_smooth(method = "loess") +
-    theme_bw() +
-    facet_wrap(~ variable, nrow = 2) + 
-    theme(legend.position = "none") + 
-    labs(
-      title = "Coefficients Over Time",
-      subtitle = "2008 Democratic Nominating Contest",
-      x = "Week",
-      y = "Coefficient",
-      caption = "Point estimates and 95% confidence intervals are shown."
-    )
-
-# Viability
-
-df_final_full_reg_all %>%
-  filter(week %in% 1:25) %>%
-  filter(variable %in% c("NORMALIZED_VIABILITY")) %>%
-  mutate(variable = factor(variable, levels = c("NORMALIZED_VIABILITY"),
-                           labels = c("Viability"))) %>%
-  ggplot(aes(x = week, y = coef)) +
-    geom_hline(yintercept = 0, colour = gray(1 / 2), lty = 2) +
-    geom_pointrange(aes(ymin = coef - se * interval2,
-                        ymax = coef + se * interval2),
-                    lwd = 1 / 2, shape = 21, fill = "WHITE") +
-    geom_smooth(method = "loess") +
-    theme_bw() +
-    theme(legend.position = "none") + 
-    labs(
-      title = "Viability Coefficient Over Time",
-      subtitle = "2008 Democratic Nominating Contest",
-      x = "Week",
-      y = "Coefficient",
-      caption = "Point estimates and 95% confidence intervals are shown."
-    ) +
-    ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11k_viability_coefficients_over_time.bmp", 
-           width = 7.5, height = 4.5)
-
-# Electability
-
-df_final_full_reg_all %>%
-  filter(week %in% 1:25) %>%
-  filter(variable %in% c("NORMALIZED_ELECTABILITY")) %>%
-  mutate(variable = factor(variable, levels = c("NORMALIZED_ELECTABILITY"),
-                           labels = c("Electability"))) %>%
-  ggplot(aes(x = week, y = coef)) +
-    geom_hline(yintercept = 0, colour = gray(1 / 2), lty = 2) +
-    geom_pointrange(aes(ymin = coef - se * interval2,
-                        ymax = coef + se * interval2),
-                    lwd = 1 / 2, shape = 21, fill = "WHITE") +
-    geom_smooth(method = "loess") +
-    theme_bw() +
-    theme(legend.position = "none") + 
-    labs(
-      title = "Electability Coefficient Over Time",
-      subtitle = "2008 Democratic Nominating Contest",
-      x = "Week",
-      y = "Coefficient",
-      caption = "Point estimates and 95% confidence intervals are shown."
-    ) +
-    ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11k_electability_coefficients_over_time.bmp", 
-           width = 7.5, height = 4.5)
-
-# Feeling thermometer
-
-df_final_full_reg_all %>%
-  filter(week %in% 1:25) %>%
-  filter(variable %in% c("NORMALIZED_FT")) %>%
-  mutate(variable = factor(variable, levels = c("NORMALIZED_FT"),
-                           labels = c("Feeling Thermometer"))) %>%
-  ggplot(aes(x = week, y = coef)) +
-    geom_hline(yintercept = 0, colour = gray(1 / 2), lty = 2) +
-    geom_pointrange(aes(ymin = coef - se * interval2,
-                        ymax = coef + se * interval2),
-                    lwd = 1 / 2, shape = 21, fill = "WHITE") +
-    geom_smooth(method = "loess") +
-    ylim(1, 8) + 
-    theme_bw() +
-    theme(legend.position = "none") + 
-    labs(
-      title = "Favorability Coefficient Over Time",
-      subtitle = "2008 Democratic Nominating Contest",
-      x = "Week",
-      y = "Coefficient",
-      caption = "Point estimates and 95% confidence intervals are shown."
-    ) +
-    ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11k_ft_coefficients_over_time.bmp", 
-           width = 7.5, height = 4.5)
-
-# Ideology
-
-df_final_full_reg_all %>%
-  filter(week %in% 1:25) %>%
-  filter(variable %in% c("NORMALIZED_IDEOLOGY")) %>%
-  mutate(variable = factor(variable, levels = c("NORMALIZED_IDEOLOGY"),
-                           labels = c("Ideology"))) %>%
-  ggplot(aes(x = week, y = coef)) +
-    geom_hline(yintercept = 0, colour = gray(1 / 2), lty = 2) +
-    geom_pointrange(aes(ymin = coef - se * interval2,
-                        ymax = coef + se * interval2),
-                    lwd = 1 / 2, shape = 21, fill = "WHITE") +
-    geom_smooth(method = "loess") +
-    theme_bw() +
-    theme(legend.position = "none") + 
-    labs(
-      title = "Ideological Distance Coefficient Over Time",
-      subtitle = "2008 Democratic Nominating Contest",
-      x = "Week",
-      y = "Coefficient",
-      caption = "Point estimates and 95% confidence intervals are shown."
-    ) +
-    ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure11/11k_ideological_distance_coefficients_over_time.bmp", 
-           width = 7.5, height = 4.5)
-
-```
-
-## Calculating Weekly Changes
-
-```{r message=FALSE, warning=FALSE}
-
-# Change per week (voting types aggregated together)
-
-df_final_full_3 <- df_final_full_2 %>%
-  full_join(naes08_phone_full, by = c("ID" = "RKEY")) %>%
-  group_by(SINCERE_MAX2, STRATEGIC_MAX2, WEEK_c) %>%
-  count() %>%
-  mutate(sincere_strategic = case_when(
-    (SINCERE_MAX2 == 0 & STRATEGIC_MAX2 == 0) ~ "irrational",
-    (SINCERE_MAX2 == 1 & STRATEGIC_MAX2 == 0) ~ "expressive",
-    (SINCERE_MAX2 == 0 & STRATEGIC_MAX2 == 1) ~ "instrumental",
-    (SINCERE_MAX2 == 1 & STRATEGIC_MAX2 == 1) ~ "ideal",
-    )) %>%
-  group_by(WEEK_c) %>%
-  drop_na() %>%
-  mutate(percent = n / sum(n)) %>%
-  group_by(SINCERE_MAX2, STRATEGIC_MAX2) %>%
-  mutate(percent_change = percent - lag(percent))
-
-df_final_full_3 %>%
-  write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure13/voting_types_aggregated_week.csv")
-
-# Change per week (voting types disaggregated by candidate)
-
-df_final_full_3 <- df_final_full_2 %>%
-  inner_join(naes08_phone_full, by = c("ID" = "RKEY")) %>%
-  group_by(Candidate, SINCERE_MAX2, STRATEGIC_MAX2, WEEK_c) %>%
-  count() %>%
-  mutate(sincere_strategic = case_when(
-    (SINCERE_MAX2 == 0 & STRATEGIC_MAX2 == 0) ~ 1,
-    (SINCERE_MAX2 == 1 & STRATEGIC_MAX2 == 0) ~ 2,
-    (SINCERE_MAX2 == 0 & STRATEGIC_MAX2 == 1) ~ 3,
-    (SINCERE_MAX2 == 1 & STRATEGIC_MAX2 == 1) ~ 4,
-    )) %>%
-  group_by(Candidate, WEEK_c) %>%
-  mutate(percent = n / sum(n)) %>%
-  group_by(SINCERE_MAX2, STRATEGIC_MAX2, Candidate) %>%
-  mutate(percent_change = percent - lag(percent))
-
-df_final_full_3 %>%
-  write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure13/voting_types_candidate_week.csv")
-
-# Change per week (candidate feeling thermometer)
-
-naes08_phone_full_ft_week <- naes08_phone_full %>%
-  filter(!(ABc01_c %in% c(998, 999)),
-         !(ABe01_c %in% c(998, 999)),
-         !(ABo01_c %in% c(998, 999))) %>%
-  pivot_longer(cols = c(ABc01_c, ABe01_c, ABo01_c), names_to = "candidate", values_to = "feeling_thermometer") %>%
-  mutate(candidate = case_when(
-    candidate == "ABc01_c" ~ "Clinton",
-    candidate == "ABe01_c" ~ "Edwards",
-    candidate == "ABo01_c" ~ "Obama"
-    )) %>%
-  select(WEEK_c, candidate, feeling_thermometer) %>%
-  drop_na() %>%
-  group_by(WEEK_c, candidate) %>%
-  mutate(weekly_average = mean(feeling_thermometer)) %>%
-  filter(!duplicated(WEEK_c, candidate)) %>%
-  arrange(WEEK_c) %>%
-  select(-feeling_thermometer) %>%
-  group_by(candidate) %>%
-  mutate(change = weekly_average - lag(weekly_average))
-
-naes08_phone_full_ft_week %>%
-  write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure13/feeling_thermometer_week.csv")
-
-# Change per day (candidate feeling thermometer)
-
-naes08_phone_full_ft_day <- naes08_phone_full %>%
-  filter(!(ABc01_c %in% c(998, 999)),
-         !(ABe01_c %in% c(998, 999)),
-         !(ABo01_c %in% c(998, 999))) %>%
-  pivot_longer(cols = c(ABc01_c, ABe01_c, ABo01_c), names_to = "candidate", values_to = "feeling_thermometer") %>%
-  mutate(candidate = case_when(
-    candidate == "ABc01_c" ~ "Clinton",
-    candidate == "ABe01_c" ~ "Edwards",
-    candidate == "ABo01_c" ~ "Obama"
-    )) %>%
-  select(DATE_c, candidate, feeling_thermometer) %>%
-  drop_na() %>%
-  group_by(DATE_c, candidate) %>%
-  mutate(weekly_average = mean(feeling_thermometer)) %>%
-  filter(!duplicated(DATE_c, candidate)) %>%
-  arrange(DATE_c) %>%
-  select(-feeling_thermometer) %>%
-  group_by(candidate) %>%
-  mutate(change = weekly_average - lag(weekly_average))
-
-naes08_phone_full_ft_day %>%
-  write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure13/feeling_thermometer_day.csv")
-
-# Change per week (candidate viability)
-
-naes08_phone_full_viability_week <- naes08_phone_full %>%
-  filter(!(NAa06_c %in% c(998, 999)),
-         !(NAa07_c %in% c(998, 999)),
-         !(NAa08_c %in% c(998, 999))) %>%
-  pivot_longer(cols = c(NAa06_c, NAa07_c, NAa08_c), names_to = "candidate", values_to = "viability") %>%
-  mutate(candidate = case_when(
-    candidate == "NAa06_c" ~ "Clinton",
-    candidate == "NAa07_c" ~ "Edwards",
-    candidate == "NAa08_c" ~ "Obama"
-    )) %>%
-  select(WEEK_c, candidate, viability) %>%
-  drop_na() %>%
-  group_by(WEEK_c, candidate) %>%
-  mutate(weekly_average = mean(viability)) %>%
-  filter(!duplicated(WEEK_c, candidate)) %>%
-  arrange(WEEK_c) %>%
-  select(-viability) %>%
-  group_by(candidate) %>%
-  mutate(change = weekly_average - lag(weekly_average))
-
-naes08_phone_full_viability_week %>%
-  write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure13/viability_week.csv")
-
-# Change per day (candidate viability)
-
-naes08_phone_full_viability_day <- naes08_phone_full %>%
-  filter(!(NAa06_c %in% c(998, 999)),
-         !(NAa07_c %in% c(998, 999)),
-         !(NAa08_c %in% c(998, 999))) %>%
-  pivot_longer(cols = c(NAa06_c, NAa07_c, NAa08_c), names_to = "candidate", values_to = "viability") %>%
-  mutate(candidate = case_when(
-    candidate == "NAa06_c" ~ "Clinton",
-    candidate == "NAa07_c" ~ "Edwards",
-    candidate == "NAa08_c" ~ "Obama"
-    )) %>%
-  select(DATE_c, candidate, viability) %>%
-  drop_na() %>%
-  group_by(DATE_c, candidate) %>%
-  mutate(weekly_average = mean(viability)) %>%
-  filter(!duplicated(DATE_c, candidate)) %>%
-  arrange(DATE_c) %>%
-  select(-viability) %>%
-  group_by(candidate) %>%
-  mutate(change = weekly_average - lag(weekly_average))
-
-naes08_phone_full_viability_day %>%
-  write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure13/viability_day.csv")
-
-# Change per week (candidate electability)
-
-naes08_phone_full_electability_week <- naes08_phone_full %>%
-  filter(!(NBa05_c %in% c(998, 999)),
-         !(NBa06_c %in% c(998, 999)),
-         !(NBa07_c %in% c(998, 999))) %>%
-  pivot_longer(cols = c(NBa05_c, NBa06_c, NBa07_c), names_to = "candidate", values_to = "electability") %>%
-  mutate(candidate = case_when(
-    candidate == "NBa05_c" ~ "Clinton",
-    candidate == "NBa06_c" ~ "Edwards",
-    candidate == "NBa07_c" ~ "Obama"
-    )) %>%
-  select(WEEK_c, candidate, electability) %>%
-  drop_na() %>%
-  group_by(WEEK_c, candidate) %>%
-  mutate(weekly_average = mean(electability)) %>%
-  filter(!duplicated(WEEK_c, candidate)) %>%
-  arrange(WEEK_c) %>%
-  select(-electability) %>%
-  group_by(candidate) %>%
-  mutate(change = weekly_average - lag(weekly_average))
-
-naes08_phone_full_electability_week %>%
-  write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure13/electability_week.csv")
-
-# Change per day (candidate electability)
-
-naes08_phone_full_electability_day <- naes08_phone_full %>%
-  filter(!(NBa05_c %in% c(998, 999)),
-         !(NBa06_c %in% c(998, 999)),
-         !(NBa07_c %in% c(998, 999))) %>%
-  pivot_longer(cols = c(NBa05_c, NBa06_c, NBa07_c), names_to = "candidate", values_to = "electability") %>%
-  mutate(candidate = case_when(
-    candidate == "NBa05_c" ~ "Clinton",
-    candidate == "NBa06_c" ~ "Edwards",
-    candidate == "NBa07_c" ~ "Obama"
-    )) %>%
-  select(DATE_c, candidate, electability) %>%
-  drop_na() %>%
-  group_by(DATE_c, candidate) %>%
-  mutate(weekly_average = mean(electability)) %>%
-  filter(!duplicated(DATE_c, candidate)) %>%
-  arrange(DATE_c) %>%
-  select(-electability) %>%
-  group_by(candidate) %>%
-  mutate(change = weekly_average - lag(weekly_average))
-
-naes08_phone_full_electability_day %>%
-  write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure13/electability_day.csv")
-
-# Change per week (candidate ideology)
-
-naes08_phone_full_ideology_week <- naes08_phone_full %>%
-  filter(!(ABc03_c %in% c(998, 999)),
-         !(ABe02_c %in% c(998, 999)),
-         !(ABo04_c %in% c(998, 999))) %>%
-  pivot_longer(cols = c(ABc03_c, ABe02_c, ABo04_c), names_to = "candidate", values_to = "ideology") %>%
-  mutate(candidate = case_when(
-    candidate == "ABc03_c" ~ "Clinton",
-    candidate == "ABe02_c" ~ "Edwards",
-    candidate == "ABo04_c" ~ "Obama"
-    )) %>%
-  select(WEEK_c, candidate, ideology) %>%
-  drop_na() %>%
-  group_by(WEEK_c, candidate) %>%
-  mutate(weekly_average = mean(ideology)) %>%
-  filter(!duplicated(WEEK_c, candidate)) %>%
-  arrange(WEEK_c) %>%
-  select(-ideology) %>%
-  group_by(candidate) %>%
-  mutate(change = weekly_average - lag(weekly_average))
-
-naes08_phone_full_ideology_week %>%
-  write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure13/ideology_week.csv")
-
-# Change per day (candidate ideology)
-
-naes08_phone_full_ideology_day <- naes08_phone_full %>%
-  filter(!(ABc03_c %in% c(998, 999)),
-         !(ABe02_c %in% c(998, 999)),
-         !(ABo04_c %in% c(998, 999))) %>%
-  pivot_longer(cols = c(ABc03_c, ABe02_c, ABo04_c), names_to = "candidate", values_to = "ideology") %>%
-  mutate(candidate = case_when(
-    candidate == "ABc03_c" ~ "Clinton",
-    candidate == "ABe02_c" ~ "Edwards",
-    candidate == "ABo04_c" ~ "Obama"
-    )) %>%
-  select(DATE_c, candidate, ideology) %>%
-  drop_na() %>%
-  group_by(DATE_c, candidate) %>%
-  mutate(weekly_average = mean(ideology)) %>%
-  filter(!duplicated(DATE_c, candidate)) %>%
-  arrange(DATE_c) %>%
-  select(-ideology) %>%
-  group_by(candidate) %>%
-  mutate(change = weekly_average - lag(weekly_average))
-
-naes08_phone_full_ideology_day %>%
-  write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure13/ideology_day.csv")
-
-```
-
-
-```{r include=FALSE}
-
-rm(list = ls())
-
-```
-
-
-## Miscellaneous
-
-```{r}
-
-
-
-```
-
 
 
 ```{r}
+### Voting Types ###
 
-# Graphs of Normalized Variables
-
-# By week (voting types aggregated together)
+# Voting types over time (week-by-week), not disaggregated by candidate. 
 
 df_final_full_3 <- df_final_full_2 %>%
   full_join(naes08_phone_full, by = c("ID" = "RKEY")) %>%
@@ -2131,7 +2192,7 @@ df_final_full_3 %>%
     geom_point(size = 0.5) +
     geom_smooth(method = "loess")
 
-# By week (voting types disaggregated by candidate)
+# Voting types over time (week-by-week), disaggregated by candidate. 
 
 df_final_full_3 <- df_final_full_2 %>%
   inner_join(naes08_phone_full, by = c("ID" = "RKEY")) %>%
@@ -2169,10 +2230,10 @@ df_final_full_3 %>%
       y = "Instrumental Voters"
     )
 
-######################
+### Candidate Ratings Over Time ###
 
-# Viability -- Iowa Caucuses, respondents stratified by whether Iraq war was worth it
-# No patterns found
+# Candidate viability ratings before vs. after the Iowa caucuses; respondents
+# stratified by whether Iraq war was worth it (no patterns found).
 
 naes08_phone_full %>%
   filter(!(NAa06_c %in% c(998, 999)),
@@ -2203,8 +2264,8 @@ naes08_phone_full %>%
       y = "Viability Rating"
     )
 
-# Viability -- Iowa Caucuses, respondents stratified by whether government should nationalize health care
-# No patterns found
+# Candidate viability ratings before vs. after the Iowa caucuses; respondents
+# stratified by health care views (no patterns found).
 
 naes08_phone_full %>%
   filter(!(NAa06_c %in% c(998, 999)),
@@ -2231,8 +2292,8 @@ naes08_phone_full %>%
       y = "Viability Rating"
     )
 
-# Viability -- Iowa Caucuses, respondents stratified by ideology
-# No patterns found 
+# Candidate viability ratings before vs. after the Iowa caucuses; respondents
+# stratified by ideology (no patterns found).
 
 naes08_phone_full %>%
   filter(!(NAa06_c %in% c(998, 999)),
@@ -2266,9 +2327,9 @@ naes08_phone_full %>%
       y = "Viability Rating"
     )
 
-##############
+### Policy Views ###
 
-# Health care questions
+# Views on health care over time.
 
 naes08_phone_full %>%
   filter(!(CCa01_c %in% c(998, 999)),
@@ -2282,7 +2343,7 @@ naes08_phone_full %>%
       title = "Voters' Health Care Views Over Time"
     ) 
 
-# Foreign policy questions
+# Views on foreign policy over time.
 
 naes08_phone_full %>%
   filter(!(CDa02_c %in% c(998, 999)),
@@ -2300,7 +2361,9 @@ naes08_phone_full %>%
       title = "Voters' Foreign Policy Views Over Time"
     ) 
 
-# Political orientation
+### Voter Characteristics ###
+
+# Political orientation over time.
 
 naes08_phone_full %>%
   filter(!(MA04_c %in% c(998, 999)),
@@ -2314,8 +2377,7 @@ naes08_phone_full %>%
       title = "Voters' Political Orientation Over Time"
     ) 
 
-# Political media exposure (over time)
-# No pattern
+# Media exposure over time (no pattern).
 
 naes08_phone_full %>%
   filter(!(EB02_c %in% c(998, 999)),
@@ -2335,8 +2397,7 @@ naes08_phone_full %>%
       title = "Voters' Political Media Exposure Over Time"
     ) 
 
-# Political media exposure (Iowa caucuses)
-# No pattern 
+# Media exposure before vs. after the Iowa caucuses (no pattern).
 
 naes08_phone_full %>%
   filter(!(EB02_c %in% c(998, 999)),

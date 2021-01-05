@@ -296,6 +296,7 @@ df_final[-1][my_index] <- 1
 
 ```{r}
 df_final %>%
+  select(-TRAITS) %>%
   drop_na() %>%
   write.dta("clean_data/df08phone_r_v2.dta")
 ```

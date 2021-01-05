@@ -30,7 +30,6 @@ naes08_phone <- read.spss("raw_data/naes/naes08-phone-nat-rcs-data-full.sav",
     filter(DATE_c <= 20080129)
 naes08_phone[naes08_phone == 998] <- NA
 naes08_phone[naes08_phone == 999] <- NA
-
 ```
 
 
@@ -74,7 +73,7 @@ my_names <- c("ID", "voting",
               "Lead3", "Trust3", "Experience3", "Judgement3", "Ready3", "Honest3"
               )
 
-colnames(df08phone) <- my_names=
+colnames(df08phone) <- my_names
 ```
 
 
@@ -318,6 +317,7 @@ df_final[-1][my_index] <- 1
 
 ```{r}
 df_final %>%
+  select(-TRAITS) %>%
   drop_na() %>%
   write.dta("clean_data/df08phone_r.dta")
 ```
@@ -329,7 +329,6 @@ df_final %>%
 ## Graphs of Candidate Viability and Electability 
 
 ```{r}
-
 df_final %>%
   ggplot(aes(x = NORMALIZED_ELECTABILITY)) +
     geom_density() +
@@ -353,7 +352,6 @@ df_final %>%
       y = "Density"
     ) +
   ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure2/naes08_phone_r_viability.bmp", width = 7.5, height = 4.5)
-
 ```
 
 
@@ -394,7 +392,6 @@ df_final_2 %>%
   mutate(percent = n / sum(n),
          df = "df08phone_r") %>%
   write.csv("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure3/df08phone_r_counts_aggregate.csv")
-
 ```
 
 

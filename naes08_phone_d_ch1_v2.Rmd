@@ -301,6 +301,7 @@ df_final[-1][my_index] <- 1
 
 ```{r}
 df_final %>%
+  select(-TRAITS) %>%
   drop_na() %>%
   write.dta("clean_data/df08phone_d_v2.dta")
 ```
@@ -309,32 +310,165 @@ df_final %>%
 ##########
 
 
-## Graphs of Candidate Viability and Electability 
+## Graph of Candidate Strategy
 
 ```{r}
 df_final %>%
-  ggplot(aes(x = NORMALIZED_ELECTABILITY)) +
+  ggplot(aes(x = NORMALIZED_STRATEGY)) +
     geom_density() +
     facet_wrap(~ Candidate) +
     theme_bw() + 
     labs(
-      title = "Candidate Electability",
-      x = "Normalized Electability",
+      title = "Candidate Strategy",
+      x = "Normalized Strategy",
       y = "Density"
     ) +
-  ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure2/naes08_phone_d_electability.bmp", width = 7.5, height = 4.5)
+  ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure2/naes08_phone_d_strategy.bmp", width = 7.5, height = 4.5)
+```
 
-df_final %>%
-  ggplot(aes(x = NORMALIZED_VIABILITY)) +
-    geom_density() +
-    facet_wrap(~ Candidate) +
-    theme_bw() + 
-    labs(
-      title = "Candidate Viability",
-      x = "Normalized Viability",
-      y = "Density"
-    ) +
-  ggsave("/Users/ryan/Google Drive/2020_2021/Thesis/Figures/Figure2/naes08_phone_d_viability.bmp", width = 7.5, height = 4.5)
+
+##########
+
+# Create Wide Data Set with Dummy Variables
+
+```{r}
+# Control variables for age, education level, income, race, gender, party ID
+# strength, political interest. (Missing is political efficacy.)
+
+df_final_controls <- df_final %>%
+  inner_join(naes08_phone, by = c("ID" = "RKEY")) %>%
+  select(ID, Candidate, VoteCandidate, NORMALIZED_FT, NORMALIZED_STRATEGY, 
+         NORMALIZED_IDEOLOGY, TRAITS, CLINTON, EDWARDS, OBAMA, 
+         WA02_c, WA03_c, WA04_c, WC03_c, WA01_c, MA02_c, KA01_c) %>%
+  drop_na() 
+
+# Pivot education level longer.
+
+df_final_controls <- data.frame(df_final_controls, value=TRUE)
+
+df_final_controls <- df_final_controls %>%
+  arrange(WA03_c) %>%
+  reshape(idvar = c("ID", "Candidate", "VoteCandidate", "NORMALIZED_FT", 
+                    "NORMALIZED_STRATEGY", "NORMALIZED_IDEOLOGY", 
+                    "TRAITS", "CLINTON", "EDWARDS", "OBAMA",
+                    "WA02_c", "WA04_c", "WC03_c", "WA01_c", "MA02_c", "KA01_c"), 
+                    timevar = "WA03_c",
+                    direction = "wide") %>%
+  rename(
+    GRADE8 = value.1,
+    SOMEHS = value.2,
+    HS = value.3,
+    VOCATIONAL = value.4,
+    SOMECOLLEGE = value.5,
+    ASSOCIATES = value.6,
+    BACHELORS = value.7,
+    SOMEPROFESSIONAL = value.8,
+    PROFESSIONAL = value.9
+    ) 
+
+df_final_controls[is.na(df_final_controls)] <- 0
+
+# Pivot race longer.
+
+df_final_controls <- data.frame(df_final_controls, value=TRUE)
+
+df_final_controls <- df_final_controls %>%
+  arrange(WC03_c) %>%
+  reshape(idvar = c("ID", "Candidate", "VoteCandidate", "NORMALIZED_FT", 
+                    "NORMALIZED_STRATEGY", "NORMALIZED_IDEOLOGY", 
+                    "TRAITS", "CLINTON", "EDWARDS", "OBAMA", "WA02_c", "WA04_c", 
+                    "WA01_c", "MA02_c", "KA01_c", "GRADE8", "SOMEHS", "HS", 
+                    "VOCATIONAL", "SOMECOLLEGE", "ASSOCIATES", "BACHELORS", 
+                    "SOMEPROFESSIONAL", "PROFESSIONAL"),
+          timevar = "WC03_c",
+          direction = "wide") %>%
+  rename(
+    WHITE = value.1,
+    BLACK = value.2,
+    ASIAN = value.3,
+    NATIVE = value.4,
+    HISPANIC = value.5,
+    MIXED = value.6,
+    OTHER = value.7
+    ) 
+
+df_final_controls[is.na(df_final_controls)] <- 0
+
+# Pivot gender longer.
+
+df_final_controls <- data.frame(df_final_controls, value=TRUE)
+
+df_final_controls <- df_final_controls %>%
+  arrange(WA01_c) %>%
+  reshape(idvar = c("ID", "Candidate", "VoteCandidate", "NORMALIZED_FT", 
+                    "NORMALIZED_STRATEGY", "NORMALIZED_IDEOLOGY", 
+                    "TRAITS", "CLINTON", "EDWARDS", "OBAMA", "WA02_c", "WA04_c", 
+                    "MA02_c", "KA01_c", "GRADE8", "SOMEHS", "HS", "VOCATIONAL",
+                    "SOMECOLLEGE", "ASSOCIATES", "BACHELORS", 
+                    "SOMEPROFESSIONAL", "PROFESSIONAL", "WHITE", "BLACK", 
+                    "ASIAN", "NATIVE", "HISPANIC", "MIXED", "OTHER"),
+          timevar = "WA01_c",
+          direction = "wide") %>%
+  rename(
+    MALE = value.1,
+    FEMALE = value.2
+  ) 
+
+df_final_controls[is.na(df_final_controls)] <- 0
+
+# Pivot strength of party identification longer.
+
+df_final_controls <- data.frame(df_final_controls, value=TRUE)
+
+df_final_controls <- df_final_controls %>%
+  arrange(MA02_c) %>%
+  filter(MA02_c %in% c(1, 2)) %>%
+  reshape(idvar = c("ID", "Candidate", "VoteCandidate", "NORMALIZED_FT", 
+                    "NORMALIZED_STRATEGY", "NORMALIZED_IDEOLOGY", 
+                    "TRAITS", "CLINTON", "EDWARDS", "OBAMA", "WA02_c", "WA04_c", 
+                    "KA01_c", "GRADE8", "SOMEHS", "HS", "VOCATIONAL",
+                    "SOMECOLLEGE", "ASSOCIATES", "BACHELORS", 
+                    "SOMEPROFESSIONAL", "PROFESSIONAL", 
+                    "WHITE", "BLACK", "ASIAN", "NATIVE", "HISPANIC", "MIXED", 
+                    "OTHER", "MALE", "FEMALE"),
+          timevar = "MA02_c",
+          direction = "wide") %>%
+  rename(
+    STRONG = value.1,
+    WEAK = value.2
+  ) 
+
+df_final_controls[is.na(df_final_controls)] <- 0
+
+# Pivot level of political interest longer.
+
+df_final_controls <- data.frame(df_final_controls, value=TRUE)
+
+df_final_controls <- df_final_controls %>%
+  arrange(KA01_c) %>%
+  filter(KA01_c %in% c(1, 2, 3, 4)) %>%
+  reshape(idvar = c("ID", "Candidate", "VoteCandidate", "NORMALIZED_FT", 
+                    "NORMALIZED_STRATEGY", "NORMALIZED_IDEOLOGY", 
+                    "TRAITS", "CLINTON", "EDWARDS", "OBAMA", "WA02_c", "WA04_c", 
+                    "GRADE8", "SOMEHS", "HS", "VOCATIONAL",
+                    "SOMECOLLEGE", "ASSOCIATES", "BACHELORS", 
+                    "SOMEPROFESSIONAL", "PROFESSIONAL", 
+                    "WHITE", "BLACK", "ASIAN", "NATIVE", "HISPANIC", "MIXED",
+                    "OTHER", "MALE", "FEMALE", "STRONG", "WEAK"),
+          timevar = "KA01_c",
+          direction = "wide") %>%
+  rename(
+    VERYCLOSELY = value.1,
+    SOMEWHATCLOSELY = value.2,
+    NOTTOOCLOSELY = value.3,
+    NOTCLOSELYATALL = value.4
+  ) 
+
+df_final_controls[is.na(df_final_controls)] <- 0
+  
+df_final_controls %>%
+  drop_na() %>%
+  write.dta("clean_data/df08phone_d_controls_v2.dta")
 ```
 
 

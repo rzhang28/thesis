@@ -316,6 +316,7 @@ df_final[-1][my_index] <- 1
 
 ```{r}
 df_final %>%
+  select(-TRAITS) %>%
   drop_na() %>%
   write.dta("clean_data/df08phone_d.dta")
 ```
@@ -359,20 +360,20 @@ df_final %>%
 
 ```{r}
 # Control variables for age, education level, income, race, gender, party ID
-# strength, political interest,  / political efficacy
+# strength, political interest. (Missing ispolitical efficacy.)
 
-df_final_temp <- df_final %>%
+df_final_controls <- df_final %>%
   inner_join(naes08_phone, by = c("ID" = "RKEY")) %>%
   select(ID, Candidate, VoteCandidate, NORMALIZED_FT, NORMALIZED_VIABILITY, 
          NORMALIZED_ELECTABILITY, NORMALIZED_IDEOLOGY, TRAITS, CLINTON, EDWARDS, OBAMA, 
          WA02_c, WA03_c, WA04_c, WC03_c, WA01_c, MA02_c, KA01_c) %>%
   drop_na() 
 
-# Education level
+# Pivot education level longer.
 
-df_final_temp <- data.frame(df_final_temp, value=TRUE)
+df_final_controls <- data.frame(df_final_controls, value=TRUE)
 
-df_final_temp <- df_final_temp %>%
+df_final_controls <- df_final_controls %>%
   arrange(WA03_c) %>%
   reshape(idvar = c("ID", "Candidate", "VoteCandidate", "NORMALIZED_FT", "NORMALIZED_VIABILITY", 
                     "NORMALIZED_ELECTABILITY", "NORMALIZED_IDEOLOGY", 
@@ -392,13 +393,13 @@ df_final_temp <- df_final_temp %>%
     PROFESSIONAL = value.9
     ) 
 
-df_final_temp[is.na(df_final_temp)] <- 0
+df_final_controls[is.na(df_final_controls)] <- 0
 
-# Race
+# Pivot race longer.
 
-df_final_temp_2 <- data.frame(df_final_temp, value=TRUE)
+df_final_controls <- data.frame(df_final_controls, value=TRUE)
 
-df_final_temp_2 <- df_final_temp_2 %>%
+df_final_controls <- df_final_controls %>%
   arrange(WC03_c) %>%
   reshape(idvar = c("ID", "Candidate", "VoteCandidate", "NORMALIZED_FT", "NORMALIZED_VIABILITY", 
                     "NORMALIZED_ELECTABILITY", "NORMALIZED_IDEOLOGY", 
@@ -417,13 +418,13 @@ df_final_temp_2 <- df_final_temp_2 %>%
     OTHER = value.7
     ) 
 
-df_final_temp_2[is.na(df_final_temp_2)] <- 0
+df_final_controls[is.na(df_final_controls)] <- 0
 
-# Gender
+# Pivot gender longer.
 
-df_final_temp_3 <- data.frame(df_final_temp_2, value=TRUE)
+df_final_controls <- data.frame(df_final_controls, value=TRUE)
 
-df_final_temp_3 <- df_final_temp_3 %>%
+df_final_controls <- df_final_controls %>%
   arrange(WA01_c) %>%
   reshape(idvar = c("ID", "Candidate", "VoteCandidate", "NORMALIZED_FT", "NORMALIZED_VIABILITY", 
                     "NORMALIZED_ELECTABILITY", "NORMALIZED_IDEOLOGY", 
@@ -438,13 +439,13 @@ df_final_temp_3 <- df_final_temp_3 %>%
     FEMALE = value.2
   ) 
 
-df_final_temp_3[is.na(df_final_temp_3)] <- 0
+df_final_controls[is.na(df_final_controls)] <- 0
 
-# Party ID strength
+# Pivot strength of party identification longer.
 
-df_final_temp_4 <- data.frame(df_final_temp_3, value=TRUE)
+df_final_controls <- data.frame(df_final_controls, value=TRUE)
 
-df_final_temp_4 <- df_final_temp_4 %>%
+df_final_controls <- df_final_controls %>%
   arrange(MA02_c) %>%
   filter(MA02_c %in% c(1, 2)) %>%
   reshape(idvar = c("ID", "Candidate", "VoteCandidate", "NORMALIZED_FT", "NORMALIZED_VIABILITY", 
@@ -460,13 +461,13 @@ df_final_temp_4 <- df_final_temp_4 %>%
     WEAK = value.2
   ) 
 
-df_final_temp_4[is.na(df_final_temp_4)] <- 0
+df_final_controls[is.na(df_final_controls)] <- 0
 
-# Political interest
+# Pivot political interest.
 
-df_final_temp_5 <- data.frame(df_final_temp_4, value=TRUE)
+df_final_controls <- data.frame(df_final_controls, value=TRUE)
 
-df_final_temp_5 <- df_final_temp_5 %>%
+df_final_controls <- df_final_controls %>%
   arrange(KA01_c) %>%
   filter(KA01_c %in% c(1, 2, 3, 4)) %>%
   reshape(idvar = c("ID", "Candidate", "VoteCandidate", "NORMALIZED_FT", "NORMALIZED_VIABILITY", 
@@ -485,11 +486,11 @@ df_final_temp_5 <- df_final_temp_5 %>%
     NOTCLOSELYATALL = value.4
   ) 
 
-df_final_temp_5[is.na(df_final_temp_5)] <- 0
+df_final_controls[is.na(df_final_controls)] <- 0
   
-df_final_temp_5 %>%
+df_final_controls %>%
   drop_na() %>%
-  write.dta("clean_data/df08phone_d_v3.dta")
+  write.dta("clean_data/df08phone_d_controls.dta")
 ```
 
 
