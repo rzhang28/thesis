@@ -542,8 +542,9 @@ allModelFrame2_ve <- allModelFrame_ve %>%
                      "NORMALIZED_ELECTABILITY", "NORMALIZED_IDEOLOGY"),
          scope == "national") %>%
   group_by(variable) %>%
-  summarise(avg_coef = mean(coef)) %>%
-  mutate(avg_fctodds = factor_odds(avg_coef))
+  summarise(avg_coef = mean(coef),
+            avg_fctodds = factor_odds(avg_coef),
+            avg_se = mean(se))
 
 # Aggregate results for all Super Tuesday contests.
 
@@ -568,16 +569,18 @@ allModelFrame2_ve <- allModelFrame_ve %>%
                      "NORMALIZED_ELECTABILITY", "NORMALIZED_IDEOLOGY"),
          party == "D") %>%
   group_by(variable) %>%
-  summarise(avg_coef = mean(coef)) %>%
-  mutate(avg_fctodds = factor_odds(avg_coef))
+  summarise(avg_coef = mean(coef),
+            avg_fctodds = factor_odds(avg_coef),
+            avg_se = mean(se))
 
 allModelFrame2_ve <- allModelFrame_ve %>%
   filter(variable %in% c("NORMALIZED_FT", "NORMALIZED_VIABILITY", 
                      "NORMALIZED_ELECTABILITY", "NORMALIZED_IDEOLOGY"),
          party == "R") %>%
   group_by(variable) %>%
-  summarise(avg_coef = mean(coef)) %>%
-  mutate(avg_fctodds = factor_odds(avg_coef))
+  summarise(avg_coef = mean(coef),
+            avg_fctodds = factor_odds(avg_coef),
+            avg_se = mean(se))
 
 # National results, disaggregated by incumbency.
 
@@ -586,16 +589,18 @@ allModelFrame2_ve <- allModelFrame_ve %>%
                      "NORMALIZED_ELECTABILITY", "NORMALIZED_IDEOLOGY"),
          modelname %in% c("df08phone_d_reg", "df00_national_d_reg")) %>%
   group_by(variable) %>%
-  summarise(avg_coef = mean(coef)) %>%
-  mutate(avg_fctodds = factor_odds(avg_coef))
+  summarise(avg_coef = mean(coef),
+            avg_fctodds = factor_odds(avg_coef),
+            avg_se = mean(se))
 
 allModelFrame2_ve <- allModelFrame_ve %>%
   filter(variable %in% c("NORMALIZED_FT", "NORMALIZED_VIABILITY", 
                      "NORMALIZED_ELECTABILITY", "NORMALIZED_IDEOLOGY"),
          modelname %in% c("df04_national_d_reg", "df84cm_d_reg")) %>%
   group_by(variable) %>%
-  summarise(avg_coef = mean(coef)) %>%
-  mutate(avg_fctodds = factor_odds(avg_coef))
+  summarise(avg_coef = mean(coef),
+            avg_fctodds = factor_odds(avg_coef),
+            avg_se = mean(se))
 
 # Contests with highest feeling thermometer coefficients.
 
@@ -626,8 +631,9 @@ allModelFrame2_s <- allModelFrame_s %>%
   filter(variable %in% c("NORMALIZED_FT", "NORMALIZED_STRATEGY", "NORMALIZED_IDEOLOGY"),
          scope == "national") %>%
   group_by(variable) %>%
-  summarise(avg_coef = mean(coef)) %>%
-  mutate(avg_fctodds = factor_odds(avg_coef))
+  summarise(avg_coef = mean(coef),
+            avg_fctodds = factor_odds(avg_coef),
+            avg_se = mean(se))
 
 # Aggregate results for all Super Tuesday contests.
 
@@ -649,15 +655,17 @@ allModelFrame2_s <- allModelFrame_s %>%
   filter(variable %in% c("NORMALIZED_FT", "NORMALIZED_STRATEGY", "NORMALIZED_IDEOLOGY"),
          party == "D") %>%
   group_by(variable) %>%
-  summarise(avg_coef = mean(coef)) %>%
-  mutate(avg_fctodds = factor_odds(avg_coef))
+  summarise(avg_coef = mean(coef),
+            avg_fctodds = factor_odds(avg_coef),
+            avg_se = mean(se))
 
 allModelFrame2_s <- allModelFrame_s %>%
   filter(variable %in% c("NORMALIZED_FT", "NORMALIZED_STRATEGY", "NORMALIZED_IDEOLOGY"),
          party == "R") %>%
   group_by(variable) %>%
-  summarise(avg_coef = mean(coef)) %>%
-  mutate(avg_fctodds = factor_odds(avg_coef))
+  summarise(avg_coef = mean(coef),
+            avg_fctodds = factor_odds(avg_coef),
+            avg_se = mean(se))
 
 # National results, disaggregated by incumbency.
 
@@ -665,15 +673,17 @@ allModelFrame2_s <- allModelFrame_s %>%
   filter(variable %in% c("NORMALIZED_FT", "NORMALIZED_STRATEGY", "NORMALIZED_IDEOLOGY"),
          modelname %in% c("df08phone_d_reg", "df00_national_d_reg")) %>%
   group_by(variable) %>%
-  summarise(avg_coef = mean(coef)) %>%
-  mutate(avg_fctodds = factor_odds(avg_coef))
+  summarise(avg_coef = mean(coef),
+            avg_fctodds = factor_odds(avg_coef),
+            avg_se = mean(se))
 
 allModelFrame2_s <- allModelFrame_s %>%
   filter(variable %in% c("NORMALIZED_FT", "NORMALIZED_STRATEGY", "NORMALIZED_IDEOLOGY"),
          modelname %in% c("df04_national_d_reg", "df84cm_d_reg")) %>%
   group_by(variable) %>%
-  summarise(avg_coef = mean(coef)) %>%
-  mutate(avg_fctodds = factor_odds(avg_coef))
+  summarise(avg_coef = mean(coef),
+            avg_fctodds = factor_odds(avg_coef),
+            avg_se = mean(se))
 
 # Contests with highest feeling thermometer coefficients.
 
@@ -808,9 +818,11 @@ allModelFrame_s %>%
     scale_x_discrete(labels = c("1984 (D)", "1988 (D)", "1988 (R)", "2000 (D)", 
                                 "2000 (R)", "2004 (D)", 
                                 "2008 (D)", "2008 (R)")) +
-    facet_wrap(~ variable, nrow = 3) + 
-    scale_color_manual(values = c("black", "black", "black", "black", "black", 
-                                  "black", "black", "black")) + 
+    theme(axis.text.x = element_text(size = 8, hjust = .5, vjust = .5, 
+                                     angle = 90)) + 
+    facet_wrap(~ variable, nrow = 1) + 
+    scale_color_manual(values = c("blue", "blue", "red", "blue", "red", 
+                                  "blue", "blue", "red")) + 
     theme(legend.position = "none") + 
     labs(
       title = "Model Coefficients Over Time",
@@ -860,8 +872,8 @@ allModelFrame_s %>%
 ```
 
 
-
 ##########
+
 
 ## Prediction Section
 
